@@ -34,12 +34,15 @@ public class OrderExplorer {
         jsonNode.forEach((order) -> {
             JsonNode billing = order.get("billing");
             System.out.print(billing.get("first_name").asText());
+            System.out.print(billing.get("last_name").asText());
+            System.out.print(billing.get("email").asText());
 
+            System.out.println();
             order.get("line_items").forEach((product) -> {
-                System.out.print("* " + product.get("name").asText() +" ");
-                System.out.print(product.get("sku").asText() + " q:");
-                System.out.print(product.get("quantity").asInt() + " CHF");
-                System.out.println(product.get("total").asText());
+                System.out.print("* " + product.get("quantity").asInt() + "x ");
+                System.out.print(product.get("name").asText() +" ");
+                System.out.print(product.get("sku").asText() + " ");
+                System.out.println("CHF "+product.get("total").asText());
             });
         });
     }
