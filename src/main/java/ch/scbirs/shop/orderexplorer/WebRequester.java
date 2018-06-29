@@ -1,5 +1,7 @@
 package ch.scbirs.shop.orderexplorer;
 
+import ch.scbirs.shop.orderexplorer.model.Person;
+import ch.scbirs.shop.orderexplorer.model.Product;
 import ch.scbirs.shop.orderexplorer.web.LinkHeader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,18 +11,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Properties;
-import java.util.Queue;
+import java.util.*;
 
-public class WebRequest {
+public class WebRequester {
 
 
     private Queue<HttpUrl> queue = new ArrayDeque<>();
     private OkHttpClient client = new OkHttpClient();
     private final Properties env;
 
-    public WebRequest(Env env) {
+    public WebRequester(Env env) {
         this.env = env;
     }
 
@@ -31,6 +31,7 @@ public class WebRequest {
                 .addPathSegments("wp-json/wc/v2/orders")
                 .addQueryParameter("consumer_key", env.getProperty("consumer_key"))
                 .addQueryParameter("consumer_secret", env.getProperty("consumer_secret"))
+                //TODO: remove this, its only for testing purposes
                 .addQueryParameter("per_page", "1")
                 .build();
         queue.add(url);
@@ -58,23 +59,33 @@ public class WebRequest {
     private void handleAnswer(JsonNode jsonNode) {
         jsonNode.forEach((order) -> {
             JsonNode billing = order.get("billing");
-            System.out.print(billing.get("first_name").asText() + " ");
-            System.out.print(billing.get("last_name").asText() + " ");
-            System.out.print(billing.get("email").asText());
 
-            System.out.println();
+            Person.Builder b = new Person.Builder()
+                    .setFirstName(billing.get("first_name").asText())
+                    .setLastName(billing.get("last_name").asText())
+                    .setEmail(billing.get("email").asText())
+                    .setTotal(order.get("total").asText());
+
             order.get("line_items").forEach((product) -> {
-                System.out.print("* " + product.get("quantity").asInt() + "x ");
-                System.out.print(product.get("name").asText() + " ");
-                System.out.print(product.get("sku").asText() + " ");
-                System.out.print("CHF " + product.get("total").asText());
+                int quantity = product.get("quantity").asInt();
+                String name = product.get("name").asText();
+                String sku = product.get("sku").asText();
+                double total = product.get("total").asDouble();
+                double price = product.get("price").asDouble();
+
+                Map<String, String> meta = new HashMap<>();
+
                 product.get("meta_data").forEach((size) -> {
-                    System.out.print(" " + size.get("value").asText());
+                    meta.put(size.get("key").asText(), size.get("value").asText());
                 });
-                System.out.println();
+                b.addProduct(new Product(quantity, name, meta, price, total, sku));
             });
-            System.out.println( " = " +order.get("total").asText());
+            handleOrder(b.build());
         });
+    }
+
+    private void handleOrder(Person person) {
+        System.out.println(person);
     }
 
 }

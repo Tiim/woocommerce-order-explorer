@@ -6,7 +6,7 @@ public class OrderExplorer {
 
 
     public static void main(String[] args) throws IOException {
-        WebRequest wr = new WebRequest(new Env());
+        WebRequester wr = new WebRequester(new Env());
 
         wr.start();
     }
