@@ -1,8 +1,8 @@
-package ch.scbirs.shop.orderexplorer;
+package ch.scbirs.shop.orderexplorer.web;
 
-import ch.scbirs.shop.orderexplorer.model.Person;
+import ch.scbirs.shop.orderexplorer.Env;
+import ch.scbirs.shop.orderexplorer.model.Order;
 import ch.scbirs.shop.orderexplorer.model.Product;
-import ch.scbirs.shop.orderexplorer.web.LinkHeader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.HttpUrl;
@@ -19,33 +19,38 @@ public class WebRequester {
     private Queue<HttpUrl> queue = new ArrayDeque<>();
     private OkHttpClient client = new OkHttpClient();
     private final Properties env;
+    private List<Order> orders;
+
+    private int currentPage = 0;
+    private int maxPages = 0;
 
     public WebRequester(Env env) {
         this.env = env;
-    }
 
-    public void start() throws IOException {
+        orders = new ArrayList<>();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(env.getProperty("host"))
                 .addPathSegments("wp-json/wc/v2/orders")
                 .addQueryParameter("consumer_key", env.getProperty("consumer_key"))
                 .addQueryParameter("consumer_secret", env.getProperty("consumer_secret"))
-                //TODO: remove this, its only for testing purposes
                 .addQueryParameter("per_page", "1")
                 .build();
         queue.add(url);
-
-        while (!queue.isEmpty()) {
-            doRequest();
-        }
     }
 
-    private void doRequest() throws IOException {
+    public void doRequest() throws IOException {
         HttpUrl url = queue.poll();
+
+        currentPage += 1;
 
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
+
+        String totalPages = response.header("x-wp-totalpages");
+        if (totalPages != null) {
+            maxPages = Integer.parseInt(totalPages);
+        }
 
         ObjectMapper om = new ObjectMapper();
         JsonNode jsonNode = om.readTree(response.body().byteStream());
@@ -60,7 +65,10 @@ public class WebRequester {
         jsonNode.forEach((order) -> {
             JsonNode billing = order.get("billing");
 
-            Person.Builder b = new Person.Builder()
+            Order.Builder b = new Order.Builder()
+                    .setId(order.get("id").asInt())
+                    .setStatus(order.get("status").asText())
+                    .setNote(order.get("customer_note").asText())
                     .setFirstName(billing.get("first_name").asText())
                     .setLastName(billing.get("last_name").asText())
                     .setEmail(billing.get("email").asText())
@@ -84,8 +92,24 @@ public class WebRequester {
         });
     }
 
-    private void handleOrder(Person person) {
-        System.out.println(person);
+    private void handleOrder(Order order) {
+        orders.add(order);
+    }
+
+    public List<Order> getOrders() {
+        return Collections.unmodifiableList(orders);
+    }
+
+    public boolean isDone() {
+        return queue.isEmpty();
+    }
+
+    public int currentProgress() {
+        return currentPage;
+    }
+
+    public int maxProgress() {
+        return maxPages;
     }
 
 }

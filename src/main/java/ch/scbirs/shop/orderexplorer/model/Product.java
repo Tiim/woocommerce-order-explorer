@@ -10,7 +10,6 @@ public class Product {
     private final String name;
     private final Map<String, String> meta;
     private final double price;
-    private final double totalPrice;
     private final String sku;
 
     public Product(int quantity, String name, Map<String, String> meta, double price, double totalPrice, String sku) {
@@ -18,7 +17,6 @@ public class Product {
         this.name = name;
         this.meta = meta;
         this.price = price;
-        this.totalPrice = totalPrice;
         this.sku = sku;
     }
 
@@ -29,7 +27,6 @@ public class Product {
                 .add("name", name)
                 .add("meta", meta)
                 .add("price", price)
-                .add("totalPrice", totalPrice)
                 .add("sku", sku)
                 .toString();
     }
@@ -48,10 +45,6 @@ public class Product {
 
     public double getPrice() {
         return price;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
     }
 
     public String getSku() {
