@@ -31,9 +31,17 @@ public class OrderExplorer {
 
         ObjectMapper om = new ObjectMapper();
         JsonNode jsonNode = om.readTree(response.body().byteStream());
-        System.out.println(jsonNode);
+        jsonNode.forEach((order) -> {
+            JsonNode billing = order.get("billing");
+            System.out.print(billing.get("first_name").asText());
 
-
+            order.get("line_items").forEach((product) -> {
+                System.out.print("* " + product.get("name").asText() +" ");
+                System.out.print(product.get("sku").asText() + " q:");
+                System.out.print(product.get("quantity").asInt() + " CHF");
+                System.out.println(product.get("total").asText());
+            });
+        });
     }
 
 }
