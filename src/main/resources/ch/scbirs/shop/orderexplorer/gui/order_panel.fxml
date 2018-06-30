@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.scbirs.shop.orderexplorer.gui.OrderPanelController" maxHeight="1.7976931348623157E308"
-            maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.121"
+            fx:controller="ch.scbirs.shop.orderexplorer.gui.OrderPanelController">
     <top>
         <GridPane alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
             <columnConstraints>
@@ -19,10 +18,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Label fx:id="firstName" text="First Name"/>
-                <Label fx:id="lastName" text="Last Name" GridPane.columnIndex="1"/>
+                <Label fx:id="firstName" styleClass="bold" text="First Name"/>
+                <Label fx:id="lastName" styleClass="bold" text="Last Name" GridPane.columnIndex="1"/>
                 <Label fx:id="status" text="Status" GridPane.rowIndex="1"/>
-                <Label fx:id="total" text="Total" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label fx:id="total" styleClass="price" text="Total" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <Label fx:id="email" text="Email" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
             </children>
         </GridPane>

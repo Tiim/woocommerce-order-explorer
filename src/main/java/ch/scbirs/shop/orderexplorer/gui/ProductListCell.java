@@ -69,7 +69,7 @@ public class ProductListCell extends ListCell<Product> {
             price.setText("CHF " + String.valueOf(item.getPrice()));
             quantity.setText(String.valueOf(item.getQuantity()) + "x");
             sku.setText(item.getSku());
-            meta.setText(Util.formatMap(item.getMeta()));
+            meta.setText(Util.formatMap(item.getMeta()).toUpperCase());
 
             setGraphic(root);
         }

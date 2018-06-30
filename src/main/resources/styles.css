@@ -1,0 +1,13 @@
+.bold {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.price {
+    -fx-font-style: italic;
+}
+
+#meta {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}

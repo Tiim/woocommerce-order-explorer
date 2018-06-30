@@ -25,7 +25,11 @@ public class Gui extends Application {
         controller.setStage(primaryStage);
 
 
-        primaryStage.setScene(new Scene(root, 600, 400));
+        Scene scene = new Scene(root, 600, 400);
+
+        scene.getStylesheets().add("styles.css");
+
+        primaryStage.setScene(scene);
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
         primaryStage.show();
