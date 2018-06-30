@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.model;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +44,26 @@ public class Order {
                 .add("total", total)
                 .add("products", products)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id == order.id &&
+                Objects.equal(firstName, order.firstName) &&
+                Objects.equal(lastName, order.lastName) &&
+                Objects.equal(email, order.email) &&
+                Objects.equal(note, order.note) &&
+                Objects.equal(status, order.status) &&
+                Objects.equal(total, order.total) &&
+                Objects.equal(products, order.products);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, firstName, lastName, email, note, status, total, products);
     }
 
     public int getId() {

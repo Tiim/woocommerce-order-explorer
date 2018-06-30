@@ -3,6 +3,7 @@ package ch.scbirs.shop.orderexplorer.web;
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.Order;
 import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.util.SteppedTask;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.HttpUrl;
@@ -13,7 +14,7 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.*;
 
-public class OrderFetcher {
+public class OrderFetcher implements SteppedTask {
 
 
     private Queue<HttpUrl> queue = new ArrayDeque<>();
@@ -39,7 +40,8 @@ public class OrderFetcher {
         queue.add(url);
     }
 
-    public void doRequest() throws IOException {
+    @Override
+    public void doStep() throws IOException {
         HttpUrl url = queue.poll();
 
         currentPage += 1;
@@ -78,15 +80,16 @@ public class OrderFetcher {
                 int quantity = product.get("quantity").asInt();
                 String name = product.get("name").asText();
                 String sku = product.get("sku").asText();
-                double total = product.get("total").asDouble();
                 double price = product.get("price").asDouble();
+                int productId = product.get("product_id").asInt();
+                int variationId = product.get("variation_id").asInt();
 
                 Map<String, String> meta = new HashMap<>();
 
                 product.get("meta_data").forEach((size) -> {
                     meta.put(size.get("key").asText(), size.get("value").asText());
                 });
-                b.addProduct(new Product(quantity, name, meta, price, total, sku));
+                b.addProduct(new Product(quantity, name, meta, price, sku, productId, variationId));
             });
             handleOrder(b.build());
         });
@@ -100,14 +103,17 @@ public class OrderFetcher {
         return Collections.unmodifiableList(orders);
     }
 
+    @Override
     public boolean isDone() {
         return queue.isEmpty();
     }
 
+    @Override
     public int currentProgress() {
         return currentPage;
     }
 
+    @Override
     public int maxProgress() {
         return maxPages;
     }

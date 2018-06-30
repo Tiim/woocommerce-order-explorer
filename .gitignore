@@ -4,3 +4,7 @@
 *.class
 *.jar
 *.json
+*.png
+*.jpg
+*.jpeg
+/data/

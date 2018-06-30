@@ -5,6 +5,7 @@ module ch.scbirs.shop.orderexplorer {
     requires com.fasterxml.jackson.databind;
     requires okhttp3;
     requires com.google.common;
+    requires org.apache.commons.io;
 
 
     exports ch.scbirs.shop.orderexplorer.gui;
