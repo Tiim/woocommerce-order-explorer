@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.Order;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
@@ -54,13 +55,14 @@ public class GuiController {
     }
 
     @FXML
-    private void onOpen(ActionEvent actionEvent) {
-
+    private void onOpen(ActionEvent actionEvent) throws IOException {
+        Data data = Data.fromJsonFile(OrderExplorer.FOLDER.resolve("savefile.json"));
+        onNewData(data);
     }
 
     @FXML
-    private void onSave(ActionEvent actionEvent) {
-
+    private void onSave(ActionEvent actionEvent) throws IOException {
+        Data.toJsonFile(OrderExplorer.FOLDER.resolve("savefile.json"), data);
     }
 
     @FXML

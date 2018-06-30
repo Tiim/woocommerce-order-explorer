@@ -14,6 +14,11 @@ public class Data {
 
     private final Map<String, String> images;
 
+    private Data() {
+        orders = null;
+        images = null;
+    }
+
     public Data(List<Order> orders, Map<String, String> images) {
         this.orders = Collections.unmodifiableList(new ArrayList<>(orders));
         this.images = Collections.unmodifiableMap(new HashMap<>(images));

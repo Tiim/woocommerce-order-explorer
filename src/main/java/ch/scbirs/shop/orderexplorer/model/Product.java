@@ -16,6 +16,16 @@ public class Product {
     private final int productId;
     private final int variationId;
 
+    private Product() {
+        quantity = 0;
+        name = null;
+        meta = null;
+        price = 0;
+        sku = null;
+        productId = 0;
+        variationId = 0;
+    }
+
     public Product(int quantity, String name, Map<String, String> meta, double price, String sku, int productId, int variationId) {
         this.quantity = quantity;
         this.name = name;

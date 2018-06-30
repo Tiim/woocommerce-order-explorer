@@ -20,6 +20,17 @@ public class Order {
     private final String total;
     private final List<Product> products;
 
+    private Order() {
+        id = 0;
+        firstName = null;
+        lastName = null;
+        email = null;
+        note = null;
+        status = null;
+        total = null;
+        products = null;
+    }
+
     public Order(int id, String firstName, String lastName, String email, String status, String total, String note, List<Product> products) {
         this.id = id;
         this.firstName = firstName;
