@@ -1,7 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -14,7 +13,7 @@ public class ExceptionAlert extends Alert {
     public ExceptionAlert(Throwable t) {
         super(AlertType.ERROR);
         setTitle("Exception!");
-        setHeaderText(t.getLocalizedMessage());
+        setHeaderText("An unexpected error occured");
         setContentText(t.getMessage());
 
 

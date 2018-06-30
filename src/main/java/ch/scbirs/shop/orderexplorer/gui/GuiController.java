@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,7 +20,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GuiController {
 
@@ -127,5 +130,15 @@ public class GuiController {
     @FXML
     private void handleAboutAction(ActionEvent actionEvent) {
 
+    }
+
+    @FXML
+    private void onSearch(KeyEvent keyEvent) {
+        String s = search.getText().toLowerCase();
+        List<Order> filtered = data.getOrders().stream()
+                .filter(o -> (o.getFirstName() + " " + o.getLastName()).toLowerCase().contains(s))
+                .collect(Collectors.toList());
+        list.setItems(FXCollections.observableArrayList(filtered));
+        list.getSelectionModel().select(0);
     }
 }
