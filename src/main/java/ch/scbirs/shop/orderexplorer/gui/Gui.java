@@ -81,7 +81,11 @@ public class Gui extends Application {
             System.out.println(task.getValue());
         });
         task.setOnCancelled(event -> alert.close());
-        task.setOnFailed(event -> alert.close());
+        task.setOnFailed(event -> {
+            alert.close();
+            Alert error = new ExceptionAlert(task.getException());
+            error.show();
+        });
 
         Thread th = new Thread(task);
         th.setDaemon(true);

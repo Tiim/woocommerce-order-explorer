@@ -1,12 +1,9 @@
 package ch.scbirs.shop.orderexplorer.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
 import com.google.common.base.MoreObjects;
-import com.google.common.io.Resources;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,8 +19,7 @@ public class Data {
 
     public static Data fromJsonFile(Path file) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Data data = mapper.readValue(file.toUri().toURL(), Data.class);
-        return data;
+        return mapper.readValue(file.toUri().toURL(), Data.class);
     }
 
     public static void toJsonFile(Path file, Data data) throws IOException {

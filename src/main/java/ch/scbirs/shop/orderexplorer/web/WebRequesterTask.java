@@ -9,16 +9,10 @@ public class WebRequesterTask extends Task<Data> {
     @Override
     protected Data call() throws Exception {
         WebRequester webRequester = new WebRequester(OrderExplorer.env);
-        System.out.println("start");
         while (!webRequester.isDone() && !isCancelled()) {
-            try {
-                webRequester.doRequest();
-                updateProgress(webRequester.currentProgress(), webRequester.maxProgress());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            webRequester.doRequest();
+            updateProgress(webRequester.currentProgress(), webRequester.maxProgress());
         }
-        System.out.println("end");
         return new Data(webRequester.getOrders());
     }
 }
