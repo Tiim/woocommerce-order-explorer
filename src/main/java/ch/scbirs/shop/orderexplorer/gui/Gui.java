@@ -2,9 +2,11 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Gui extends Application {
@@ -24,8 +26,8 @@ public class Gui extends Application {
         GuiController controller = loader.getController();
         controller.setStage(primaryStage);
 
-
-        Scene scene = new Scene(root, 600, 400);
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        Scene scene = new Scene(root, bounds.getWidth() * 2f / 3f, bounds.getHeight() * 2f / 3f);
 
         scene.getStylesheets().add("styles.css");
 
