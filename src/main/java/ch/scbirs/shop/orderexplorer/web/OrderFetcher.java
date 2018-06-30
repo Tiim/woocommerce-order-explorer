@@ -13,7 +13,7 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.*;
 
-public class WebRequester {
+public class OrderFetcher {
 
 
     private Queue<HttpUrl> queue = new ArrayDeque<>();
@@ -24,7 +24,7 @@ public class WebRequester {
     private int currentPage = 0;
     private int maxPages = 0;
 
-    public WebRequester(Env env) {
+    public OrderFetcher(Env env) {
         this.env = env;
 
         orders = new ArrayList<>();
