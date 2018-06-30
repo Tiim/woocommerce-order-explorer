@@ -60,7 +60,8 @@ public class ProductListCell extends ListCell<Product> {
             Path imgPath = OrderExplorer.FOLDER.resolve(parent.getData().getImage(item));
 
             try {
-                img.setImage(new Image(Files.newInputStream(imgPath)));
+                Image value = new Image(Files.newInputStream(imgPath), 200, 200, true, true);
+                img.setImage(value);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(e);

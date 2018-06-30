@@ -15,8 +15,6 @@ public class OrderPanelController {
     @FXML
     private Label firstName;
     @FXML
-    private Label lastName;
-    @FXML
     private Label status;
     @FXML
     private Label total;
@@ -36,15 +34,21 @@ public class OrderPanelController {
     public void setCurrentOrder(Order order) {
 
         currentOrder = order;
+        if (order != null) {
+            firstName.setText(order.getFirstName() + " " + order.getLastName());
+            status.setText(order.getStatus());
+            total.setText("CHF " + order.getTotal());
+            email.setText(order.getEmail());
 
-        firstName.setText(order.getFirstName());
-        lastName.setText(order.getLastName());
-        status.setText(order.getStatus());
-        total.setText(order.getTotal());
-        email.setText(order.getEmail());
+            list.setItems(FXCollections.observableArrayList(order.getProducts()));
+        } else {
+            firstName.setText("");
+            status.setText("");
+            total.setText("");
+            email.setText("");
 
-        list.setItems(FXCollections.observableArrayList(order.getProducts()));
-
+            list.setItems(FXCollections.observableArrayList());
+        }
     }
 
     public Data getData() {

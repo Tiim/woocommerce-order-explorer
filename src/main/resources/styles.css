@@ -1,6 +1,15 @@
+.root {
+    -fx-font-size: 12;
+}
+
 .bold {
     -fx-font-size: 20;
     -fx-font-weight: bold;
+}
+
+.email {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
 }
 
 .price {

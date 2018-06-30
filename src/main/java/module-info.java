@@ -6,6 +6,8 @@ module ch.scbirs.shop.orderexplorer {
     requires okhttp3;
     requires com.google.common;
     requires org.apache.commons.io;
+    requires java.logging;
+    requires org.apache.logging.log4j;
 
 
     opens ch.scbirs.shop.orderexplorer.gui to javafx.fxml, javafx.graphics;

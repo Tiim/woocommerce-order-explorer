@@ -3,6 +3,7 @@ package ch.scbirs.shop.orderexplorer.web;
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.SteppedTask;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +24,7 @@ import java.util.*;
 
 public class ProductImageFetcher implements SteppedTask {
 
+    private static final Logger LOGGER = LogUtil.get();
 
     private final Env env;
     private final Deque<Product> products;
@@ -64,7 +67,7 @@ public class ProductImageFetcher implements SteppedTask {
 
             IOUtils.copy(response.body().byteStream(), Files.newOutputStream(o));
         } else {
-            System.out.println("Skipping " + o);
+            LOGGER.info("Skipping file " + o);
         }
         output.put(Data.getImageKeyForProduct(currentProduct), filename);
 
@@ -85,7 +88,7 @@ public class ProductImageFetcher implements SteppedTask {
         currentUrl = url;
         currentProduct = product;
 
-        System.out.println("Image url is " + currentUrl);
+        LOGGER.info("Found url url");
     }
 
     private String fetchNextUrlFromProduct(Product product) throws IOException {

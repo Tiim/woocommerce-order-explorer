@@ -3,6 +3,7 @@ package ch.scbirs.shop.orderexplorer.gui;
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.Order;
+import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -17,11 +18,15 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Optional;
 
 public class GuiController {
+
+    private static final Logger LOGGER = LogUtil.get();
 
     private Data data;
     private Stage primaryStage;
@@ -36,6 +41,7 @@ public class GuiController {
         this.data = data;
         list.setItems(FXCollections.observableArrayList(data.getOrders()));
         orderPanel.setData(data);
+        list.getSelectionModel().select(0);
     }
 
     public void setStage(Stage primaryStage) {
@@ -52,17 +58,25 @@ public class GuiController {
         Parent panel = loader.load();
         orderPanel = loader.getController();
         detailPane.getChildren().add(panel);
+
+        if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
+            try {
+                onNewData(Data.fromJsonFile(OrderExplorer.SETTINGS_FILE));
+            } catch (Exception e) {
+                LOGGER.warn("Failed to open json file on startup", e);
+            }
+        }
     }
 
     @FXML
     private void onOpen(ActionEvent actionEvent) throws IOException {
-        Data data = Data.fromJsonFile(OrderExplorer.FOLDER.resolve("savefile.json"));
+        Data data = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
         onNewData(data);
     }
 
     @FXML
     private void onSave(ActionEvent actionEvent) throws IOException {
-        Data.toJsonFile(OrderExplorer.FOLDER.resolve("savefile.json"), data);
+        Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data);
     }
 
     @FXML
