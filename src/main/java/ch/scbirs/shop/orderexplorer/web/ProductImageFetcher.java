@@ -63,7 +63,7 @@ public class ProductImageFetcher implements SteppedTask {
 
         IOUtils.copy(response.body().byteStream(), Files.newOutputStream(o));
 
-        output.put(Data.getImageKeyForProduct(currentProduct), o.toString());
+        output.put(Data.getImageKeyForProduct(currentProduct), filename);
 
         currentUrl = null;
         currentProduct = null;

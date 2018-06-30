@@ -34,6 +34,7 @@ public class GuiController {
     private void onNewData(Data data) {
         this.data = data;
         list.setItems(FXCollections.observableArrayList(data.getOrders()));
+        orderPanel.setData(data);
     }
 
     public void setStage(Stage primaryStage) {

@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.Order;
 import ch.scbirs.shop.orderexplorer.model.Product;
 import javafx.collections.FXCollections;
@@ -24,9 +25,11 @@ public class OrderPanelController {
     @FXML
     private ListView<Product> list;
 
+    private Data data;
+
     @FXML
     public void initialize() {
-        list.setCellFactory(param -> new ProductListCell());
+        list.setCellFactory(param -> new ProductListCell(this));
     }
 
 
@@ -44,4 +47,11 @@ public class OrderPanelController {
 
     }
 
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
 }
