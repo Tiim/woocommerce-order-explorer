@@ -57,12 +57,15 @@ public class ProductImageFetcher implements SteppedTask {
 
         Path o = folder.resolve(filename);
 
-        HttpUrl url = HttpUrl.get(new URL(currentUrl));
-        Request request = new Request.Builder().url(url).build();
-        Response response = client.newCall(request).execute();
+        if (!Files.exists(o)) {
+            HttpUrl url = HttpUrl.get(new URL(currentUrl));
+            Request request = new Request.Builder().url(url).build();
+            Response response = client.newCall(request).execute();
 
-        IOUtils.copy(response.body().byteStream(), Files.newOutputStream(o));
-
+            IOUtils.copy(response.body().byteStream(), Files.newOutputStream(o));
+        } else {
+            System.out.println("Skipping " + o);
+        }
         output.put(Data.getImageKeyForProduct(currentProduct), filename);
 
         currentUrl = null;
