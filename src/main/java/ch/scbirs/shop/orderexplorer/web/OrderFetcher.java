@@ -35,7 +35,6 @@ public class OrderFetcher implements SteppedTask {
                 .addPathSegments("wp-json/wc/v2/orders")
                 .addQueryParameter("consumer_key", env.getProperty("consumer_key"))
                 .addQueryParameter("consumer_secret", env.getProperty("consumer_secret"))
-                .addQueryParameter("per_page", "1")
                 .build();
         queue.add(url);
     }

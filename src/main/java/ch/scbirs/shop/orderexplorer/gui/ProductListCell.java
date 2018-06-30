@@ -2,6 +2,7 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -65,10 +66,10 @@ public class ProductListCell extends ListCell<Product> {
                 System.out.println(e);
             }
             name.setText(item.getName());
-            price.setText(String.valueOf(item.getPrice()));
-            quantity.setText(String.valueOf(item.getQuantity()));
+            price.setText("CHF " + String.valueOf(item.getPrice()));
+            quantity.setText(String.valueOf(item.getQuantity()) + "x");
             sku.setText(item.getSku());
-            meta.setText(item.getMeta().toString());
+            meta.setText(Util.formatMap(item.getMeta()));
 
             setGraphic(root);
         }
