@@ -57,6 +57,10 @@ public class Data {
         return orders;
     }
 
+    public Map<String, String> getImages() {
+        return images;
+    }
+
     public String getImage(Product product) {
         return images.get(getImageKeyForProduct(product));
     }
