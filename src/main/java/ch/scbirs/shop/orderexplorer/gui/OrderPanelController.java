@@ -1,8 +1,8 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.Order;
-import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.model.remote.Order;
+import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

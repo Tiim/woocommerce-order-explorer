@@ -1,4 +1,4 @@
-package ch.scbirs.shop.orderexplorer.model;
+package ch.scbirs.shop.orderexplorer.model.remote;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;

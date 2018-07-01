@@ -2,7 +2,7 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.Order;
+import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.collections.FXCollections;

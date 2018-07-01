@@ -2,8 +2,8 @@ package ch.scbirs.shop.orderexplorer.web;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.Order;
-import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.model.remote.Order;
+import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.Logger;

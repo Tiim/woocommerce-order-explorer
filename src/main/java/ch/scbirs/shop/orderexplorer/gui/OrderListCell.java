@@ -1,7 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.Env;
-import ch.scbirs.shop.orderexplorer.model.Order;
+import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import javafx.scene.control.ListCell;
 
 public class OrderListCell extends ListCell<Order> {

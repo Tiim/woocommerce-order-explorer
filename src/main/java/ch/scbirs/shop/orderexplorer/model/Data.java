@@ -1,5 +1,8 @@
 package ch.scbirs.shop.orderexplorer.model;
 
+import ch.scbirs.shop.orderexplorer.model.local.UserData;
+import ch.scbirs.shop.orderexplorer.model.remote.Order;
+import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -14,14 +17,18 @@ public class Data {
 
     private final Map<String, String> images;
 
+    private final UserData userData;
+
     private Data() {
         orders = null;
         images = null;
+        userData = null;
     }
 
-    public Data(List<Order> orders, Map<String, String> images) {
+    public Data(List<Order> orders, Map<String, String> images, UserData userData) {
         this.orders = Collections.unmodifiableList(new ArrayList<>(orders));
         this.images = Collections.unmodifiableMap(new HashMap<>(images));
+        this.userData = userData;
     }
 
     public static Data fromJsonFile(Path file) throws IOException {
@@ -48,10 +55,6 @@ public class Data {
 
     public List<Order> getOrders() {
         return orders;
-    }
-
-    public Map<String, String> getImages() {
-        return images;
     }
 
     public String getImage(Product product) {

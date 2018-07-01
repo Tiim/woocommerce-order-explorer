@@ -1,8 +1,8 @@
 package ch.scbirs.shop.orderexplorer.web;
 
 import ch.scbirs.shop.orderexplorer.Env;
-import ch.scbirs.shop.orderexplorer.model.Order;
-import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.model.remote.Order;
+import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.SteppedTask;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -2,7 +2,7 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
-import ch.scbirs.shop.orderexplorer.model.Product;
+import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
