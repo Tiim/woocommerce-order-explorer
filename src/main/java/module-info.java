@@ -11,6 +11,7 @@ module ch.scbirs.shop.orderexplorer {
 
 
     opens ch.scbirs.shop.orderexplorer.gui to javafx.fxml, javafx.graphics;
+    opens ch.scbirs.shop.orderexplorer.gui.report to javafx.fxml, javafx.graphics;
 
     opens ch.scbirs.shop.orderexplorer.model to com.fasterxml.jackson.databind;
     opens ch.scbirs.shop.orderexplorer.model.local to com.fasterxml.jackson.databind;

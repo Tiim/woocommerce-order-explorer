@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
+import ch.scbirs.shop.orderexplorer.gui.report.ProductSummary;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
@@ -148,5 +149,14 @@ public class GuiController {
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
         orderPanel.setHostServices(hostServices);
+    }
+
+    @FXML
+    private void generateReport(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(GuiController.class.getResource("report/product_summary.fxml"));
+        Parent load = loader.load();
+        ProductSummary c = loader.getController();
+
+        c.setData(data);
     }
 }

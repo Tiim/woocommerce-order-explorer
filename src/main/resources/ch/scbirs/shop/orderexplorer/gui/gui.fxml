@@ -14,6 +14,11 @@
                     <MenuItem onAction="#onExit" text="Exit" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Actions">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReport" text="Generate Report"/>
+                </items>
+            </Menu>
             <Menu text="Help">
                 <items>
                     <MenuItem disable="true" text="Search" />
