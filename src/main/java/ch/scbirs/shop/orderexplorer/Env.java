@@ -7,7 +7,7 @@ import java.util.Properties;
 public class Env extends Properties {
 
     private static final Env INSTANCE = new Env();
-    private final boolean debug;
+    public final boolean debug;
 
     public Env() {
         try {

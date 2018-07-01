@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.Order;
 import javafx.scene.control.ListCell;
 
@@ -11,7 +12,13 @@ public class OrderListCell extends ListCell<Order> {
         if (empty) {
             setText("");
         } else {
-            setText(item.getFirstName() + " " + item.getLastName());
+            String string = item.getFirstName() + " " + item.getLastName();
+
+            if (Env.getInstance().debug) {
+                string += " (ID: " + item.getId() + ")";
+            }
+
+            setText(string);
         }
     }
 }

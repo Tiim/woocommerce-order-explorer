@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Product;
 import ch.scbirs.shop.orderexplorer.util.Util;
@@ -14,6 +15,8 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductListCell extends ListCell<Product> {
 
@@ -70,7 +73,14 @@ public class ProductListCell extends ListCell<Product> {
             price.setText("CHF " + String.valueOf(item.getPrice()));
             quantity.setText(String.valueOf(item.getQuantity()) + "x");
             sku.setText(item.getSku());
-            meta.setText(Util.formatMap(item.getMeta()).toUpperCase());
+
+            Map<String, String> meta = item.getMeta();
+            if (Env.getInstance().debug) {
+                meta = new HashMap<>(meta);
+                meta.put("id", String.valueOf(item.getId()));
+            }
+
+            this.meta.setText(Util.formatMap(meta).toUpperCase());
 
             setGraphic(root);
         }
