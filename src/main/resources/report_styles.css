@@ -1,0 +1,28 @@
+.title {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+}
+
+.root {
+    -fx-background-color: white;
+}
+
+.table-view {
+    -fx-background-color: darkgray;
+}
+
+.table-view .column-header {
+    -fx-background-color: white;
+}
+
+.table-row-cell{
+    -fx-background-color: white;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FAFAFA;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: white;
+}

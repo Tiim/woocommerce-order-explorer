@@ -24,24 +24,11 @@ public class ProductCount {
         count += 1;
     }
 
-    /**
-     * Match same product variation only
-     *
-     * @param o
-     * @return
-     */
-    @Override
-    public boolean equals(Object o) {
-        Product p = null;
-        if (o instanceof ProductCount) {
-            p = ((ProductCount) o).getProduct();
-        } else if (o instanceof Product) {
-            p = (Product) o;
-        } else {
+    public boolean same(Product p) {
+        if (p.getProductId() != product.getProductId() || p.getVariationId() != product.getVariationId()) {
             return false;
         }
-
-        return p.getProductId() == product.getProductId() && p.getVariationId() == product.getVariationId();
+        return p.getMeta().equals(product.getMeta());
     }
 
     @Override

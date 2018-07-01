@@ -12,6 +12,7 @@ import javafx.scene.control.TableView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProductSummary {
@@ -50,11 +51,11 @@ public class ProductSummary {
 
         for (Product p : products) {
 
-            int i = counts.indexOf(p);
-            if (i < 0) {
+            Optional<ProductCount> first = counts.stream().filter(pc -> pc.same(p)).findFirst();
+            if (!first.isPresent()) {
                 counts.add(new ProductCount(p));
             } else {
-                counts.get(i).inc();
+                first.get().inc();
             }
         }
         return counts;

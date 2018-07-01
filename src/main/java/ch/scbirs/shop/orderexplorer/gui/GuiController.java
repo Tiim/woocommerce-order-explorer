@@ -1,7 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
-import ch.scbirs.shop.orderexplorer.gui.report.ProductSummary;
+import ch.scbirs.shop.orderexplorer.gui.report.ReportScreen;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -156,14 +155,7 @@ public class GuiController {
 
     @FXML
     private void generateReport(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(GuiController.class.getResource("report/product_summary.fxml"));
-        loader.setController(new ProductSummary(data.get()));
-        Parent load = loader.load();
-
-        Stage stage = new Stage();
-        Scene scene = new Scene(load);
-        stage.setScene(scene);
-        stage.show();
-
+        ReportScreen rs = new ReportScreen(data.get());
+        rs.show();
     }
 }
