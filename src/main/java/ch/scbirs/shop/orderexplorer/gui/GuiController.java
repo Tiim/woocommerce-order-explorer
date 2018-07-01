@@ -88,7 +88,7 @@ public class GuiController {
 
         Alert alert = new Alert(
                 Alert.AlertType.INFORMATION,
-                "Operation in progress",
+                "",
                 ButtonType.CANCEL
         );
         alert.setTitle("Reloading data");
@@ -96,6 +96,7 @@ public class GuiController {
         ProgressIndicator progressIndicator = new ProgressIndicator();
         alert.setGraphic(progressIndicator);
 
+        alert.contentTextProperty().bind(task.messageProperty());
         progressIndicator.progressProperty().bind(task.progressProperty());
 
         alert.initOwner(primaryStage);
