@@ -8,6 +8,7 @@ import ch.scbirs.shop.orderexplorer.util.Util;
 import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import javafx.application.HostServices;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -30,12 +31,12 @@ public class OrderPanelController {
     @FXML
     private ListView<Product> list;
 
-    private Data data;
+    private ObjectProperty<Data> data;
     private HostServices hostServices;
 
     @FXML
     public void initialize() {
-        list.setCellFactory(param -> new ProductListCell(this));
+        list.setCellFactory(param -> new ProductListCell(data));
     }
 
 
@@ -59,11 +60,7 @@ public class OrderPanelController {
         }
     }
 
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
+    public void setData(ObjectProperty<Data> data) {
         this.data = data;
     }
 

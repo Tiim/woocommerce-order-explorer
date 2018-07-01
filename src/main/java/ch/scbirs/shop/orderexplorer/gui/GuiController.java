@@ -7,12 +7,15 @@ import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.application.HostServices;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,7 +33,7 @@ public class GuiController {
 
     private static final Logger LOGGER = LogUtil.get();
 
-    private Data data;
+    private ObjectProperty<Data> data = new SimpleObjectProperty<>();
     private Stage primaryStage;
     private OrderPanelController orderPanel;
 
@@ -43,9 +46,8 @@ public class GuiController {
     private HostServices hostServices;
 
     private void onNewData(Data data) {
-        this.data = data;
+        this.data.setValue(data);
         list.setItems(FXCollections.observableArrayList(data.getOrders()));
-        orderPanel.setData(data);
         list.getSelectionModel().select(0);
     }
 
@@ -62,6 +64,7 @@ public class GuiController {
         FXMLLoader loader = new FXMLLoader(GuiController.class.getResource("order_panel.fxml"));
         Parent panel = loader.load();
         orderPanel = loader.getController();
+        orderPanel.setData(this.data);
         detailPane.getChildren().add(panel);
 
         if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
@@ -81,13 +84,13 @@ public class GuiController {
 
     @FXML
     private void onSave(ActionEvent actionEvent) throws IOException {
-        Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data);
+        Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get());
     }
 
     @FXML
     private void onReload(ActionEvent actionEvent) {
 
-        Task<Data> task = new WebRequesterTask(data);
+        Task<Data> task = new WebRequesterTask(data.get());
 
         Alert alert = new Alert(
                 Alert.AlertType.INFORMATION,
@@ -139,7 +142,7 @@ public class GuiController {
     @FXML
     private void onSearch(KeyEvent keyEvent) {
         String s = search.getText().toLowerCase();
-        List<Order> filtered = data.getOrders().stream()
+        List<Order> filtered = data.get().getOrders().stream()
                 .filter(o -> (o.getFirstName() + " " + o.getLastName()).toLowerCase().contains(s))
                 .collect(Collectors.toList());
         list.setItems(FXCollections.observableArrayList(filtered));
@@ -154,9 +157,13 @@ public class GuiController {
     @FXML
     private void generateReport(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(GuiController.class.getResource("report/product_summary.fxml"));
+        loader.setController(new ProductSummary(data.get()));
         Parent load = loader.load();
-        ProductSummary c = loader.getController();
 
-        c.setData(data);
+        Stage stage = new Stage();
+        Scene scene = new Scene(load);
+        stage.setScene(scene);
+        stage.show();
+
     }
 }

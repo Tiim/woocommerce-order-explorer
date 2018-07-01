@@ -4,8 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="594.0" prefWidth="420.0"
-            xmlns="http://javafx.com/javafx/8.0.121"
-            fx:controller="ch.scbirs.shop.orderexplorer.gui.report.ProductSummary">
+            xmlns="http://javafx.com/javafx/8.0.121">
     <top>
         <Label fx:id="title" styleClass="title" text="Title" BorderPane.alignment="CENTER">
             <BorderPane.margin>
@@ -14,7 +13,7 @@
         </Label>
     </top>
     <center>
-        <TableView prefHeight="200.0" prefWidth="200.0" styleClass="table" BorderPane.alignment="CENTER">
+        <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" styleClass="table" BorderPane.alignment="CENTER">
             <columns>
                 <TableColumn fx:id="number" editable="false" prefWidth="75.0" sortable="false" text="Number"/>
                 <TableColumn fx:id="name" editable="false" prefWidth="75.0" sortable="false" text="Name"/>

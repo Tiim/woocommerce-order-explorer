@@ -2,8 +2,10 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
+import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.Util;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +22,7 @@ import java.util.Map;
 
 public class ProductListCell extends ListCell<Product> {
 
-    private final OrderPanelController parent;
+    private final ObjectProperty<Data> data;
     private FXMLLoader loader;
 
     private Parent root;
@@ -38,8 +40,8 @@ public class ProductListCell extends ListCell<Product> {
     @FXML
     private Label meta;
 
-    public ProductListCell(OrderPanelController parent) {
-        this.parent = parent;
+    public ProductListCell(ObjectProperty<Data> data) {
+        this.data = data;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ProductListCell extends ListCell<Product> {
                 }
             }
 
-            Path imgPath = OrderExplorer.FOLDER.resolve(parent.getData().getImage(item));
+            Path imgPath = OrderExplorer.FOLDER.resolve(data.get().getImage(item));
 
             try {
                 Image value = new Image(Files.newInputStream(imgPath), 200, 200, true, true);
