@@ -3,6 +3,8 @@ package ch.scbirs.shop.orderexplorer.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
@@ -32,7 +34,7 @@ public class Product {
         this.id = id;
         this.quantity = quantity;
         this.name = name;
-        this.meta = meta;
+        this.meta = Collections.unmodifiableMap(new HashMap<>(meta));
         this.price = price;
         this.sku = sku;
         this.productId = productId;
