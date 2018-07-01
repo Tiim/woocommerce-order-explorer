@@ -26,7 +26,6 @@ public class ProductImageFetcher implements SteppedTask {
 
     private static final Logger LOGGER = LogUtil.get();
 
-    private final Env env;
     private final Deque<Product> products;
     private final Path folder;
     private final OkHttpClient client = new OkHttpClient();
@@ -37,9 +36,8 @@ public class ProductImageFetcher implements SteppedTask {
     private Product currentProduct = null;
     private String currentUrl = null;
 
-    public ProductImageFetcher(Env env, List<Product> products, Path folder) {
+    public ProductImageFetcher(List<Product> products, Path folder) {
 
-        this.env = env;
         this.products = new ArrayDeque<>(products);
         this.folder = folder;
         maxProgress = products.size() * 2;
@@ -92,6 +90,7 @@ public class ProductImageFetcher implements SteppedTask {
     }
 
     private String fetchNextUrlFromProduct(Product product) throws IOException {
+        Env env = Env.getInstance();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(env.getProperty("host"))
@@ -110,6 +109,7 @@ public class ProductImageFetcher implements SteppedTask {
     }
 
     private String fetchNextUrlFromVariation(Product product) throws IOException {
+        Env env = Env.getInstance();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(env.getProperty("host"))

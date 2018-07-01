@@ -19,7 +19,7 @@ public class WebRequesterTask extends Task<Data> {
 
     @Override
     protected Data call() throws Exception {
-        OrderFetcher orderFetcher = new OrderFetcher(OrderExplorer.env);
+        OrderFetcher orderFetcher = new OrderFetcher();
         updateMessage("Fetching orders");
         while (!orderFetcher.isDone() && !isCancelled()) {
             orderFetcher.doStep();
@@ -30,7 +30,7 @@ public class WebRequesterTask extends Task<Data> {
                 .flatMap(order -> order.getProducts().stream())
                 .collect(Collectors.toSet());
         updateMessage("Fetching images");
-        ProductImageFetcher imageFetcher = new ProductImageFetcher(OrderExplorer.env, new ArrayList<>(allProducts), OrderExplorer.FOLDER);
+        ProductImageFetcher imageFetcher = new ProductImageFetcher(new ArrayList<>(allProducts), OrderExplorer.FOLDER);
         while (!imageFetcher.isDone() && !isCancelled()) {
             imageFetcher.doStep();
             updateProgress(progress(imageFetcher.currentProgress(), imageFetcher.maxProgress(), 2, 2), 1);

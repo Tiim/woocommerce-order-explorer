@@ -19,15 +19,13 @@ public class OrderFetcher implements SteppedTask {
 
     private Queue<HttpUrl> queue = new ArrayDeque<>();
     private OkHttpClient client = new OkHttpClient();
-    private final Properties env;
     private List<Order> orders;
 
     private int currentPage = 0;
     private int maxPages = 0;
 
-    public OrderFetcher(Env env) {
-        this.env = env;
-
+    public OrderFetcher() {
+        Env env = Env.getInstance();
         orders = new ArrayList<>();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")

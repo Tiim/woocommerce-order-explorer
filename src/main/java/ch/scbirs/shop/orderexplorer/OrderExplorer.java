@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 
 public class OrderExplorer {
 
-    public static Env env = new Env();
     public static final Path FOLDER = Paths.get("data");
     public static final Path SETTINGS_FILE = FOLDER.resolve("savefile.json");
 
