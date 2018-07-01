@@ -25,6 +25,7 @@ public class Gui extends Application {
         Parent root = loader.load();
         GuiController controller = loader.getController();
         controller.setStage(primaryStage);
+        controller.setHostServices(getHostServices());
 
         Rectangle2D bounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(root, bounds.getWidth() * 2f / 3f, bounds.getHeight() * 2f / 3f);
@@ -35,6 +36,5 @@ public class Gui extends Application {
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
         primaryStage.show();
-
     }
 }

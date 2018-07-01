@@ -5,6 +5,7 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
+import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -38,6 +39,7 @@ public class GuiController {
     private ListView<Order> list;
     @FXML
     private AnchorPane detailPane;
+    private HostServices hostServices;
 
     private void onNewData(Data data) {
         this.data = data;
@@ -141,5 +143,10 @@ public class GuiController {
                 .collect(Collectors.toList());
         list.setItems(FXCollections.observableArrayList(filtered));
         list.getSelectionModel().select(0);
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+        orderPanel.setHostServices(hostServices);
     }
 }

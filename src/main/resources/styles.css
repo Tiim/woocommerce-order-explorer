@@ -10,6 +10,8 @@
 .email {
     -fx-font-weight: bold;
     -fx-font-size: 14;
+    -fx-text-fill: blue;
+    -fx-underline: true;
 }
 
 .price {
