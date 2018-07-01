@@ -61,6 +61,10 @@ public class Data {
         return images.get(getImageKeyForProduct(product));
     }
 
+    public UserData getUserData() {
+        return userData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

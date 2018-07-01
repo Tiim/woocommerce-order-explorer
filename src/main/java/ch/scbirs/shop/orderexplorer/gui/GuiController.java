@@ -84,7 +84,7 @@ public class GuiController {
     @FXML
     private void onReload(ActionEvent actionEvent) {
 
-        Task<Data> task = new WebRequesterTask();
+        Task<Data> task = new WebRequesterTask(data);
 
         Alert alert = new Alert(
                 Alert.AlertType.INFORMATION,

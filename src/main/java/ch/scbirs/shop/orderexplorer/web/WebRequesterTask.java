@@ -2,20 +2,24 @@ package ch.scbirs.shop.orderexplorer.web;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WebRequesterTask extends Task<Data> {
     private static final Logger LOGGER = LogUtil.get();
+    private final Data prevData;
+
+    public WebRequesterTask(Data prevData) {
+
+        this.prevData = prevData;
+    }
 
     @Override
     protected Data call() throws Exception {
@@ -37,7 +41,15 @@ public class WebRequesterTask extends Task<Data> {
         }
         Map<String, String> images = imageFetcher.getImages();
         updateMessage("Done");
-        return new Data(orders, images);
+
+        UserData userData;
+        if (prevData != null) {
+            userData = prevData.getUserData();
+        } else {
+            userData = new UserData(new HashMap<>());
+        }
+
+        return new Data(orders, images, userData);
     }
 
     private final float progress(int current, int max, int step, int maxstep) {
