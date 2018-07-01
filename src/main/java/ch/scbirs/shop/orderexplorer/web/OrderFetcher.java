@@ -74,6 +74,7 @@ public class OrderFetcher implements SteppedTask {
                     .setTotal(order.get("total").asText());
 
             order.get("line_items").forEach((product) -> {
+                int id = product.get("id").asInt();
                 int quantity = product.get("quantity").asInt();
                 String name = product.get("name").asText();
                 String sku = product.get("sku").asText();
@@ -86,7 +87,7 @@ public class OrderFetcher implements SteppedTask {
                 product.get("meta_data").forEach((size) -> {
                     meta.put(size.get("key").asText(), size.get("value").asText());
                 });
-                b.addProduct(new Product(quantity, name, meta, price, sku, productId, variationId));
+                b.addProduct(new Product(id, quantity, name, meta, price, sku, productId, variationId));
             });
             handleOrder(b.build());
         });

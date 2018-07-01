@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Product {
 
+    private final int id;
     private final int quantity;
     private final String name;
     private final Map<String, String> meta;
@@ -17,6 +18,7 @@ public class Product {
     private final int variationId;
 
     private Product() {
+        id = 0;
         quantity = 0;
         name = null;
         meta = null;
@@ -26,7 +28,8 @@ public class Product {
         variationId = 0;
     }
 
-    public Product(int quantity, String name, Map<String, String> meta, double price, String sku, int productId, int variationId) {
+    public Product(int id, int quantity, String name, Map<String, String> meta, double price, String sku, int productId, int variationId) {
+        this.id = id;
         this.quantity = quantity;
         this.name = name;
         this.meta = meta;
@@ -39,6 +42,7 @@ public class Product {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
+                .add("id", id)
                 .add("quantity", quantity)
                 .add("name", name)
                 .add("meta", meta)
@@ -54,7 +58,8 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return quantity == product.quantity &&
+        return id == product.id &&
+                quantity == product.quantity &&
                 Double.compare(product.price, price) == 0 &&
                 productId == product.productId &&
                 variationId == product.variationId &&
@@ -65,7 +70,11 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(quantity, name, meta, price, sku, productId, variationId);
+        return Objects.hashCode(id, quantity, name, meta, price, sku, productId, variationId);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getQuantity() {
