@@ -8,7 +8,7 @@ module ch.scbirs.shop.orderexplorer {
     requires org.apache.commons.io;
     requires java.logging;
     requires org.apache.logging.log4j;
-
+    requires org.apache.poi;
 
     opens ch.scbirs.shop.orderexplorer.gui to javafx.fxml, javafx.graphics;
     opens ch.scbirs.shop.orderexplorer.gui.report to javafx.fxml, javafx.graphics;

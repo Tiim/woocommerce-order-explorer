@@ -1,7 +1,5 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
-import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ProductSummary {
 
@@ -36,28 +31,8 @@ public class ProductSummary {
     @FXML
     private TableColumn<ProductCount, String> total;
 
-    public ProductSummary(Data data) {
-        groupedData = group(data);
-    }
-
-    private List<ProductCount> group(Data data) {
-        List<Product> products = data.getOrders()
-                .stream()
-                .flatMap(o -> o.getProducts().stream())
-                .collect(Collectors.toList());
-
-        List<ProductCount> counts = new ArrayList<>();
-
-        for (Product p : products) {
-
-            Optional<ProductCount> first = counts.stream().filter(pc -> pc.same(p)).findFirst();
-            if (!first.isPresent()) {
-                counts.add(new ProductCount(p));
-            } else {
-                first.get().inc(p.getQuantity());
-            }
-        }
-        return counts;
+    public ProductSummary(List<ProductCount> data) {
+        groupedData = data;
     }
 
     @FXML
