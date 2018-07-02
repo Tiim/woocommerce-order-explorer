@@ -45,6 +45,9 @@ public class ReportScreen extends BorderPane {
         scene.getStylesheets().add("report_styles.css");
 
         stage.setScene(scene);
+
+        stage.setResizable(false);
+
         stage.show();
     }
     /**

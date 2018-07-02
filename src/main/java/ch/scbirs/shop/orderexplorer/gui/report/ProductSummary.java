@@ -74,6 +74,16 @@ public class ProductSummary {
                 p.getValue().getProduct().getPrice() * p.getValue().getCount()
         )));
 
+        meta.setCellFactory(param -> {
+            TableCell<ProductCount, String> cell = new TableCell<>();
+            Text text = new Text();
+            cell.setGraphic(text);
+            cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+            text.wrappingWidthProperty().bind(cell.widthProperty());
+            text.textProperty().bind(cell.itemProperty());
+            return cell;
+        });
+
         table.setItems(FXCollections.observableArrayList(groupedData));
     }
 }
