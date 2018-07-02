@@ -6,9 +6,8 @@ import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class ProductSummary {
             if (!first.isPresent()) {
                 counts.add(new ProductCount(p));
             } else {
-                first.get().inc();
+                first.get().inc(p.getQuantity());
             }
         }
         return counts;

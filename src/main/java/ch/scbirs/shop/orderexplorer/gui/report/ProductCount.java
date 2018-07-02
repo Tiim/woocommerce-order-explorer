@@ -20,8 +20,8 @@ public class ProductCount {
         return product;
     }
 
-    public void inc() {
-        count += 1;
+    public void inc(int amt) {
+        count += amt;
     }
 
     public boolean same(Product p) {
