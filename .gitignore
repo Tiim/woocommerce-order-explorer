@@ -1,10 +1,14 @@
-*.env
 /.idea
 /.gradle
+/build
+/out
+
+*.env
 *.class
 *.jar
 *.json
-*.png
+
 *.jpg
 *.jpeg
+
 /data/
