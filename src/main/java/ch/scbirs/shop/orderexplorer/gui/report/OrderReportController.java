@@ -1,11 +1,13 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
+import ch.scbirs.shop.orderexplorer.util.FXUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.text.Text;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.util.List;
 
@@ -49,15 +51,7 @@ public class OrderReportController {
                 p.getValue().getProduct().getPrice() * p.getValue().getCount()
         )));
 
-        meta.setCellFactory(param -> {
-            TableCell<ProductCount, String> cell = new TableCell<>();
-            Text text = new Text();
-            cell.setGraphic(text);
-            cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            text.wrappingWidthProperty().bind(cell.widthProperty());
-            text.textProperty().bind(cell.itemProperty());
-            return cell;
-        });
+        FXUtil.setWrapTableColumnCellFactory(name, sku, meta);
 
         table.setItems(FXCollections.observableArrayList(groupedData));
     }

@@ -4,20 +4,17 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
-import ch.scbirs.shop.orderexplorer.util.export.ExcelExporter;
 import ch.scbirs.shop.orderexplorer.util.export.Exporter;
-import ch.scbirs.shop.orderexplorer.util.export.TsvExporter;
+import ch.scbirs.shop.orderexplorer.util.export.ExporterFactory;
 import javafx.print.*;
 import javafx.scene.Node;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,10 +28,11 @@ public class OrderReport extends ReportScreen<Data> {
     public OrderReport(Data data) throws IOException {
         super(data);
         group = group(data);
-        setExtensionFilters(Arrays.asList(
-                new FileChooser.ExtensionFilter("Excel File", "*.xls"),
-                new FileChooser.ExtensionFilter("TSV File", "*.tsv")
-        ));
+    }
+
+    @Override
+    protected List<FileChooser.ExtensionFilter> getExtensionFilters() {
+        return ExporterFactory.getSupportedExtensions();
     }
 
     private List<ProductCount> group(Data data) {
@@ -86,20 +84,10 @@ public class OrderReport extends ReportScreen<Data> {
 
     @Override
     protected void export(Path p) throws IOException {
-        String ext = FilenameUtils.getExtension(p.toString());
-        Exporter exp = null;
-        String[] header = new String[]{"Nr", "Name", "SKU", "Meta", "Price", "Total"};
-        switch (ext) {
-            case "tsv":
-                exp = new TsvExporter(header);
-                break;
-            case "xls":
-                exp = new ExcelExporter(header);
-                break;
-            default:
-                throw new RuntimeException("Unknown extension " + ext);
-        }
-        export(p, exp);
+        ExporterFactory factory = new ExporterFactory();
+        factory.setHeader("Nr", "Name", "SKU", "Meta", "Price", "Total");
+        factory.setPath(p);
+        export(p, factory.build());
     }
 
     private void export(Path p, Exporter exp) throws IOException {
@@ -117,7 +105,7 @@ public class OrderReport extends ReportScreen<Data> {
 
     @Override
     protected String getFxml() {
-        return "product_summary.fxml";
+        return "order_report.fxml";
     }
 
     @Override

@@ -16,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,6 @@ public abstract class ReportScreen<T> extends BorderPane {
 
     private static final Logger LOGGER = LogUtil.get();
     private final T data;
-    private List<FileChooser.ExtensionFilter> filters = Collections.emptyList();
     private Stage stage;
 
 
@@ -60,10 +58,7 @@ public abstract class ReportScreen<T> extends BorderPane {
         stage.show();
     }
 
-    protected void setExtensionFilters(List<FileChooser.ExtensionFilter> filters) {
-
-        this.filters = filters;
-    }
+    protected abstract List<FileChooser.ExtensionFilter> getExtensionFilters();
 
     @FXML
     private void print() {
@@ -89,9 +84,7 @@ public abstract class ReportScreen<T> extends BorderPane {
     private void exportImpl() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select where to save the report");
-        chooser.getExtensionFilters().addAll(
-                filters
-        );
+        chooser.getExtensionFilters().addAll(getExtensionFilters());
         File selectedFile = chooser.showSaveDialog(stage);
         if (selectedFile != null) {
             ExceptionAlert.doTry(() -> export(selectedFile.toPath()));
