@@ -1,15 +1,19 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import org.apache.logging.log4j.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class ExceptionAlert extends Alert {
+
+    private static final Logger LOGGER = LogUtil.get();
 
     public ExceptionAlert(Throwable t) {
         super(AlertType.ERROR);
@@ -40,15 +44,18 @@ public class ExceptionAlert extends Alert {
         getDialogPane().setExpandableContent(expContent);
     }
 
-    public static void doTry(RunnableWithException toTry) {
+    public static boolean doTry(RunnableWithException toTry) {
         try {
             toTry.run();
+            return true;
         } catch (Exception e) {
+            LOGGER.warn("Exception Dialog showing to the user: ", e);
             Platform.runLater(() -> {
                 Alert error = new ExceptionAlert(e);
                 error.show();
             });
         }
+        return false;
     }
 
     public interface RunnableWithException {

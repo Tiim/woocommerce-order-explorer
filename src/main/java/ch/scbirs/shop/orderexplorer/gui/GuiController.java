@@ -91,9 +91,12 @@ public class GuiController {
             } catch (IOException e) {
                 LOGGER.warn("Can't make backup", e);
             }
+            Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get());
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No data to save");
+            alert.show();
         }
-
-        Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get());
     }
 
     @FXML
@@ -144,6 +147,17 @@ public class GuiController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
             task.cancel();
+        }
+    }
+
+    @FXML
+    private void onBackup(ActionEvent actionEvent) {
+        if (data != null) {
+            ExceptionAlert.doTry(() -> BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No data to backup");
+            alert.show();
         }
     }
 

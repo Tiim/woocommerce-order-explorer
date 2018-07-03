@@ -10,6 +10,8 @@
                     <MenuItem onAction="#onOpen" text="Open" />
                     <MenuItem onAction="#onSave" text="Save" />
                <MenuItem mnemonicParsing="false" onAction="#onReload" text="Reload" />
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="Backup"/>
                     <SeparatorMenuItem />
                     <MenuItem onAction="#onExit" text="Exit" />
                 </items>
