@@ -3,12 +3,17 @@ package ch.scbirs.shop.orderexplorer.gui;
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.ProductData;
+import ch.scbirs.shop.orderexplorer.model.local.Status;
+import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -27,6 +32,8 @@ public class ProductListCell extends ListCell<Product> {
 
     private Parent root;
 
+    private Product currentItem;
+
     @FXML
     private ImageView img;
     @FXML
@@ -39,14 +46,40 @@ public class ProductListCell extends ListCell<Product> {
     private Label sku;
     @FXML
     private Label meta;
+    @FXML
+    private ComboBox<Status> status;
 
     public ProductListCell(ObjectProperty<Data> data) {
         this.data = data;
     }
 
+    @FXML
+    private void initialize() {
+        status.setItems(FXCollections.observableArrayList(Status.values()));
+        status.getSelectionModel().selectedItemProperty().addListener((o, old, n) -> {
+            System.out.println("Selected " + n);
+            Data oldData = this.data.get();
+            UserData oldUserData = oldData.getUserData();
+            Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
+
+            ProductData newProductData = new ProductData(n);
+
+            Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
+            newProductDataMap.put(currentItem.getId(), newProductData);
+
+
+            UserData ud = new UserData(newProductDataMap);
+            Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
+
+            data.setValue(d);
+        });
+    }
+
     @Override
     protected void updateItem(Product item, boolean empty) {
         super.updateItem(item, empty);
+
+        currentItem = item;
 
         if (empty || item == null) {
             setGraphic(null);
@@ -75,6 +108,9 @@ public class ProductListCell extends ListCell<Product> {
             price.setText("CHF " + String.valueOf(item.getPrice()));
             quantity.setText(String.valueOf(item.getQuantity()) + "x");
             sku.setText(item.getSku());
+
+            ProductData productData = data.get().getUserData().getProductData(item);
+            status.getSelectionModel().select(productData.getStatus());
 
             Map<String, String> meta = item.getMeta();
             if (Env.getInstance().debug) {

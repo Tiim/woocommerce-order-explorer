@@ -11,6 +11,7 @@ import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.application.HostServices;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -46,8 +47,11 @@ public class GuiController {
     private AnchorPane detailPane;
     private HostServices hostServices;
 
-    private void onNewData(Data data) {
-        this.data.setValue(data);
+    public GuiController() {
+        data.addListener(this::onNewData);
+    }
+
+    private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
         list.setItems(FXCollections.observableArrayList(data.getOrders()));
         list.getSelectionModel().select(0);
     }
@@ -70,7 +74,7 @@ public class GuiController {
 
         if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
             try {
-                onNewData(Data.fromJsonFile(OrderExplorer.SETTINGS_FILE));
+                data.setValue(Data.fromJsonFile(OrderExplorer.SETTINGS_FILE));
             } catch (Exception e) {
                 LOGGER.warn("Failed to open json file on startup", e);
             }
@@ -79,8 +83,8 @@ public class GuiController {
 
     @FXML
     private void onOpen(ActionEvent actionEvent) throws IOException {
-        Data data = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
-        onNewData(data);
+        Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
+        data.setValue(d);
     }
 
     @FXML
@@ -130,7 +134,7 @@ public class GuiController {
 
         task.setOnSucceeded(event -> {
             alert.close();
-            onNewData(task.getValue());
+            data.setValue(task.getValue());
             ExceptionAlert.doTry(() -> Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get()));
         });
         task.setOnCancelled(event -> alert.close());

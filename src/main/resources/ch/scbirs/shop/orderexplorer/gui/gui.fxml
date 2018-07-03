@@ -32,7 +32,8 @@
             </Menu>
         </menus>
     </MenuBar>
-   <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.25" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+               VBox.vgrow="ALWAYS">
      <items>
          <BorderPane>
              <center>

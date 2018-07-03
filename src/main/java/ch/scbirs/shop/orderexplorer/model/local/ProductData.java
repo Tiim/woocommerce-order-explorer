@@ -11,4 +11,8 @@ public class ProductData {
     public ProductData(Status status) {
         this.status = status;
     }
+
+    public Status getStatus() {
+        return status;
+    }
 }
