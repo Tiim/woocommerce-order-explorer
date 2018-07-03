@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -39,4 +40,18 @@ public class ExceptionAlert extends Alert {
         getDialogPane().setExpandableContent(expContent);
     }
 
+    public static void doTry(RunnableWithException toTry) {
+        try {
+            toTry.run();
+        } catch (Exception e) {
+            Platform.runLater(() -> {
+                Alert error = new ExceptionAlert(e);
+                error.show();
+            });
+        }
+    }
+
+    public interface RunnableWithException {
+        void run() throws Exception;
+    }
 }

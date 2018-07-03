@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class ProductSummary {
+public class OrderReportController {
 
     private final List<ProductCount> groupedData;
 
@@ -31,7 +31,7 @@ public class ProductSummary {
     @FXML
     private TableColumn<ProductCount, String> total;
 
-    public ProductSummary(List<ProductCount> data) {
+    public OrderReportController(List<ProductCount> data) {
         groupedData = data;
     }
 

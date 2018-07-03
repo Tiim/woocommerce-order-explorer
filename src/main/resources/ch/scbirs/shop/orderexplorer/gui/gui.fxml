@@ -16,7 +16,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Actions">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReport" text="Generate Report"/>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportOrder" text="Generate Report"/>
                 </items>
             </Menu>
             <Menu text="Help">

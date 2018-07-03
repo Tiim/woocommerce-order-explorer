@@ -11,7 +11,7 @@
             <children>
                 <Button mnemonicParsing="false" onAction="#print" text="Print"/>
                 <Button mnemonicParsing="false" onAction="#printPdf" text="Print to Pdf"/>
-                <Button mnemonicParsing="false" onAction="#export" text="Export"/>
+                <Button mnemonicParsing="false" onAction="#exportImpl" text="Export"/>
             </children>
         </HBox>
     </top>
