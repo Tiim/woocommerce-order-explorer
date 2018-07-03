@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
+import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
 import ch.scbirs.shop.orderexplorer.model.Data;
@@ -84,11 +85,27 @@ public class GuiController {
 
     @FXML
     private void onSave(ActionEvent actionEvent) throws IOException {
+        if (data != null) {
+            try {
+                BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER);
+            } catch (IOException e) {
+                LOGGER.warn("Can't make backup", e);
+            }
+        }
+
         Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get());
     }
 
     @FXML
     private void onReload(ActionEvent actionEvent) {
+
+        if (data != null) {
+            try {
+                BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER);
+            } catch (IOException e) {
+                LOGGER.warn("Can't make backup", e);
+            }
+        }
 
         Task<Data> task = new WebRequesterTask(data.get());
 
@@ -111,6 +128,7 @@ public class GuiController {
         task.setOnSucceeded(event -> {
             alert.close();
             onNewData(task.getValue());
+            ExceptionAlert.doTry(() -> Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get()));
         });
         task.setOnCancelled(event -> alert.close());
         task.setOnFailed(event -> {
