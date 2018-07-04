@@ -53,8 +53,14 @@ public class GuiController {
 
     private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
         LOGGER.info("onNewData");
+        int idx = list.getSelectionModel().getSelectedIndex();
+        if (idx < 0) {
+            idx = 0;
+        }
         list.setItems(FXCollections.observableArrayList(data.getOrders()));
-        list.getSelectionModel().select(0);
+        if (list.getItems().size() > idx) {
+            list.getSelectionModel().select(idx);
+        }
     }
 
     public void setStage(Stage primaryStage) {
