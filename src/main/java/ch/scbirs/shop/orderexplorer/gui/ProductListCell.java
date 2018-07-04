@@ -7,8 +7,10 @@ import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductListCell extends ListCell<Product> {
-
+    private static final Logger LOGGER = LogUtil.get();
     private final ObjectProperty<Data> data;
     private FXMLLoader loader;
 
@@ -56,28 +59,11 @@ public class ProductListCell extends ListCell<Product> {
     @FXML
     private void initialize() {
         status.setItems(FXCollections.observableArrayList(Status.values()));
-        status.getSelectionModel().selectedItemProperty().addListener((o, old, n) -> {
-            Data oldData = this.data.get();
-            UserData oldUserData = oldData.getUserData();
-            Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
-
-            ProductData newProductData = new ProductData(n);
-
-            Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
-            newProductDataMap.put(currentItem.getId(), newProductData);
-
-
-            UserData ud = new UserData(newProductDataMap);
-            Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
-
-            data.setValue(d);
-        });
     }
 
     @Override
     protected void updateItem(Product item, boolean empty) {
         super.updateItem(item, empty);
-
         currentItem = item;
 
         if (empty || item == null) {
@@ -93,6 +79,7 @@ public class ProductListCell extends ListCell<Product> {
                     throw new RuntimeException(e);
                 }
             }
+            status.getSelectionModel().selectedItemProperty().removeListener(this::changed);
 
             Path imgPath = OrderExplorer.FOLDER.resolve(data.get().getImage(item));
 
@@ -119,8 +106,26 @@ public class ProductListCell extends ListCell<Product> {
 
             this.meta.setText(Util.formatMap(meta).toUpperCase());
 
+            status.getSelectionModel().selectedItemProperty().addListener(this::changed);
             setGraphic(root);
         }
 
+    }
+
+    private void changed(ObservableValue<? extends Status> o, Status old, Status n) {
+        Data oldData = this.data.get();
+        UserData oldUserData = oldData.getUserData();
+        Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
+
+        ProductData newProductData = new ProductData(n);
+
+        Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
+        newProductDataMap.put(currentItem.getId(), newProductData);
+
+
+        UserData ud = new UserData(newProductDataMap);
+        Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
+
+        data.set(d);
     }
 }

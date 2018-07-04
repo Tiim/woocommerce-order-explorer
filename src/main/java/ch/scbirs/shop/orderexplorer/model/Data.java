@@ -74,11 +74,13 @@ public class Data {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Data data = (Data) o;
-        return Objects.equal(orders, data.orders);
+        return Objects.equal(orders, data.orders) &&
+                Objects.equal(images, data.images) &&
+                Objects.equal(userData, data.userData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(orders);
+        return Objects.hashCode(orders, images, userData);
     }
 }

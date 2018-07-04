@@ -9,33 +9,40 @@
             AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.121"
             fx:controller="ch.scbirs.shop.orderexplorer.gui.OrderPanelController">
     <top>
-        <GridPane maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
-            <columnConstraints>
-                <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <children>
-                <Label fx:id="firstName" styleClass="bold" text="Name" GridPane.columnSpan="2"
-                       GridPane.halignment="LEFT"/>
-                <Label fx:id="status" text="Status" GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
-                <Label fx:id="total" styleClass="price" text="Total" GridPane.columnIndex="1" GridPane.halignment="LEFT"
-                       GridPane.rowIndex="2"/>
-                <Label fx:id="email" onMouseClicked="#sendMail" styleClass="email" text="Email" GridPane.columnSpan="2"
-                       GridPane.rowIndex="1">
-                    <cursor>
-                        <Cursor fx:constant="HAND"/>
-                    </cursor>
-                </Label>
-            </children>
+        <BorderPane BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </BorderPane.margin>
-        </GridPane>
+            <center>
+                <GridPane maxWidth="1.7976931348623157E308">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label fx:id="firstName" styleClass="bold" text="Name" GridPane.columnSpan="2"
+                               GridPane.halignment="LEFT"/>
+                        <Label fx:id="status" text="Status" GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
+                        <Label fx:id="total" styleClass="price" text="Total" GridPane.columnIndex="1"
+                               GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
+                        <Label fx:id="email" onMouseClicked="#sendMail" styleClass="email" text="Email"
+                               GridPane.columnSpan="2" GridPane.rowIndex="1">
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Label>
+                    </children>
+                </GridPane>
+            </center>
+            <right>
+                <ComboBox fx:id="statusDropdown" prefWidth="150.0" BorderPane.alignment="CENTER"/>
+            </right>
+        </BorderPane>
     </top>
     <center>
         <ListView fx:id="list" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"

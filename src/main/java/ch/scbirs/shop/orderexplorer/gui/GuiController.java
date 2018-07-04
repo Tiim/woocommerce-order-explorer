@@ -52,6 +52,7 @@ public class GuiController {
     }
 
     private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
+        LOGGER.info("onNewData");
         list.setItems(FXCollections.observableArrayList(data.getOrders()));
         list.getSelectionModel().select(0);
     }
@@ -89,7 +90,7 @@ public class GuiController {
 
     @FXML
     private void onSave(ActionEvent actionEvent) throws IOException {
-        if (data != null) {
+        if (data.get() != null) {
             try {
                 BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER);
             } catch (IOException e) {
@@ -106,7 +107,7 @@ public class GuiController {
     @FXML
     private void onReload(ActionEvent actionEvent) {
 
-        if (data != null) {
+        if (data.get() != null) {
             try {
                 BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER);
             } catch (IOException e) {

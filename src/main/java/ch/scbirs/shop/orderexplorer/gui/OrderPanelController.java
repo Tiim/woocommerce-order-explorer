@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
@@ -11,6 +12,7 @@ import javafx.application.HostServices;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +32,8 @@ public class OrderPanelController {
     private Label email;
     @FXML
     private ListView<Product> list;
+    @FXML
+    private ComboBox<Status> statusDropdown;
 
     private ObjectProperty<Data> data;
     private HostServices hostServices;
@@ -37,6 +41,7 @@ public class OrderPanelController {
     @FXML
     public void initialize() {
         list.setCellFactory(param -> new ProductListCell(data));
+        statusDropdown.setItems(FXCollections.observableArrayList(Status.values()));
     }
 
 
@@ -58,6 +63,19 @@ public class OrderPanelController {
 
             list.setItems(FXCollections.observableArrayList());
         }
+    }
+
+    private Status getOrderStatus(Order order, Data data) {
+        Status s = null;
+        for (Product p : order.getProducts()) {
+            Status newS = data.getUserData().getProductData(p).getStatus();
+            if (s == null) {
+                s = newS;
+            } else if (s != newS) {
+                return null;
+            }
+        }
+        return s;
     }
 
     public void setData(ObjectProperty<Data> data) {
