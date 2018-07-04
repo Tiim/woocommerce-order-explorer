@@ -52,7 +52,7 @@ public class GuiController {
     }
 
     private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
-        LOGGER.info("onNewData");
+        LOGGER.info("Data value has changed");
         int idx = list.getSelectionModel().getSelectedIndex();
         if (idx < 0) {
             idx = 0;

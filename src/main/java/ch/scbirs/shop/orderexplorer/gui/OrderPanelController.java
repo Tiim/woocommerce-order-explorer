@@ -1,7 +1,9 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
+import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
@@ -10,6 +12,8 @@ import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import javafx.application.HostServices;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -18,8 +22,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OrderPanelController {
     private static final Logger LOGGER = LogUtil.get();
+    private final ChangeListener<Status> statusChangeListener = this::changed;
+
     private Order currentOrder;
 
     @FXML
@@ -42,17 +51,39 @@ public class OrderPanelController {
     public void initialize() {
         list.setCellFactory(param -> new ProductListCell(data));
         statusDropdown.setItems(FXCollections.observableArrayList(Status.values()));
+        statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
     }
 
 
-    public void setCurrentOrder(Order order) {
+    private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
+        Data oldData = this.data.get();
+        UserData oldUserData = oldData.getUserData();
+        Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
 
+        ProductData newProductData = new ProductData(newValue);
+
+        Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
+        for (Product p : currentOrder.getProducts()) {
+            newProductDataMap.put(p.getId(), newProductData);
+        }
+
+
+        UserData ud = new UserData(newProductDataMap);
+        Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
+
+        data.set(d);
+    }
+
+    public void setCurrentOrder(Order order) {
+        statusDropdown.getSelectionModel().selectedItemProperty().removeListener(statusChangeListener);
         currentOrder = order;
         if (order != null) {
             firstName.setText(order.getFirstName() + " " + order.getLastName());
             status.setText(order.getStatus());
             total.setText("CHF " + order.getTotal());
             email.setText(order.getEmail());
+
+            statusDropdown.getSelectionModel().select(getOrderStatus(order, data.get()));
 
             list.setItems(FXCollections.observableArrayList(order.getProducts()));
         } else {
@@ -63,6 +94,8 @@ public class OrderPanelController {
 
             list.setItems(FXCollections.observableArrayList());
         }
+        statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
+
     }
 
     private Status getOrderStatus(Order order, Data data) {

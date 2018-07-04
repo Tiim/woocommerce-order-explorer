@@ -10,6 +10,7 @@ import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -31,7 +32,9 @@ import java.util.Map;
 public class ProductListCell extends ListCell<Product> {
     private static final Logger LOGGER = LogUtil.get();
     private final ObjectProperty<Data> data;
+    private final ChangeListener<Status> changedListener = this::changed;
     private FXMLLoader loader;
+
 
     private Parent root;
 
@@ -79,7 +82,7 @@ public class ProductListCell extends ListCell<Product> {
                     throw new RuntimeException(e);
                 }
             }
-            status.getSelectionModel().selectedItemProperty().removeListener(this::changed);
+            status.getSelectionModel().selectedItemProperty().removeListener(changedListener);
 
             Path imgPath = OrderExplorer.FOLDER.resolve(data.get().getImage(item));
 
@@ -106,7 +109,7 @@ public class ProductListCell extends ListCell<Product> {
 
             this.meta.setText(Util.formatMap(meta).toUpperCase());
 
-            status.getSelectionModel().selectedItemProperty().addListener(this::changed);
+            status.getSelectionModel().selectedItemProperty().addListener(changedListener);
             setGraphic(root);
         }
 
