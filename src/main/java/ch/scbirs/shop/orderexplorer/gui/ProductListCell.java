@@ -57,7 +57,6 @@ public class ProductListCell extends ListCell<Product> {
     private void initialize() {
         status.setItems(FXCollections.observableArrayList(Status.values()));
         status.getSelectionModel().selectedItemProperty().addListener((o, old, n) -> {
-            System.out.println("Selected " + n);
             Data oldData = this.data.get();
             UserData oldUserData = oldData.getUserData();
             Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
