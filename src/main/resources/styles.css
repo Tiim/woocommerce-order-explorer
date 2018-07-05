@@ -26,41 +26,41 @@
 /* ORDER LIST: OPEN */
 
 .list-cell:open {
-    -fx-background-color: coral;
+    -fx-background-color: mistyrose;
 }
 
 .list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:open {
-    -fx-background-color: derive(coral, -20%);
+    -fx-background-color: derive(mistyrose, -30%);
 }
 
 .list-cell:selected:open {
-    -fx-background-color: derive(coral, -20%);
+    -fx-background-color: derive(mistyrose, -30%);
 }
 
 /* ORDER LIST: IN STOCK */
 
 .list-cell:in_stock {
-    -fx-background-color: gold;
+    -fx-background-color: lemonchiffon;
 }
 
 .list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:in_stock {
-    -fx-background-color: derive(gold, -20%);
+    -fx-background-color: derive(lemonchiffon, -30%);
 }
 
 .list-cell:selected:in_stock {
-    -fx-background-color: derive(gold, -20%);
+    -fx-background-color: derive(lemonchiffon, -30%);
 }
 
 /* ORDER LIST: DELIVERED */
 
 .list-cell:delivered {
-    -fx-background-color: lightgreen;
+    -fx-background-color: #D0FDD0;
 }
 
 .list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:delivered {
-    -fx-background-color: derive(lightgreen, -20%);
+    -fx-background-color: derive(#D0FDD0, -30%);
 }
 
 .list-cell:selected:delivered {
-    -fx-background-color: derive(lightgreen, -20%);
+    -fx-background-color: derive(#D0FDD0, -30%);
 }
