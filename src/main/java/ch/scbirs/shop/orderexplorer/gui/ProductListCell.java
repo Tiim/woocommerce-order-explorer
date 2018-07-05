@@ -7,6 +7,7 @@ import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.util.DataUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.ObjectProperty;
@@ -71,6 +72,7 @@ public class ProductListCell extends ListCell<Product> {
 
         if (empty || item == null) {
             setGraphic(null);
+            DataUtil.setPseudoClass(this, null);
         } else {
             if (loader == null) {
                 loader = new FXMLLoader(ProductListCell.class.getResource("product_list_item.fxml"));
@@ -99,7 +101,9 @@ public class ProductListCell extends ListCell<Product> {
             sku.setText(item.getSku());
 
             ProductData productData = data.get().getUserData().getProductData(item);
-            status.getSelectionModel().select(productData.getStatus());
+            Status status = productData.getStatus();
+            this.status.getSelectionModel().select(status);
+            DataUtil.setPseudoClass(this, status);
 
             Map<String, String> meta = item.getMeta();
             if (Env.getInstance().debug) {
@@ -109,7 +113,7 @@ public class ProductListCell extends ListCell<Product> {
 
             this.meta.setText(Util.formatMap(meta).toUpperCase());
 
-            status.getSelectionModel().selectedItemProperty().addListener(changedListener);
+            this.status.getSelectionModel().selectedItemProperty().addListener(changedListener);
             setGraphic(root);
         }
 
