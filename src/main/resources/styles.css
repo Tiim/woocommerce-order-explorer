@@ -22,3 +22,45 @@
     -fx-font-weight: bold;
     -fx-font-size: 14;
 }
+
+/* ORDER LIST: OPEN */
+
+.list-cell:open {
+    -fx-background-color: coral;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:open {
+    -fx-background-color: derive(coral, -20%);
+}
+
+.list-cell:selected:open {
+    -fx-background-color: derive(coral, -20%);
+}
+
+/* ORDER LIST: IN STOCK */
+
+.list-cell:in_stock {
+    -fx-background-color: gold;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:in_stock {
+    -fx-background-color: derive(gold, -20%);
+}
+
+.list-cell:selected:in_stock {
+    -fx-background-color: derive(gold, -20%);
+}
+
+/* ORDER LIST: DELIVERED */
+
+.list-cell:delivered {
+    -fx-background-color: lightgreen;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:delivered {
+    -fx-background-color: derive(lightgreen, -20%);
+}
+
+.list-cell:selected:delivered {
+    -fx-background-color: derive(lightgreen, -20%);
+}

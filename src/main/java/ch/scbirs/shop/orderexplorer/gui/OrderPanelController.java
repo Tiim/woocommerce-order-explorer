@@ -6,6 +6,7 @@ import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.util.DataUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import com.google.common.escape.Escaper;
@@ -83,7 +84,7 @@ public class OrderPanelController {
             total.setText("CHF " + order.getTotal());
             email.setText(order.getEmail());
 
-            statusDropdown.getSelectionModel().select(getOrderStatus(order, data.get()));
+            statusDropdown.getSelectionModel().select(DataUtil.getOrderStatus(order, data.get()));
 
             list.setItems(FXCollections.observableArrayList(order.getProducts()));
         } else {
@@ -96,19 +97,6 @@ public class OrderPanelController {
         }
         statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
 
-    }
-
-    private Status getOrderStatus(Order order, Data data) {
-        Status s = null;
-        for (Product p : order.getProducts()) {
-            Status newS = data.getUserData().getProductData(p).getStatus();
-            if (s == null) {
-                s = newS;
-            } else if (s != newS) {
-                return null;
-            }
-        }
-        return s;
     }
 
     public void setData(ObjectProperty<Data> data) {

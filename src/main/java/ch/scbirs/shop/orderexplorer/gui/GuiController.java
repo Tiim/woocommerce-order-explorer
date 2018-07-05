@@ -69,7 +69,7 @@ public class GuiController {
 
     @FXML
     public void initialize() throws IOException {
-        list.setCellFactory(param -> new OrderListCell());
+        list.setCellFactory(param -> new OrderListCell(data));
 
         list.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> orderPanel.setCurrentOrder(newv));
 
