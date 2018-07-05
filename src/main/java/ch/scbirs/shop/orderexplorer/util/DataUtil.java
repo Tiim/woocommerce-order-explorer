@@ -23,7 +23,6 @@ public class DataUtil {
     }
 
     public static void setPseudoClass(Node n, Status status) {
-        LOGGER.trace("Changed pseudo class of " + n + " to " + status);
         for (Pair<Status, PseudoClass> p : CLASSES) {
             n.pseudoClassStateChanged(p.getRight(), p.getLeft() == status);
         }
