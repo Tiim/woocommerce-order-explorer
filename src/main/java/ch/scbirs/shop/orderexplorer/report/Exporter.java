@@ -1,4 +1,4 @@
-package ch.scbirs.shop.orderexplorer.util.export;
+package ch.scbirs.shop.orderexplorer.report;
 
 import com.google.common.base.Preconditions;
 

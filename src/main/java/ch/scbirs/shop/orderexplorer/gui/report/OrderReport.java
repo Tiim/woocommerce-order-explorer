@@ -1,11 +1,12 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.report.Exporter;
+import ch.scbirs.shop.orderexplorer.report.ExporterFactory;
+import ch.scbirs.shop.orderexplorer.report.model.ProductCount;
+import ch.scbirs.shop.orderexplorer.report.model.ProductCountFactory;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
-import ch.scbirs.shop.orderexplorer.util.export.Exporter;
-import ch.scbirs.shop.orderexplorer.util.export.ExporterFactory;
 import javafx.print.*;
 import javafx.scene.Node;
 import javafx.scene.transform.Scale;
@@ -14,10 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class OrderReport extends ReportScreen<Data> {
     private static final Logger LOGGER = LogUtil.get();
@@ -27,32 +25,12 @@ public class OrderReport extends ReportScreen<Data> {
 
     public OrderReport(Data data) throws IOException {
         super(data);
-        group = group(data);
+        group = new ProductCountFactory(data).build();
     }
 
     @Override
     protected List<FileChooser.ExtensionFilter> getExtensionFilters() {
         return ExporterFactory.getSupportedExtensions();
-    }
-
-    private List<ProductCount> group(Data data) {
-        List<Product> products = data.getOrders()
-                .stream()
-                .flatMap(o -> o.getProducts().stream())
-                .collect(Collectors.toList());
-
-        List<ProductCount> counts = new ArrayList<>();
-
-        for (Product p : products) {
-
-            Optional<ProductCount> first = counts.stream().filter(pc -> pc.same(p)).findFirst();
-            if (!first.isPresent()) {
-                counts.add(new ProductCount(p));
-            } else {
-                first.get().inc(p.getQuantity());
-            }
-        }
-        return counts;
     }
 
     /**

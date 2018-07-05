@@ -1,4 +1,4 @@
-package ch.scbirs.shop.orderexplorer.util.export;
+package ch.scbirs.shop.orderexplorer.report;
 
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FilenameUtils;

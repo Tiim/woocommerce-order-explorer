@@ -1,12 +1,12 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.remote.Order;
-import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.report.Exporter;
+import ch.scbirs.shop.orderexplorer.report.ExporterFactory;
+import ch.scbirs.shop.orderexplorer.report.model.OrderedProduct;
+import ch.scbirs.shop.orderexplorer.report.model.OrderedProductFactory;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
-import ch.scbirs.shop.orderexplorer.util.export.Exporter;
-import ch.scbirs.shop.orderexplorer.util.export.ExporterFactory;
 import javafx.print.*;
 import javafx.scene.Node;
 import javafx.scene.transform.Scale;
@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OverviewReport extends ReportScreen<Data> {
@@ -26,7 +25,7 @@ public class OverviewReport extends ReportScreen<Data> {
 
     public OverviewReport(Data data) throws IOException {
         super(data);
-        productList = expand(data);
+        productList = new OrderedProductFactory(data).build();
     }
 
     @Override
@@ -42,16 +41,6 @@ public class OverviewReport extends ReportScreen<Data> {
     @Override
     protected Object getNewController(Data data) {
         return new OverviewReportController(productList);
-    }
-
-    private List<OrderedProduct> expand(Data data) {
-        List<OrderedProduct> out = new ArrayList<>();
-        for (Order o : data.getOrders()) {
-            for (Product p : o.getProducts()) {
-                out.add(new OrderedProduct(o, p));
-            }
-        }
-        return out;
     }
 
     @Override

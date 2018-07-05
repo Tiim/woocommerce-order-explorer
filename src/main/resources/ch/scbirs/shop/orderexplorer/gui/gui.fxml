@@ -21,6 +21,8 @@
                     <MenuItem mnemonicParsing="false" onAction="#generateReportOrder" text="Generate Order Report"/>
                     <MenuItem mnemonicParsing="false" onAction="#generateReportOverview"
                               text="Generate Overview Report"/>
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportFull" text="Generate Full Report"/>
                 </items>
             </Menu>
             <Menu text="Help">

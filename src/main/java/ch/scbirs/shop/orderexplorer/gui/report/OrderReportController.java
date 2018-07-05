@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
+import ch.scbirs.shop.orderexplorer.report.model.ProductCount;
 import ch.scbirs.shop.orderexplorer.util.FXUtil;
 import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.SimpleStringProperty;

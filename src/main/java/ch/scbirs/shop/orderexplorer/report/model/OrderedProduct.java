@@ -1,4 +1,4 @@
-package ch.scbirs.shop.orderexplorer.gui.report;
+package ch.scbirs.shop.orderexplorer.report.model;
 
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;

@@ -6,6 +6,7 @@ import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
+import ch.scbirs.shop.orderexplorer.report.FullReport;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.application.HostServices;
@@ -21,10 +22,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -207,5 +210,18 @@ public class GuiController {
     private void generateReportOverview(ActionEvent actionEvent) throws IOException {
         OverviewReport report = new OverviewReport(data.get());
         report.show();
+    }
+
+    @FXML
+    private void generateReportFull() throws IOException {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select where to save the report");
+        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel File", "*.xls"));
+        File selectedFile = chooser.showSaveDialog(primaryStage);
+        if (selectedFile != null) {
+            ExceptionAlert.doTry(() -> {
+                new FullReport(data.get()).save(selectedFile.toPath());
+            });
+        }
     }
 }
