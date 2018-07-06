@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
+import ch.scbirs.shop.orderexplorer.report.ExporterFactory;
 import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -12,5 +13,7 @@ public abstract class Report {
 
     public abstract void export(Path path) throws IOException;
 
-    public abstract List<FileChooser.ExtensionFilter> getExtensionFilters();
+    public List<FileChooser.ExtensionFilter> getExtensionFilters() {
+        return ExporterFactory.getSupportedExtensions();
+    }
 }
