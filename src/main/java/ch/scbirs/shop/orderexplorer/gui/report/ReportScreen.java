@@ -29,6 +29,9 @@ public abstract class ReportScreen<T> extends BorderPane {
     private final T data;
     private Stage stage;
 
+    @FXML
+    private PDFView pdfView;
+
 
     public ReportScreen(T data) throws IOException {
         this.data = data;
