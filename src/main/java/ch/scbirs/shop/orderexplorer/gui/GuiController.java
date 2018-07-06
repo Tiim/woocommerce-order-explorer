@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class GuiController {
@@ -49,6 +50,9 @@ public class GuiController {
     private ObjectProperty<Data> data = new SimpleObjectProperty<>();
     private Stage primaryStage;
     private OrderPanelController orderPanel;
+
+    @FXML
+    private ResourceBundle resources;
 
     @FXML
     private TextField search;
@@ -115,8 +119,8 @@ public class GuiController {
             }
             Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get());
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("No data to save");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText(resources.getString("app.dialog.save.NoData"));
             alert.show();
         }
     }
@@ -140,12 +144,13 @@ public class GuiController {
             }
 
             Task<Boolean> task = new CheckConnectionTask(newsettings.get());
-            TaskAlert<Boolean> alert = new TaskAlert<>(task, "Connection Check", "Checking the connection", primaryStage);
+            TaskAlert<Boolean> alert = new TaskAlert<>(task, resources.getString("app.dialog.conncheck.Title"),
+                    resources.getString("app.dialog.conncheck.Header"), primaryStage);
 
             task.setOnSucceeded(e -> {
                 alert.close();
                 if (!task.getValue()) {
-                    AlertUtil.showError("Can't connect to Woo Commerce");
+                    AlertUtil.showError(resources.getString("app.dialog.conncheck.Error"));
                 } else {
                     data.set(d);
                 }
@@ -160,18 +165,19 @@ public class GuiController {
     @FXML
     private void onCheckConnection() {
         if (data.get() == null || data.get().getUserData() == null || data.get().getUserData().getUserSettings() == null) {
-            AlertUtil.showError("No connection specified: go to File > Settings");
+            AlertUtil.showError(resources.getString("app.dialog.conncheck.NoSettings"));
             return;
         }
         Task<Boolean> task = new CheckConnectionTask(data.get().getUserData().getUserSettings());
-        TaskAlert<Boolean> alert = new TaskAlert<>(task, "Connection Check", "Checking the connection", primaryStage);
+        TaskAlert<Boolean> alert = new TaskAlert<>(task, resources.getString("app.dialog.conncheck.Title"),
+                resources.getString("app.dialog.conncheck.Header"), primaryStage);
 
         task.setOnSucceeded(e -> {
             alert.close();
             if (!task.getValue()) {
-                AlertUtil.showError("Can't connect to Woo Commerce");
+                AlertUtil.showError(resources.getString("app.dialog.conncheck.Error"));
             } else {
-                AlertUtil.showInfo("Connection successful :)");
+                AlertUtil.showInfo(resources.getString("app.dialog.conncheck.Success"));
             }
         });
 
@@ -197,7 +203,8 @@ public class GuiController {
 
         Task<Data> task = new WebRequesterTask(data.get());
 
-        Alert alert = new TaskAlert<Data>(task, "Loading data", "Please wait", primaryStage);
+        Alert alert = new TaskAlert<Data>(task, resources.getString("app.dialog.loading.Title"),
+                resources.getString("app.dialog.loading.Header"), primaryStage);
 
         task.setOnSucceeded(event -> {
             alert.close();
@@ -217,9 +224,7 @@ public class GuiController {
         if (data != null) {
             ExceptionAlert.doTry(() -> BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER));
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("No data to backup");
-            alert.show();
+            AlertUtil.showWarning(resources.getString("app.dialog.backup.NoData"));
         }
     }
 
@@ -263,7 +268,7 @@ public class GuiController {
     @FXML
     private void generateReportFull() throws IOException {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Select where to save the report");
+        chooser.setTitle(resources.getString("app.dialog.report.full.filechooser.Title"));
         chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel File", "*.xls"));
         File selectedFile = chooser.showSaveDialog(primaryStage);
         if (selectedFile != null) {

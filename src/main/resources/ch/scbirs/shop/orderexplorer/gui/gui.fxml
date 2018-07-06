@@ -5,33 +5,36 @@
 <VBox id="vbox" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.scbirs.shop.orderexplorer.gui.GuiController">
     <MenuBar>
         <menus>
-            <Menu text="File">
+            <Menu text="%app.menu.File">
                 <items>
-                    <MenuItem onAction="#onOpen" text="Open" />
-                    <MenuItem onAction="#onSave" text="Save" />
-               <MenuItem mnemonicParsing="false" onAction="#onReload" text="Reload" />
+                    <MenuItem onAction="#onOpen" text="%app.menu.File.Open"/>
+                    <MenuItem onAction="#onSave" text="%app.menu.File.Save"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onReload" text="%app.menu.File.Reload"/>
                     <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onCheckConnection" text="Check Connection"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onSettingsDialog" text="Settings"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="Backup"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onCheckConnection"
+                              text="%app.menu.File.CheckConnection"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onSettingsDialog" text="%app.menu.File.Settings"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="%app.menu.File.Backup"/>
                     <SeparatorMenuItem />
-                    <MenuItem onAction="#onExit" text="Exit" />
+                    <MenuItem onAction="#onExit" text="%app.menu.File.Exit"/>
                 </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Reports">
+            <Menu mnemonicParsing="false" text="%app.menu.Reports">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReportOrder" text="Generate Order Report"/>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportOrder"
+                              text="%app.menu.Reports.OrderReport"/>
                     <MenuItem mnemonicParsing="false" onAction="#generateReportOverview"
-                              text="Generate Overview Report"/>
+                              text="%app.menu.Reports.OverviewReport"/>
                     <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReportFull" text="Generate Full Report"/>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportFull"
+                              text="%app.menu.Reports.FullReport"/>
                 </items>
             </Menu>
-            <Menu text="Help">
+            <Menu text="%app.menu.Help">
                 <items>
-                    <MenuItem disable="true" text="Search" />
+                    <MenuItem disable="true" text="%app.menu.Help.Search"/>
                     <SeparatorMenuItem />
-                    <MenuItem onAction="#handleAboutAction" text="About" />
+                    <MenuItem onAction="#handleAboutAction" text="%app.menu.Help.About"/>
                 </items>
             </Menu>
         </menus>

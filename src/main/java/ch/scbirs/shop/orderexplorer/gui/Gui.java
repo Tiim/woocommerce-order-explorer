@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.ResourceBundle;
+
 public class Gui extends Application {
 
     public static void run(String[] args) {
@@ -18,10 +20,13 @@ public class Gui extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        primaryStage.setTitle("ScBirs Bestellungen");
+        ResourceBundle bundle = ResourceBundle.getBundle("lang.bundle");
+
+        primaryStage.setTitle(bundle.getString("app.title"));
         primaryStage.getIcons().add(new Image(Gui.class.getResourceAsStream("logo.png")));
 
         FXMLLoader loader = new FXMLLoader(Gui.class.getResource("gui.fxml"));
+        loader.setResources(bundle);
         Parent root = loader.load();
         GuiController controller = loader.getController();
         controller.setStage(primaryStage);
