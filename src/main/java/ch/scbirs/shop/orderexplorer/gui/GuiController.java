@@ -158,6 +158,29 @@ public class GuiController {
     }
 
     @FXML
+    private void onCheckConnection() {
+        if (data.get() == null || data.get().getUserData() == null || data.get().getUserData().getUserSettings() == null) {
+            AlertUtil.showError("No connection specified: go to File > Settings");
+            return;
+        }
+        Task<Boolean> task = new CheckConnectionTask(data.get().getUserData().getUserSettings());
+        TaskAlert<Boolean> alert = new TaskAlert<>(task, "Connection Check", "Checking the connection", primaryStage);
+
+        task.setOnSucceeded(e -> {
+            alert.close();
+            if (!task.getValue()) {
+                AlertUtil.showError("Can't connect to Woo Commerce");
+            } else {
+                AlertUtil.showInfo("Connection successful :)");
+            }
+        });
+
+        Thread t = new Thread(task);
+        t.start();
+        alert.show();
+    }
+
+    @FXML
     private void onReload(ActionEvent actionEvent) {
 
         if (data.get() != null) {

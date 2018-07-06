@@ -11,6 +11,7 @@
                     <MenuItem onAction="#onSave" text="Save" />
                <MenuItem mnemonicParsing="false" onAction="#onReload" text="Reload" />
                     <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onCheckConnection" text="Check Connection"/>
                     <MenuItem mnemonicParsing="false" onAction="#onSettingsDialog" text="Settings"/>
                     <MenuItem mnemonicParsing="false" onAction="#onBackup" text="Backup"/>
                     <SeparatorMenuItem />
