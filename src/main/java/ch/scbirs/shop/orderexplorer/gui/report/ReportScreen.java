@@ -1,6 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
-import ch.scbirs.shop.orderexplorer.gui.ExceptionAlert;
+import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

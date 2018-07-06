@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.web;
 
 import ch.scbirs.shop.orderexplorer.Env;
+import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.SteppedTask;
@@ -24,15 +25,15 @@ public class OrderFetcher implements SteppedTask {
     private int currentPage = 0;
     private int maxPages = 0;
 
-    public OrderFetcher() {
+    public OrderFetcher(UserSettings settings) {
         Env env = Env.getInstance();
         orders = new ArrayList<>();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
-                .host(env.getProperty("host"))
+                .host(settings.getHost())
                 .addPathSegments("wp-json/wc/v2/orders")
-                .addQueryParameter("consumer_key", env.getProperty("consumer_key"))
-                .addQueryParameter("consumer_secret", env.getProperty("consumer_secret"))
+                .addQueryParameter("consumer_key", settings.getConsumerKey())
+                .addQueryParameter("consumer_secret", settings.getConsumerSecret())
                 .build();
         queue.add(url);
     }

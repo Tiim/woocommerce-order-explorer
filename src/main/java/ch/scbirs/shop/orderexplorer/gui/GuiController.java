@@ -5,10 +5,16 @@ import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
 import ch.scbirs.shop.orderexplorer.gui.report.ReportScreen;
+import ch.scbirs.shop.orderexplorer.gui.util.AlertUtil;
+import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
+import ch.scbirs.shop.orderexplorer.gui.util.TaskAlert;
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.UserData;
+import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import ch.scbirs.shop.orderexplorer.web.CheckConnectionTask;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.application.HostServices;
 import javafx.beans.property.ObjectProperty;
@@ -20,11 +26,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
@@ -115,6 +122,42 @@ public class GuiController {
     }
 
     @FXML
+    private void onSettingsDialog() {
+        SettingsDialog sd = null;
+        Data old = this.data.get();
+        if (old == null || old.getUserData() == null || old.getUserData().getUserSettings() == null) {
+            sd = new SettingsDialog(null);
+        } else {
+            sd = new SettingsDialog(old.getUserData().getUserSettings());
+        }
+        Optional<UserSettings> newsettings = sd.showAndWait();
+        if (newsettings.isPresent()) {
+            Data d;
+            if (old == null) {
+                d = new Data(null, null, new UserData(null, newsettings.get()));
+            } else {
+                d = new Data(old.getOrders(), old.getImages(), new UserData(old.getUserData().getProductData(), newsettings.get()));
+            }
+
+            Task<Boolean> task = new CheckConnectionTask(newsettings.get());
+            TaskAlert<Boolean> alert = new TaskAlert<>(task, "Connection Check", "Checking the connection", primaryStage);
+
+            task.setOnSucceeded(e -> {
+                alert.close();
+                if (!task.getValue()) {
+                    AlertUtil.showError("Can't connect to Woo Commerce");
+                } else {
+                    data.set(d);
+                }
+            });
+
+            Thread t = new Thread(task);
+            t.start();
+            alert.show();
+        }
+    }
+
+    @FXML
     private void onReload(ActionEvent actionEvent) {
 
         if (data.get() != null) {
@@ -125,44 +168,25 @@ public class GuiController {
             }
         }
 
+        if (data.get().getUserData().getUserSettings() == null) {
+            onSettingsDialog();
+        }
+
         Task<Data> task = new WebRequesterTask(data.get());
 
-        Alert alert = new Alert(
-                Alert.AlertType.INFORMATION,
-                "",
-                ButtonType.CANCEL
-        );
-        alert.setTitle("Reloading data");
-        alert.setHeaderText("Please wait..");
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        alert.setGraphic(progressIndicator);
-
-        alert.contentTextProperty().bind(task.messageProperty());
-        progressIndicator.progressProperty().bind(task.progressProperty());
-
-        alert.initOwner(primaryStage);
-        alert.initModality(Modality.APPLICATION_MODAL);
+        Alert alert = new TaskAlert<Data>(task, "Loading data", "Please wait", primaryStage);
 
         task.setOnSucceeded(event -> {
             alert.close();
             data.setValue(task.getValue());
             ExceptionAlert.doTry(() -> Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get()));
         });
-        task.setOnCancelled(event -> alert.close());
-        task.setOnFailed(event -> {
-            alert.close();
-            Alert error = new ExceptionAlert(task.getException());
-            error.show();
-        });
 
         Thread th = new Thread(task);
         th.setDaemon(true);
         th.start();
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
-            task.cancel();
-        }
+        alert.show();
     }
 
     @FXML

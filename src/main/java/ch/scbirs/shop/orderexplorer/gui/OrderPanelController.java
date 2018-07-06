@@ -4,6 +4,7 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
+import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
@@ -59,6 +60,7 @@ public class OrderPanelController {
     private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();
+        UserSettings settings = oldUserData.getUserSettings();
         Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
 
         ProductData newProductData = new ProductData(newValue);
@@ -69,7 +71,7 @@ public class OrderPanelController {
         }
 
 
-        UserData ud = new UserData(newProductDataMap);
+        UserData ud = new UserData(newProductDataMap, settings);
         Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
 
         data.set(d);

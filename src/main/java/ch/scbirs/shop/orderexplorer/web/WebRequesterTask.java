@@ -9,7 +9,10 @@ import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class WebRequesterTask extends Task<Data> {
@@ -23,7 +26,7 @@ public class WebRequesterTask extends Task<Data> {
 
     @Override
     protected Data call() throws Exception {
-        OrderFetcher orderFetcher = new OrderFetcher();
+        OrderFetcher orderFetcher = new OrderFetcher(prevData.getUserData().getUserSettings());
         updateMessage("Fetching orders");
         while (!orderFetcher.isDone() && !isCancelled()) {
             orderFetcher.doStep();
@@ -34,7 +37,8 @@ public class WebRequesterTask extends Task<Data> {
                 .flatMap(order -> order.getProducts().stream())
                 .collect(Collectors.toSet());
         updateMessage("Fetching images");
-        ProductImageFetcher imageFetcher = new ProductImageFetcher(new ArrayList<>(allProducts), OrderExplorer.FOLDER);
+        ProductImageFetcher imageFetcher = new ProductImageFetcher(new ArrayList<>(allProducts), OrderExplorer.FOLDER,
+                prevData.getUserData().getUserSettings());
         while (!imageFetcher.isDone() && !isCancelled()) {
             imageFetcher.doStep();
             updateProgress(progress(imageFetcher.currentProgress(), imageFetcher.maxProgress(), 2, 2), 1);
@@ -43,11 +47,7 @@ public class WebRequesterTask extends Task<Data> {
         updateMessage("Done");
 
         UserData userData;
-        if (prevData != null) {
-            userData = prevData.getUserData();
-        } else {
-            userData = new UserData(new HashMap<>());
-        }
+        userData = prevData.getUserData();
 
         return new Data(orders, images, userData);
     }

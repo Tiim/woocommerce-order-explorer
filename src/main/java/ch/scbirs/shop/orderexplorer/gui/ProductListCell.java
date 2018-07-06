@@ -6,6 +6,7 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
+import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
@@ -122,6 +123,7 @@ public class ProductListCell extends ListCell<Product> {
     private void changed(ObservableValue<? extends Status> o, Status old, Status n) {
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();
+        UserSettings settings = oldUserData.getUserSettings();
         Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
 
         ProductData newProductData = new ProductData(n);
@@ -130,7 +132,7 @@ public class ProductListCell extends ListCell<Product> {
         newProductDataMap.put(currentItem.getId(), newProductData);
 
 
-        UserData ud = new UserData(newProductDataMap);
+        UserData ud = new UserData(newProductDataMap, settings);
         Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
 
         data.set(d);

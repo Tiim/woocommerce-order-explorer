@@ -10,13 +10,16 @@ import java.util.Map;
 public class UserData {
 
     private final Map<Integer, ProductData> productData;
+    private final UserSettings userSettings;
 
     private UserData() {
         productData = new HashMap<>();
+        userSettings = null;
     }
 
-    public UserData(Map<Integer, ProductData> productData) {
+    public UserData(Map<Integer, ProductData> productData, UserSettings userSettings) {
         this.productData = Collections.unmodifiableMap(new HashMap<>(productData));
+        this.userSettings = userSettings;
     }
 
     public ProductData getProductData(Product p) {
@@ -42,5 +45,9 @@ public class UserData {
     @Override
     public int hashCode() {
         return Objects.hashCode(productData);
+    }
+
+    public UserSettings getUserSettings() {
+        return userSettings;
     }
 }

@@ -2,6 +2,7 @@ package ch.scbirs.shop.orderexplorer.web;
 
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.SteppedTask;
@@ -30,17 +31,19 @@ public class ProductImageFetcher implements SteppedTask {
     private final Path folder;
     private final OkHttpClient client = new OkHttpClient();
     private final int maxProgress;
+    private final UserSettings settings;
 
     private final Map<String, String> output = new HashMap<>();
 
     private Product currentProduct = null;
     private String currentUrl = null;
 
-    public ProductImageFetcher(List<Product> products, Path folder) {
+    public ProductImageFetcher(List<Product> products, Path folder, UserSettings settings) {
 
         this.products = new ArrayDeque<>(products);
         this.folder = folder;
         maxProgress = products.size() * 2;
+        this.settings = settings;
     }
 
     @Override
@@ -93,10 +96,10 @@ public class ProductImageFetcher implements SteppedTask {
         Env env = Env.getInstance();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
-                .host(env.getProperty("host"))
+                .host(settings.getHost())
                 .addPathSegments(String.format("wp-json/wc/v2/products/%d", product.getProductId(), product.getVariationId()))
-                .addQueryParameter("consumer_key", env.getProperty("consumer_key"))
-                .addQueryParameter("consumer_secret", env.getProperty("consumer_secret"))
+                .addQueryParameter("consumer_key", settings.getConsumerKey())
+                .addQueryParameter("consumer_secret", settings.getConsumerSecret())
                 .build();
 
         Request request = new Request.Builder().url(url).build();
@@ -112,10 +115,10 @@ public class ProductImageFetcher implements SteppedTask {
         Env env = Env.getInstance();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
-                .host(env.getProperty("host"))
+                .host(settings.getHost())
                 .addPathSegments(String.format("wp-json/wc/v2/products/%d/variations/%d", product.getProductId(), product.getVariationId()))
-                .addQueryParameter("consumer_key", env.getProperty("consumer_key"))
-                .addQueryParameter("consumer_secret", env.getProperty("consumer_secret"))
+                .addQueryParameter("consumer_key", settings.getConsumerKey())
+                .addQueryParameter("consumer_secret", settings.getConsumerSecret())
                 .build();
 
         Request request = new Request.Builder().url(url).build();

@@ -1,4 +1,4 @@
-package ch.scbirs.shop.orderexplorer.gui;
+package ch.scbirs.shop.orderexplorer.gui.util;
 
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.application.Platform;
