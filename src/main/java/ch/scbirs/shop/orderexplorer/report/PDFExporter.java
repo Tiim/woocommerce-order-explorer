@@ -22,46 +22,48 @@ public class PDFExporter extends Exporter {
         super(header);
     }
 
+    public PDDocument generatePDDocument() throws IOException {
+        PDDocument doc = new PDDocument();
+        PDPage myPage = new PDPage();
+
+        float margin = 25;
+        // starting y position is whole page height subtracted by top and bottom margin
+        float yStartNewPage = myPage.getMediaBox().getHeight() - (2 * margin);
+        // we want table across whole page width (subtracted by left and right margin ofcourse)
+        float tableWidth = myPage.getMediaBox().getWidth() - (2 * margin);
+        float bottomMargin = 50;
+        // y position is your coordinate of top left corner of the table
+        float yPosition = 50;
+
+        double[] headerSize = getStringWidths(data, PDType1Font.HELVETICA);
+
+        BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin,
+                doc, myPage, true, true);
+
+
+        List<String> header = data.get(0);
+        Row<PDPage> headerRow = table.createRow(15f);
+
+        for (int i = 0; i < header.size(); i++) {
+            String v = header.get(i);
+            Cell<PDPage> cell = headerRow.createCell((float) (headerSize[i] * 100), v);
+        }
+        table.addHeaderRow(headerRow);
+
+
+        for (int i = 1; i < data.size(); i++) {
+            List<String> d = data.get(i);
+            Row<PDPage> row = table.createRow(15);
+            row(d, row);
+        }
+
+        table.draw();
+        return doc;
+    }
+
     @Override
     public void save(Path p) throws IOException {
-        try (PDDocument doc = new PDDocument()) {
-            PDPage myPage = new PDPage();
-
-            float margin = 25;
-            // starting y position is whole page height subtracted by top and bottom margin
-            float yStartNewPage = myPage.getMediaBox().getHeight() - (2 * margin);
-            // we want table across whole page width (subtracted by left and right margin ofcourse)
-            float tableWidth = myPage.getMediaBox().getWidth() - (2 * margin);
-            float bottomMargin = 50;
-            // y position is your coordinate of top left corner of the table
-            float yPosition = 50;
-
-            double[] headerSize = getStringWidths(data, PDType1Font.HELVETICA);
-
-            BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin,
-                    doc, myPage, true, true);
-
-
-            List<String> header = data.get(0);
-            Row<PDPage> headerRow = table.createRow(15f);
-
-            for (int i = 0; i < header.size(); i++) {
-                String v = header.get(i);
-                Cell<PDPage> cell = headerRow.createCell((float) (headerSize[i] * 100), v);
-            }
-            table.addHeaderRow(headerRow);
-
-
-            for (int i = 1; i < data.size(); i++) {
-                List<String> d = data.get(i);
-                Row<PDPage> row = table.createRow(15);
-                row(d, row);
-            }
-
-            table.draw();
-
-
-            doc.addPage(myPage);
+        try (PDDocument doc = generatePDDocument()) {
             doc.save(p.toFile());
         }
     }

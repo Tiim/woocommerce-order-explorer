@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -47,6 +48,18 @@ public class PDFView extends ImageView {
 
     public void setPdf(PDDocument pdf) {
         this.pdf.set(pdf);
+    }
+
+    public IntegerProperty pageProperty() {
+        return page;
+    }
+
+    public int getPage() {
+        return page.get();
+    }
+
+    public void setPage(int page) {
+        this.page.set(page);
     }
 
     @Override

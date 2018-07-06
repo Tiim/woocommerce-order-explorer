@@ -6,6 +6,12 @@
         </Console>
     </Appenders>
     <Loggers>
+        <Logger name="org.apache.pdfbox" level="TRACE" additivity="false">
+            <AppenderRef ref="Console" level="fatal"/>
+        </Logger>
+        <Logger name="org.apache.fontbox" level="TRACE" additivity="false">
+            <AppenderRef ref="Console" level="fatal"/>
+        </Logger>
         <Root level="trace">
             <AppenderRef ref="Console"/>
         </Root>

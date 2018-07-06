@@ -2,8 +2,8 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
-import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
+import ch.scbirs.shop.orderexplorer.gui.report.ReportScreen;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
@@ -202,14 +202,13 @@ public class GuiController {
 
     @FXML
     private void generateReportOrder(ActionEvent actionEvent) throws IOException {
-        OrderReport report = new OrderReport(data.get());
-        report.show();
+        //TODO
     }
 
     @FXML
     private void generateReportOverview(ActionEvent actionEvent) throws IOException {
-        OverviewReport report = new OverviewReport(data.get());
-        report.show();
+        ReportScreen rs = new ReportScreen(new OverviewReport(data.get()));
+        rs.show();
     }
 
     @FXML
