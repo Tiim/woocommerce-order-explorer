@@ -89,6 +89,7 @@ public class GuiController {
         list.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> orderPanel.setCurrentOrder(newv));
 
         FXMLLoader loader = new FXMLLoader(GuiController.class.getResource("order_panel.fxml"));
+        loader.setResources(resources);
         Parent panel = loader.load();
         orderPanel = loader.getController();
         orderPanel.setData(this.data);

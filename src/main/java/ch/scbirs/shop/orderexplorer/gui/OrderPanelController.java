@@ -26,12 +26,16 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class OrderPanelController {
     private static final Logger LOGGER = LogUtil.get();
     private final ChangeListener<Status> statusChangeListener = this::changed;
 
     private Order currentOrder;
+
+    @FXML
+    private ResourceBundle resources;
 
     @FXML
     private Label firstName;
@@ -108,11 +112,12 @@ public class OrderPanelController {
     @FXML
     private void sendMail(MouseEvent mouseEvent) {
         Order o = this.currentOrder;
-        String subject = String.format("ScBirs - Bestellung #%d", o.getId());
-        String body = String.format("Bestellung von %s %s%n", o.getFirstName(), o.getLastName());
-        body += String.format("Total CHF %s%n%n%n", o.getTotal());
+        String subject = String.format(resources.getString("app.order.mail.Subject"), o.getId());
+        String body = String.format(resources.getString("app.order.mail.Body"), o.getFirstName(), o.getLastName());
+        body += String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal());
         for (Product p : o.getProducts()) {
-            body += String.format("%dx %s - CHF %s%n", p.getQuantity(), p.getName(), p.getPrice());
+            body += String.format(resources.getString("app.order.mail.Body.Product"),
+                    p.getQuantity(), p.getName(), p.getPrice());
             body += "* " + Util.formatMap(p.getMeta()) + "\n\n";
         }
         Escaper escaper = UrlEscapers.urlFragmentEscaper();
