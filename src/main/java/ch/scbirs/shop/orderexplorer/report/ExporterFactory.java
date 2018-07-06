@@ -22,6 +22,7 @@ public class ExporterFactory {
 
     public static List<FileChooser.ExtensionFilter> getSupportedExtensions() {
         return Arrays.asList(
+                new FileChooser.ExtensionFilter("PDF", "*.pdf"),
                 new FileChooser.ExtensionFilter("Excel File", "*.xls"),
                 new FileChooser.ExtensionFilter("TSV File", "*.tsv")
         );
@@ -41,6 +42,8 @@ public class ExporterFactory {
 
     public Exporter build() {
         switch (ext) {
+            case "pdf":
+                return new PDFExporter(header);
             case "xls":
                 return new ExcelExporter(header);
             case "tsv":
