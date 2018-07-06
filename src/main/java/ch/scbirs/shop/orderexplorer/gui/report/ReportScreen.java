@@ -4,11 +4,15 @@ import ch.scbirs.shop.orderexplorer.gui.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.print.Printer;
+import javafx.print.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
@@ -91,11 +95,38 @@ public abstract class ReportScreen<T> extends BorderPane {
         }
     }
 
+    protected void print(Printer printer) {
+        Pane node = getPrintableNode();
+        WritableImage snap = node.snapshot(null, new WritableImage((int) node.getPrefWidth(),
+                (int) node.getPrefHeight()));
+
+        ImageView image = new ImageView(snap);
+
+        PageLayout pageLayout
+                = printer.createPageLayout(Paper.A4, getPrintOrientation(), Printer.MarginType.HARDWARE_MINIMUM);
+        PrinterJob job = PrinterJob.createPrinterJob(printer);
+        double scaleX
+                = pageLayout.getPrintableWidth() / image.getBoundsInParent().getWidth();
+        double scaleY
+                = pageLayout.getPrintableHeight() / image.getBoundsInParent().getHeight();
+        Scale scale = new Scale(scaleX, scaleY);
+        image.getTransforms().add(scale);
+
+        if (job.showPrintDialog(node.getScene().getWindow())) {
+            boolean success = job.printPage(pageLayout, image);
+            if (success) {
+                job.endJob();
+            }
+        }
+    }
+
     protected abstract String getFxml();
 
     protected abstract Object getNewController(T data);
 
-    protected abstract void print(Printer printer);
-
     protected abstract void export(Path p) throws IOException;
+
+    protected abstract Pane getPrintableNode();
+
+    protected abstract PageOrientation getPrintOrientation();
 }
