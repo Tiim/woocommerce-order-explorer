@@ -59,6 +59,12 @@ public class PDFView extends ImageView {
     }
 
     public void setPage(int page) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (page >= pdf.get().getNumberOfPages()) {
+            page = pdf.get().getNumberOfPages() - 1;
+        }
         this.page.set(page);
     }
 
@@ -92,7 +98,7 @@ public class PDFView extends ImageView {
         if (i == null) {
             return minHeight(width);
         }
-        return i.getWidth();
+        return i.getHeight();
     }
 
     @Override

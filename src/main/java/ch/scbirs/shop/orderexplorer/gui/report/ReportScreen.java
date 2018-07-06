@@ -4,8 +4,9 @@ import ch.scbirs.shop.orderexplorer.gui.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
@@ -23,17 +24,24 @@ public class ReportScreen {
     private Stage stage;
 
     @FXML
-    private Parent root;
+    private BorderPane root;
     @FXML
     private PDFView pdfView;
+    @FXML
+    private Label page;
 
 
     public ReportScreen(Report report) throws IOException {
         this.report = report;
 
-        FXMLLoader loader = new FXMLLoader(ReportScreen.class.getResource("report_toolbar.fxml"));
+        FXMLLoader loader = new FXMLLoader(ReportScreen.class.getResource("report_window.fxml"));
         loader.setController(this);
         loader.load();
+    }
+
+    @FXML
+    private void initialize() {
+        page.textProperty().bind(pdfView.pageProperty().asString());
     }
 
     public void show() {
@@ -45,7 +53,8 @@ public class ReportScreen {
 
         stage.setScene(scene);
 
-        stage.setResizable(true);
+        stage.setResizable(false);
+        stage.sizeToScene();
 
         stage.show();
     }
@@ -56,7 +65,6 @@ public class ReportScreen {
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPageable(new PDFPageable(document));
         if (job.printDialog()) {
-            job.pageDialog(job.defaultPage());
             ExceptionAlert.doTry(() -> job.print());
         }
     }
@@ -70,5 +78,16 @@ public class ReportScreen {
         if (selectedFile != null) {
             ExceptionAlert.doTry(() -> report.export(selectedFile.toPath()));
         }
+    }
+
+    @FXML
+    private void pageNext() {
+        pdfView.setPage(pdfView.getPage() + 1);
+    }
+
+
+    @FXML
+    private void pagePrev() {
+        pdfView.setPage(pdfView.getPage() - 1);
     }
 }

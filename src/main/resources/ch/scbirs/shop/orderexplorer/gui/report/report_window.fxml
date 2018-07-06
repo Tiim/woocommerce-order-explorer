@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import ch.scbirs.shop.orderexplorer.gui.report.PDFView?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="400.0" prefWidth="600.0"
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root"
             xmlns="http://javafx.com/javafx/8.0.121">
     <top>
-        <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0"
+        <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              spacing="5.0"
               BorderPane.alignment="CENTER">
             <children>
+                <Button mnemonicParsing="false" onAction="#pagePrev" text="&lt;"/>
+                <Label text="0" fx:id="page"/>
+                <Button mnemonicParsing="false" onAction="#pageNext" text="&gt;"/>
+                <Region HBox.hgrow="ALWAYS"/>
                 <Button mnemonicParsing="false" onAction="#print" text="Print"/>
                 <Button mnemonicParsing="false" onAction="#exportImpl" text="Export"/>
             </children>
