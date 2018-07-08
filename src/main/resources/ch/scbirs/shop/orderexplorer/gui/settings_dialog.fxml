@@ -14,13 +14,15 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
     </rowConstraints>
     <children>
-        <Label text="Host"/>
-        <TextField fx:id="host" prefWidth="300.0" promptText="host.example.com" GridPane.columnIndex="1"/>
-        <Label text="Consumer Key" GridPane.rowIndex="1"/>
-        <TextField fx:id="key" prefWidth="300.0" promptText="ck_xxxxxxxxxxxxxxxx" GridPane.columnIndex="1"
+        <Label text="%app.settings.conf.Host"/>
+        <TextField fx:id="host" prefWidth="300.0" promptText="%app.settings.conf.Host.Prompt" GridPane.columnIndex="1"/>
+        <Label text="%app.settings.conf.ConsumerKey" GridPane.rowIndex="1"/>
+        <TextField fx:id="key" prefWidth="300.0" promptText="%app.settings.conf.ConsumerKey.Prompt"
+                   GridPane.columnIndex="1"
                    GridPane.rowIndex="1"/>
-        <Label text="Consumer Secret" GridPane.rowIndex="2"/>
-        <TextField fx:id="secret" prefWidth="300.0" promptText="cs_xxxxxxxxxxxxxxxx" GridPane.columnIndex="1"
+        <Label text="%app.settings.conf.ConsumerSecret" GridPane.rowIndex="2"/>
+        <TextField fx:id="secret" prefWidth="300.0" promptText="%app.settings.conf.ConsumerSecret.Prompt"
+                   GridPane.columnIndex="1"
                    GridPane.rowIndex="2"/>
     </children>
     <padding>

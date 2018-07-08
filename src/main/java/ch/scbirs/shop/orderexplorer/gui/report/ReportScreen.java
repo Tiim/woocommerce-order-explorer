@@ -16,10 +16,12 @@ import org.apache.pdfbox.printing.PDFPageable;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class ReportScreen {
 
     private static final Logger LOGGER = LogUtil.get();
+    private static ResourceBundle resources;
     private final Report report;
     private Stage stage;
 
@@ -35,8 +37,14 @@ public class ReportScreen {
         this.report = report;
 
         FXMLLoader loader = new FXMLLoader(ReportScreen.class.getResource("report_window.fxml"));
+        loader.setResources(resources);
         loader.setController(this);
         loader.load();
+    }
+
+    public static void setResources(ResourceBundle resources) {
+
+        ReportScreen.resources = resources;
     }
 
     @FXML
@@ -49,6 +57,7 @@ public class ReportScreen {
         pdfView.setPdf(report.getPdf());
 
         stage = new Stage();
+        stage.setTitle(report.getName(resources));
         Scene scene = new Scene(root);
 
         stage.setScene(scene);

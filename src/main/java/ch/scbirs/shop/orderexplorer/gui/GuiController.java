@@ -84,6 +84,9 @@ public class GuiController {
 
     @FXML
     public void initialize() throws IOException {
+
+        ReportScreen.setResources(resources);
+
         list.setCellFactory(param -> new OrderListCell(data));
 
         list.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> orderPanel.setCurrentOrder(newv));
@@ -131,9 +134,9 @@ public class GuiController {
         SettingsDialog sd = null;
         Data old = this.data.get();
         if (old == null || old.getUserData() == null || old.getUserData().getUserSettings() == null) {
-            sd = new SettingsDialog(null);
+            sd = new SettingsDialog(null, resources);
         } else {
-            sd = new SettingsDialog(old.getUserData().getUserSettings());
+            sd = new SettingsDialog(old.getUserData().getUserSettings(), resources);
         }
         Optional<UserSettings> newsettings = sd.showAndWait();
         if (newsettings.isPresent()) {

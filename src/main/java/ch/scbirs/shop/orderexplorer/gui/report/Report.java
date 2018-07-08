@@ -7,6 +7,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public abstract class Report {
     public abstract PDDocument getPdf();
@@ -16,4 +17,6 @@ public abstract class Report {
     public List<FileChooser.ExtensionFilter> getExtensionFilters() {
         return ExporterFactory.getSupportedExtensions();
     }
+
+    public abstract String getName(ResourceBundle resources);
 }

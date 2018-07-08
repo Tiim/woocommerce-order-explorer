@@ -14,6 +14,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class OverviewReport extends Report {
 
@@ -60,5 +61,10 @@ public class OverviewReport extends Report {
                     pr.getProduct().getPrice()
             );
         }
+    }
+
+    @Override
+    public String getName(ResourceBundle resources) {
+        return resources.getString("app.report.overview.Name");
     }
 }

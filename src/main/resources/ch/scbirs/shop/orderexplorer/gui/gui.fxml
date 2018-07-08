@@ -48,7 +48,8 @@
                            minWidth="200.0"/>
              </center>
              <top>
-                 <TextField fx:id="search" onKeyTyped="#onSearch" promptText="Search" BorderPane.alignment="CENTER"/>
+                 <TextField fx:id="search" onKeyTyped="#onSearch" promptText="%app.orders.search.Prompt"
+                            BorderPane.alignment="CENTER"/>
              </top>
          </BorderPane>
        <AnchorPane fx:id="detailPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" />

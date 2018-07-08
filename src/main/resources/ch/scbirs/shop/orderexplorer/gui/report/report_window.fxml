@@ -10,12 +10,12 @@
               spacing="5.0"
               BorderPane.alignment="CENTER">
             <children>
-                <Button mnemonicParsing="false" onAction="#pagePrev" text="&lt;"/>
+                <Button mnemonicParsing="false" onAction="#pagePrev" text="%app.report.toolbar.Prev"/>
                 <Label text="0" fx:id="page"/>
-                <Button mnemonicParsing="false" onAction="#pageNext" text="&gt;"/>
+                <Button mnemonicParsing="false" onAction="#pageNext" text="%app.report.toolbar.Next"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button mnemonicParsing="false" onAction="#print" text="Print"/>
-                <Button mnemonicParsing="false" onAction="#exportImpl" text="Export"/>
+                <Button mnemonicParsing="false" onAction="#print" text="%app.report.toolbar.Print"/>
+                <Button mnemonicParsing="false" onAction="#exportImpl" text="%app.report.toolbar.Export"/>
             </children>
         </HBox>
     </top>

@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class SettingsDialog extends Dialog<UserSettings> {
     private static final Logger LOGGER = LogUtil.get();
@@ -23,8 +24,9 @@ public class SettingsDialog extends Dialog<UserSettings> {
     @FXML
     private TextField secret;
 
-    public SettingsDialog(UserSettings settings) {
+    public SettingsDialog(UserSettings settings, ResourceBundle bundle) {
         getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.APPLY);
+        setTitle(bundle.getString("app.settings.Title"));
         this.oldSettings = settings;
         setResultConverter(b ->
                 b == ButtonType.APPLY ?
@@ -32,6 +34,7 @@ public class SettingsDialog extends Dialog<UserSettings> {
                         this.oldSettings);
         try {
             FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("settings_dialog.fxml"));
+            loader.setResources(bundle);
             loader.setController(this);
             Parent p = loader.load();
             getDialogPane().setContent(p);
