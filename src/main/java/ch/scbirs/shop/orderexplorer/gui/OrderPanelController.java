@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
@@ -58,6 +59,11 @@ public class OrderPanelController {
         list.setCellFactory(param -> new ProductListCell(data));
         statusDropdown.setItems(FXCollections.observableArrayList(Status.values()));
         statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
+
+        Hotkeys.getInstance().putHotkey("order.mark.Open", () -> changed(null, null, Status.OPEN));
+        Hotkeys.getInstance().putHotkey("order.mark.InStock", () -> changed(null, null, Status.IN_STOCK));
+        Hotkeys.getInstance().putHotkey("order.mark.Delivered", () -> changed(null, null, Status.DELIVERED));
+
     }
 
 

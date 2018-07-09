@@ -2,6 +2,8 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
+import ch.scbirs.shop.orderexplorer.gui.hotkey.HotkeySettings;
+import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
 import ch.scbirs.shop.orderexplorer.gui.report.ReportScreen;
@@ -50,7 +52,6 @@ public class GuiController {
     private ObjectProperty<Data> data = new SimpleObjectProperty<>();
     private Stage primaryStage;
     private OrderPanelController orderPanel;
-
     @FXML
     private ResourceBundle resources;
 
@@ -61,6 +62,7 @@ public class GuiController {
     @FXML
     private AnchorPane detailPane;
     private HostServices hostServices;
+
 
     public GuiController() {
         data.addListener(this::onNewData);
@@ -191,7 +193,7 @@ public class GuiController {
     }
 
     @FXML
-    private void onReload(ActionEvent actionEvent) {
+    private void onReload() {
 
         if (data.get() != null) {
             try {
@@ -280,5 +282,10 @@ public class GuiController {
                 new FullReport(data.get()).save(selectedFile.toPath());
             });
         }
+    }
+
+    public void onHotkeyDialog() {
+        HotkeySettings hs = new HotkeySettings(resources, Hotkeys.getInstance());
+        hs.show();
     }
 }

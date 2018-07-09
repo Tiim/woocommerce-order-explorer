@@ -33,6 +33,7 @@
             <Menu text="%app.menu.Help">
                 <items>
                     <MenuItem disable="true" text="%app.menu.Help.Search"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onHotkeyDialog" text="%app.menu.Help.Hotkey"/>
                     <SeparatorMenuItem />
                     <MenuItem onAction="#handleAboutAction" text="%app.menu.Help.About"/>
                 </items>
