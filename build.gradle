@@ -1,10 +1,25 @@
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+
 group 'ch.scbirs.shop'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
+
 sourceCompatibility = 1.10
 targetCompatibility = 1.10
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.squareup.okhttp3:okhttp:3.10.0'
+    }
+}
 
 repositories {
     mavenCentral()
@@ -40,5 +55,43 @@ jar {
     }
     manifest {
         attributes 'Main-Class': 'ch.scbirs.shop.orderexplorer.OrderExplorer'
+    }
+}
+
+gradle.buildFinished { result ->
+
+    if (System.getenv("CI")?.toBoolean() ?: false) {
+        def apiToken = System.getenv('PUSHOVER_API_TOKEN')
+        def userKey = System.getenv('PUSHOVER_USER_KEY')
+
+        if (apiToken != null && userKey != null) {
+            println('Sending build status with Pushover')
+            def status = result.failure ? 'failed' : 'success'
+            def name = System.getenv('CI_PROJECT_NAME') ?: 'Unknown Project'
+            def pipeline = System.getenv('CI_PIPELINE_URL') ?: 'Unknown Url'
+            def msg = System.getenv('CI_COMMIT_MESSAGE') ?: 'Unknown commit message'
+            def ref = System.getenv('CI_COMMIT_REF_NAME') ?: 'unknown branch'
+            def sha = System.getenv('CI_COMMIT_SHA') ?: 'unknown git sha'
+
+
+            def body = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart('token', "$apiToken")
+                    .addFormDataPart('user', "$userKey")
+                    .addFormDataPart('title', "$name: Build $status")
+                    .addFormDataPart('message', "Commit on $ref $sha\n$msg")
+                    .addFormDataPart('url', pipeline)
+                    .build()
+
+            def req = new Request.Builder()
+                    .url('https://api.pushover.net/1/messages.json')
+                    .post(body)
+                    .build();
+            def res = new OkHttpClient().newCall(req)
+
+            println(res.execute().body().string())
+        } else {
+            println('Skipping notification, Pushover credentials are not present')
+        }
     }
 }

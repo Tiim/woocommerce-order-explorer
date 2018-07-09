@@ -1,0 +1,15 @@
+image: goodforgod/debian-jdk10-oracle
+
+stages:
+  - build
+  - notify
+
+cache:
+  paths:
+    - .gradle/caches
+    - .gradle/wrapper
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
