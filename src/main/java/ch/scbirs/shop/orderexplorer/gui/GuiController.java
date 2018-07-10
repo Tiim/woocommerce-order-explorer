@@ -214,13 +214,13 @@ public class GuiController {
             }
         }
 
-        if (data.get().getUserData().getUserSettings() == null) {
+        if (data.get() == null || data.get().getUserData() == null || data.get().getUserData().getUserSettings() == null) {
             onSettingsDialog();
         }
 
         Task<Data> task = new WebRequesterTask(data.get());
 
-        Alert alert = new TaskAlert<Data>(task, resources.getString("app.dialog.loading.Title"),
+        Alert alert = new TaskAlert<>(task, resources.getString("app.dialog.loading.Title"),
                 resources.getString("app.dialog.loading.Header"), primaryStage);
 
         task.setOnSucceeded(event -> {
