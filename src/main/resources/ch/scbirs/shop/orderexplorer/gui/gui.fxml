@@ -14,9 +14,15 @@
                     <MenuItem mnemonicParsing="false" onAction="#onCheckConnection"
                               text="%app.menu.File.CheckConnection"/>
                     <MenuItem mnemonicParsing="false" onAction="#onSettingsDialog" text="%app.menu.File.Settings"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="%app.menu.File.Backup"/>
                     <SeparatorMenuItem />
                     <MenuItem onAction="#onExit" text="%app.menu.File.Exit"/>
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="%app.menu.Backup">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="%app.menu.Backup.New"/>
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <Menu fx:id="recentBackup" mnemonicParsing="false" text="\%app.menu.Backup.Recent"/>
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="%app.menu.Reports">

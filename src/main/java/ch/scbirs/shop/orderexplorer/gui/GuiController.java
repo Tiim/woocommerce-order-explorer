@@ -15,6 +15,7 @@ import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
+import ch.scbirs.shop.orderexplorer.util.BindingUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.CheckConnectionTask;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
@@ -23,14 +24,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -63,6 +64,8 @@ public class GuiController {
     @FXML
     private TextField search;
     @FXML
+    private Menu recentBackup;
+    @FXML
     private ListView<Order> list;
     @FXML
     private AnchorPane detailPane;
@@ -74,7 +77,7 @@ public class GuiController {
     }
 
     private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
-        LOGGER.info("Data value has changed");
+        LOGGER.info("Data value has changed " + data);
         int idx = list.getSelectionModel().getSelectedIndex();
         if (idx < 0) {
             idx = 0;
@@ -118,6 +121,20 @@ public class GuiController {
         hotkeys.keymap(HOTKEY_REPORT_ORDER, KeyCode.F1, this::generateReportOrder);
         hotkeys.keymap(HOTKEY_REPORT_OVERVIEW, KeyCode.F2, this::generateReportOverview);
         hotkeys.keymap(HOTKEY_REPORT_FULL, KeyCode.F3, this::generateReportFull);
+
+
+        ObservableList<String> backups = BackupProvider.backups();
+        ObservableList<MenuItem> items = recentBackup.getItems();
+        EventHandler<ActionEvent> actionEventHandle = event -> {
+            String filename = ((MenuItem) event.getSource()).getText();
+            ExceptionAlert.doTry(() -> {
+                        data.set(BackupProvider.loadBackup(filename));
+                    }
+            );
+        };
+        BindingUtil.mapContent(items, backups, MenuItem::new,
+                m -> m.setOnAction(actionEventHandle), m -> m.setOnAction(null)
+        );
     }
 
     @FXML
@@ -130,7 +147,7 @@ public class GuiController {
     private void onSave(ActionEvent actionEvent) throws IOException {
         if (data.get() != null) {
             try {
-                BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER);
+                BackupProvider.nextBackup(data.get());
             } catch (IOException e) {
                 LOGGER.warn("Can't make backup", e);
             }
@@ -208,7 +225,7 @@ public class GuiController {
 
         if (data.get() != null) {
             try {
-                BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER);
+                BackupProvider.nextBackup(data.get());
             } catch (IOException e) {
                 LOGGER.warn("Can't make backup", e);
             }
@@ -239,7 +256,7 @@ public class GuiController {
     @FXML
     private void onBackup(ActionEvent actionEvent) {
         if (data != null) {
-            ExceptionAlert.doTry(() -> BackupProvider.nextBackup(data.get(), OrderExplorer.FOLDER));
+            ExceptionAlert.doTry(() -> BackupProvider.nextBackup(data.get()));
         } else {
             AlertUtil.showWarning(resources.getString("app.dialog.backup.NoData"));
         }

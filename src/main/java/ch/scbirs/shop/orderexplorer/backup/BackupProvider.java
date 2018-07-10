@@ -2,6 +2,8 @@ package ch.scbirs.shop.orderexplorer.backup;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.Logger;
 
@@ -27,8 +29,21 @@ public class BackupProvider {
     private static final Pattern REGEX = Pattern.compile("backup-(.+)\\.json");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd-HH-mm-ss");
 
+    private static ObservableList<String> backups;
+    private static Path root;
 
-    public static void nextBackup(Data data, Path root) throws IOException {
+    public static void setRoot(Path root) {
+        if (BackupProvider.root != null) {
+            throw new IllegalStateException("Root path already set");
+        }
+        BackupProvider.root = root;
+    }
+
+
+    public static void nextBackup(Data data) throws IOException {
+        if (data == null) {
+            return;
+        }
         Path folder = root.resolve(FOLDER);
 
         Files.createDirectories(folder);
@@ -36,6 +51,10 @@ public class BackupProvider {
         newBackup(data, folder);
 
         cleanupOldBackups(folder);
+    }
+
+    public static Data loadBackup(String name) throws IOException {
+        return Data.fromJsonFile(root.resolve(FOLDER).resolve(name));
     }
 
     private static void cleanupOldBackups(Path folder) throws IOException {
@@ -49,13 +68,16 @@ public class BackupProvider {
             LOGGER.info("Deleting backup " + oldest);
 
             Files.delete(folder.resolve(oldest));
+            backups.remove(oldest);
         }
     }
 
     private static void newBackup(Data data, Path folder) throws IOException {
-        Path file = folder.resolve(String.format(FORMAT, LocalDateTime.now().format(DATE_FORMATTER)));
+        String fileName = String.format(FORMAT, LocalDateTime.now().format(DATE_FORMATTER));
+        Path file = folder.resolve(fileName);
         LOGGER.info("New Backup " + file);
         Data.toJsonFile(file, data);
+        backups.add(fileName);
     }
 
     private static LocalDateTime getDate(String filename) {
@@ -76,6 +98,18 @@ public class BackupProvider {
         return Files.list(folder)
                 .map(p -> FilenameUtils.getName(p.toString()))
                 .collect(Collectors.toList());
+    }
+
+    public static ObservableList<String> backups() {
+        if (backups == null) {
+            try {
+                backups = FXCollections.observableList(listBackups(root.resolve(FOLDER)));
+            } catch (IOException e) {
+                LOGGER.error("Can't list backups", e);
+                backups = FXCollections.observableArrayList();
+            }
+        }
+        return backups;
     }
 
 }

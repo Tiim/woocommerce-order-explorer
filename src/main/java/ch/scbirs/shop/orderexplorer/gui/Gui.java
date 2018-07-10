@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
+import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ public class Gui extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Hotkeys.init(OrderExplorer.FOLDER.resolve("keymap.json"));
+        BackupProvider.setRoot(OrderExplorer.FOLDER);
 
         ResourceBundle bundle = ResourceBundle.getBundle("lang.bundle");
 
