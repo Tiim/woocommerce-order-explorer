@@ -84,6 +84,15 @@ public class Hotkeys {
         }
     }
 
+    void reset() {
+        keyMap.clear();
+        try {
+            save(file);
+        } catch (IOException e) {
+            LOGGER.warn("Can't save keymap");
+        }
+    }
+
     public boolean match(String s, KeyEvent event) {
         if (keyMap.containsKey(s)) {
             return keyMap.get(s).match(event);

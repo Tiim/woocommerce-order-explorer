@@ -130,4 +130,11 @@ public class HotkeySettings extends Dialog<Void> {
         hotkeys.delete(item.getLeft());
         changeItems();
     }
+
+    @FXML
+    private void onButtonReset() {
+
+        hotkeys.reset();
+        changeItems();
+    }
 }
