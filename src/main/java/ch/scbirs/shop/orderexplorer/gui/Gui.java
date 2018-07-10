@@ -1,5 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.OrderExplorer;
+import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -17,8 +19,11 @@ public class Gui extends Application {
         Gui.launch(args);
     }
 
+    private Scene scene;
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        Hotkeys.init(OrderExplorer.FOLDER.resolve("keymap.json"));
 
         ResourceBundle bundle = ResourceBundle.getBundle("lang.bundle");
 
@@ -36,6 +41,8 @@ public class Gui extends Application {
         Scene scene = new Scene(root, bounds.getWidth() * 2f / 3f, bounds.getHeight() * 2f / 3f);
 
         scene.getStylesheets().add("styles.css");
+
+        scene.setOnKeyPressed(event -> Hotkeys.getInstance().execute(event));
 
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(400);

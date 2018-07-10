@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
+import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
@@ -21,6 +22,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +34,9 @@ import java.util.ResourceBundle;
 
 public class OrderPanelController {
     private static final Logger LOGGER = LogUtil.get();
+    private static final String HOTKEY_OPEN = "order.mark.Open";
+    private static final String HOTKEY_IN_STOCK = "order.mark.InStock";
+    private static final String HOTKEY_DELIVERED = "order.mark.Delivered";
     private final ChangeListener<Status> statusChangeListener = this::changed;
 
     private Order currentOrder;
@@ -58,6 +65,17 @@ public class OrderPanelController {
         list.setCellFactory(param -> new ProductListCell(data));
         statusDropdown.setItems(FXCollections.observableArrayList(Status.values()));
         statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
+
+        Hotkeys hotkey = Hotkeys.getInstance();
+        hotkey.keymap(HOTKEY_OPEN, new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHIFT_DOWN),
+                () -> statusDropdown.getSelectionModel().select(Status.OPEN)
+        );
+        hotkey.keymap(HOTKEY_IN_STOCK, new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.SHIFT_DOWN),
+                () -> statusDropdown.getSelectionModel().select(Status.IN_STOCK)
+        );
+        hotkey.keymap(HOTKEY_DELIVERED, new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.SHIFT_DOWN),
+                () -> statusDropdown.getSelectionModel().select(Status.DELIVERED)
+        );
     }
 
 
@@ -66,7 +84,6 @@ public class OrderPanelController {
         UserData oldUserData = oldData.getUserData();
         UserSettings settings = oldUserData.getUserSettings();
         Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
-
         ProductData newProductData = new ProductData(newValue);
 
         Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
