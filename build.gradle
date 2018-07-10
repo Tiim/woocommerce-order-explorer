@@ -3,7 +3,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 group 'ch.scbirs.shop'
-version '1.0-SNAPSHOT'
+version '0.2.0'
 
 apply plugin: 'java'
 
@@ -71,15 +71,13 @@ gradle.buildFinished { result ->
             def pipeline = System.getenv('CI_PIPELINE_URL') ?: 'Unknown Url'
             def msg = System.getenv('CI_COMMIT_MESSAGE') ?: 'Unknown commit message'
             def ref = System.getenv('CI_COMMIT_REF_NAME') ?: 'unknown branch'
-            def sha = System.getenv('CI_COMMIT_SHA') ?: 'unknown git sha'
-
 
             def body = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart('token', "$apiToken")
                     .addFormDataPart('user', "$userKey")
                     .addFormDataPart('title', "$name: Build $status")
-                    .addFormDataPart('message', "Commit on $ref $sha\n$msg")
+                    .addFormDataPart('message', "Commit on $ref \n$msg")
                     .addFormDataPart('url', pipeline)
                     .build()
 
