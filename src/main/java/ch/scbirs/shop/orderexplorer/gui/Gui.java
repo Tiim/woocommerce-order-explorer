@@ -42,6 +42,8 @@ public class Gui extends Application {
 
         scene.getStylesheets().add("styles.css");
 
+        scene.setOnKeyPressed(event -> Hotkeys.getInstance().execute(event));
+
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);

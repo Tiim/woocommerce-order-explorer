@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui.hotkey;
 
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,17 +55,23 @@ public class HotkeySettings extends Dialog<Void> {
     @FXML
     private void initialize() {
         input.setOnKeyPressed(this::onKeyPressed);
-        input.textProperty().addListener((observable, oldValue, newValue) -> {
-            LOGGER.info("LISTENER " + last);
-        });
-
         list.setCellFactory(param -> new HotkeyListCell());
+
+        list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                last = newValue.getRight();
+                input.setText(newValue.getRight().getDisplayText());
+                Platform.runLater(() -> input.requestFocus());
+            }
+        });
 
         changeItems();
     }
 
     private void changeItems() {
+        int index = list.getSelectionModel().getSelectedIndex();
         list.setItems(FXCollections.observableArrayList(getData()));
+        list.getSelectionModel().select(index);
     }
 
     private List<Pair<String, KeyCombination>> getData() {
@@ -84,7 +91,7 @@ public class HotkeySettings extends Dialog<Void> {
                     e.isControlDown() ? DOWN : UP,
                     e.isAltDown() ? DOWN : UP,
                     e.isMetaDown() ? DOWN : UP,
-                    e.isShortcutDown() ? DOWN : UP
+                    UP
             );
             last = kcc;
             input.setText(kcc.getDisplayText());
@@ -111,9 +118,16 @@ public class HotkeySettings extends Dialog<Void> {
     @FXML
     private void onButtonSet() {
         Pair<String, KeyCombination> item = list.getSelectionModel().getSelectedItem();
-        KeyCombination kc = last;
 
-        hotkeys.changeBinding(item.getLeft(), kc);
+        hotkeys.overwrite(item.getLeft(), last);
+        changeItems();
+    }
+
+    @FXML
+    private void onButtonDefault() {
+        Pair<String, KeyCombination> item = list.getSelectionModel().getSelectedItem();
+
+        hotkeys.delete(item.getLeft());
         changeItems();
     }
 }

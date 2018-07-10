@@ -20,6 +20,7 @@
                     </HBox.margin>
                 </TextField>
                 <Button fx:id="button" mnemonicParsing="false" onAction="#onButtonSet" text="Set"/>
+                <Button mnemonicParsing="false" onAction="#onButtonDefault" text="Default"/>
             </children>
             <BorderPane.margin>
                 <Insets top="5.0"/>

@@ -31,6 +31,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -48,6 +49,10 @@ import java.util.stream.Collectors;
 public class GuiController {
 
     private static final Logger LOGGER = LogUtil.get();
+    private static final String HOTKEY_RELOAD = "data.Reload";
+    private static final String HOTKEY_REPORT_ORDER = "report.export.OrderReport";
+    private static final String HOTKEY_REPORT_OVERVIEW = "report.export.OverviewReport";
+    private static final String HOTKEY_REPORT_FULL = "report.export.FullReport";
 
     private ObjectProperty<Data> data = new SimpleObjectProperty<>();
     private Stage primaryStage;
@@ -107,6 +112,12 @@ public class GuiController {
                 LOGGER.warn("Failed to open json file on startup", e);
             }
         }
+
+        Hotkeys hotkeys = Hotkeys.getInstance();
+        hotkeys.keymap(HOTKEY_RELOAD, KeyCode.F5, this::onReload);
+        hotkeys.keymap(HOTKEY_REPORT_ORDER, KeyCode.F1, this::generateReportOrder);
+        hotkeys.keymap(HOTKEY_REPORT_OVERVIEW, KeyCode.F2, this::generateReportOverview);
+        hotkeys.keymap(HOTKEY_REPORT_FULL, KeyCode.F3, this::generateReportFull);
     }
 
     @FXML
@@ -260,13 +271,13 @@ public class GuiController {
     }
 
     @FXML
-    private void generateReportOrder(ActionEvent actionEvent) throws IOException {
+    private void generateReportOrder() throws IOException {
         ReportScreen rs = new ReportScreen(new OrderReport(data.get()));
         rs.show();
     }
 
     @FXML
-    private void generateReportOverview(ActionEvent actionEvent) throws IOException {
+    private void generateReportOverview() throws IOException {
         ReportScreen rs = new ReportScreen(new OverviewReport(data.get()));
         rs.show();
     }
