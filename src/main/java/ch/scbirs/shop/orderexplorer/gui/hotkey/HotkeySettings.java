@@ -120,7 +120,9 @@ public class HotkeySettings extends Dialog<Void> {
     @FXML
     private void onButtonSet() {
         Pair<String, KeyCombination> item = list.getSelectionModel().getSelectedItem();
-
+        if (item == null || last == null) {
+            return;
+        }
         hotkeys.overwrite(item.getLeft(), last);
         changeItems();
     }
