@@ -17,9 +17,9 @@
                         <Insets/>
                     </HBox.margin>
                 </TextField>
-                <Button fx:id="button" mnemonicParsing="false" onAction="#onButtonSet" text="Set"/>
-                <Button mnemonicParsing="false" onAction="#onButtonDefault" text="Default"/>
-                <Button mnemonicParsing="false" onAction="#onButtonReset" text="Reset All"/>
+                <Button fx:id="button" mnemonicParsing="false" onAction="#onButtonSet" text="%app.dialog.hotkey.Set"/>
+                <Button mnemonicParsing="false" onAction="#onButtonDefault" text="%app.dialog.hotkey.Default"/>
+                <Button mnemonicParsing="false" onAction="#onButtonReset" text="%app.dialog.hotkey.ResetAll"/>
             </children>
             <BorderPane.margin>
                 <Insets top="5.0"/>

@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
@@ -36,10 +37,11 @@ public class HotkeySettings extends Dialog<Void> {
     @FXML
     private Button button;
 
-    public HotkeySettings(ResourceBundle resources, Hotkeys hotkeys) {
+    public HotkeySettings(Stage owner, ResourceBundle resources, Hotkeys hotkeys) {
         this.hotkeys = hotkeys;
         getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
         setTitle(resources.getString("app.dialog.hotkey.Title"));
+        initOwner(owner);
         try {
             FXMLLoader loader = new FXMLLoader(HotkeySettings.class.getResource("hotkey_settings.fxml"));
             loader.setResources(resources);

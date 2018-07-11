@@ -184,7 +184,7 @@ public class GuiController {
             task.setOnSucceeded(e -> {
                 alert.close();
                 if (!task.getValue()) {
-                    AlertUtil.showError(resources.getString("app.dialog.conncheck.Error"));
+                    AlertUtil.showError(resources.getString("app.dialog.conncheck.Error"), primaryStage);
                 } else {
                     data.set(d);
                 }
@@ -199,7 +199,7 @@ public class GuiController {
     @FXML
     private void onCheckConnection() {
         if (data.get() == null || data.get().getUserData() == null || data.get().getUserData().getUserSettings() == null) {
-            AlertUtil.showError(resources.getString("app.dialog.conncheck.NoSettings"));
+            AlertUtil.showError(resources.getString("app.dialog.conncheck.NoSettings"), primaryStage);
             return;
         }
         Task<Boolean> task = new CheckConnectionTask(data.get().getUserData().getUserSettings());
@@ -209,9 +209,9 @@ public class GuiController {
         task.setOnSucceeded(e -> {
             alert.close();
             if (!task.getValue()) {
-                AlertUtil.showError(resources.getString("app.dialog.conncheck.Error"));
+                AlertUtil.showError(resources.getString("app.dialog.conncheck.Error"), primaryStage);
             } else {
-                AlertUtil.showInfo(resources.getString("app.dialog.conncheck.Success"));
+                AlertUtil.showInfo(resources.getString("app.dialog.conncheck.Success"), primaryStage);
             }
         });
 
@@ -258,7 +258,7 @@ public class GuiController {
         if (data != null) {
             ExceptionAlert.doTry(() -> BackupProvider.nextBackup(data.get()));
         } else {
-            AlertUtil.showWarning(resources.getString("app.dialog.backup.NoData"));
+            AlertUtil.showWarning(resources.getString("app.dialog.backup.NoData"), primaryStage);
         }
     }
 
@@ -313,7 +313,7 @@ public class GuiController {
     }
 
     public void onHotkeyDialog() {
-        HotkeySettings hs = new HotkeySettings(resources, Hotkeys.getInstance());
+        HotkeySettings hs = new HotkeySettings(primaryStage, resources, Hotkeys.getInstance());
         hs.show();
     }
 }

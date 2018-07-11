@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.gui.report;
 
+import ch.scbirs.shop.orderexplorer.gui.Icons;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.fxml.FXML;
@@ -58,6 +59,7 @@ public class ReportScreen {
 
         stage = new Stage();
         stage.setTitle(report.getName(resources));
+        stage.getIcons().addAll(Icons.getIcons());
         Scene scene = new Scene(root);
 
         stage.setScene(scene);

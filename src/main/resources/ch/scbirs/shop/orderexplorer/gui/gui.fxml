@@ -22,7 +22,7 @@
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#onBackup" text="%app.menu.Backup.New"/>
                     <SeparatorMenuItem mnemonicParsing="false"/>
-                    <Menu fx:id="recentBackup" mnemonicParsing="false" text="\%app.menu.Backup.Recent"/>
+                    <Menu fx:id="recentBackup" mnemonicParsing="false" text="%app.menu.Backup.Recent"/>
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="%app.menu.Reports">
