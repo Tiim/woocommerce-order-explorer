@@ -312,7 +312,8 @@ public class GuiController {
         }
     }
 
-    public void onHotkeyDialog() {
+    @FXML
+    private void onHotkeyDialog() {
         HotkeySettings hs = new HotkeySettings(primaryStage, resources, Hotkeys.getInstance());
         hs.show();
     }
