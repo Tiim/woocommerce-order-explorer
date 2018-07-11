@@ -4,6 +4,7 @@ import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.HotkeySettings;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
+import ch.scbirs.shop.orderexplorer.gui.report.MoneyReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
 import ch.scbirs.shop.orderexplorer.gui.report.ReportScreen;
@@ -296,6 +297,12 @@ public class GuiController {
     @FXML
     private void generateReportOverview() throws IOException {
         ReportScreen rs = new ReportScreen(new OverviewReport(data.get()));
+        rs.show();
+    }
+
+    @FXML
+    private void generateReportMoney() throws IOException {
+        ReportScreen rs = new ReportScreen(new MoneyReport(data.get()));
         rs.show();
     }
 

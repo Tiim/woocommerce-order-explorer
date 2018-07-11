@@ -31,6 +31,7 @@
                               text="%app.menu.Reports.OrderReport"/>
                     <MenuItem mnemonicParsing="false" onAction="#generateReportOverview"
                               text="%app.menu.Reports.OverviewReport"/>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportMoney" text="%app.menu.Reports.Money"/>
                     <SeparatorMenuItem mnemonicParsing="false"/>
                     <MenuItem mnemonicParsing="false" onAction="#generateReportFull"
                               text="%app.menu.Reports.FullReport"/>
