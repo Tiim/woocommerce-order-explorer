@@ -37,6 +37,11 @@ public class BackupProvider {
             throw new IllegalStateException("Root path already set");
         }
         BackupProvider.root = root;
+        try {
+            Files.createDirectories(root.resolve(FOLDER));
+        } catch (IOException e) {
+            LOGGER.error("Can't create backup folder");
+        }
     }
 
 
