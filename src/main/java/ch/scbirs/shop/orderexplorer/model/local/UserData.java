@@ -12,9 +12,9 @@ public class UserData {
     private final Map<Integer, ProductData> productData;
     private final UserSettings userSettings;
 
-    private UserData() {
-        productData = new HashMap<>();
-        userSettings = null;
+    public UserData() {
+        productData = Collections.emptyMap();
+        userSettings = new UserSettings();
     }
 
     public UserData(Map<Integer, ProductData> productData, UserSettings userSettings) {
@@ -30,24 +30,33 @@ public class UserData {
         return pd;
     }
 
-    public Map<Integer, ProductData> getProductData() {
-        return productData;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserData userData = (UserData) o;
-        return Objects.equal(productData, userData.productData);
+        return Objects.equal(productData, userData.productData) &&
+                Objects.equal(userSettings, userData.userSettings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(productData);
+        return Objects.hashCode(productData, userSettings);
+    }
+
+    public Map<Integer, ProductData> getProductData() {
+        return productData;
     }
 
     public UserSettings getUserSettings() {
         return userSettings;
+    }
+
+    public UserData setProductData(Map<Integer, ProductData> productData){
+        return new UserData(productData, userSettings);
+    }
+
+    public UserData setUserSettings(UserSettings userSettings) {
+        return new UserData(productData, userSettings);
     }
 }

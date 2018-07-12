@@ -19,10 +19,10 @@ public class Data {
 
     private final UserData userData;
 
-    private Data() {
-        orders = null;
-        images = null;
-        userData = null;
+    public Data() {
+        orders = Collections.emptyList();
+        images = Collections.emptyMap();
+        userData = new UserData();
     }
 
     public Data(List<Order> orders, Map<String, String> images, UserData userData) {
@@ -50,6 +50,7 @@ public class Data {
         return MoreObjects.toStringHelper(this)
                 .add("orders", orders)
                 .add("images", images)
+                .add("userData", userData)
                 .toString();
     }
 
@@ -67,6 +68,18 @@ public class Data {
 
     public UserData getUserData() {
         return userData;
+    }
+
+    public Data setOrders(List<Order> orders) {
+        return new Data(orders, images, userData);
+    }
+
+    public Data setImages(Map<String, String> images) {
+        return new Data(orders, images, userData);
+    }
+
+    public Data setUserData(UserData userData) {
+        return new Data(orders, images, userData);
     }
 
     @Override

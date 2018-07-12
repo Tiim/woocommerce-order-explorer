@@ -82,7 +82,6 @@ public class OrderPanelController {
     private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();
-        UserSettings settings = oldUserData.getUserSettings();
         Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
         ProductData newProductData = new ProductData(newValue);
 
@@ -92,8 +91,7 @@ public class OrderPanelController {
         }
 
 
-        UserData ud = new UserData(newProductDataMap, settings);
-        Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
+        Data d = oldData.setUserData(oldData.getUserData().setProductData(newProductDataMap));
 
         data.set(d);
     }

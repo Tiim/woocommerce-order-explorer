@@ -9,10 +9,10 @@ public class UserSettings {
     private final String consumerKey;
     private final String consumerSecret;
 
-    private UserSettings() {
-        host = null;
-        consumerKey = null;
-        consumerSecret = null;
+    public UserSettings() {
+        host = "";
+        consumerKey = "";
+        consumerSecret = "";
     }
 
     public UserSettings(String host, String consumerKey, String consumerSecret) {
@@ -31,6 +31,18 @@ public class UserSettings {
 
     public String getConsumerSecret() {
         return consumerSecret;
+    }
+
+    public UserSettings setHost(String host) {
+        return new UserSettings(host, consumerKey, consumerSecret);
+    }
+
+    public UserSettings setConsumerKey(String consumerKey) {
+        return new UserSettings(host, consumerKey, consumerSecret);
+    }
+
+    public UserSettings setConsumerSecret(String consumerSecret) {
+        return new UserSettings(host, consumerKey, consumerSecret);
     }
 
     @Override

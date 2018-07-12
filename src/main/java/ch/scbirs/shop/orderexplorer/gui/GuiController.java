@@ -73,6 +73,7 @@ public class GuiController {
 
 
     public GuiController() {
+        data.setValue(new Data());
         data.addListener(this::onNewData);
     }
 
@@ -170,12 +171,7 @@ public class GuiController {
         }
         Optional<UserSettings> newsettings = sd.showAndWait();
         if (newsettings.isPresent()) {
-            Data d;
-            if (old == null) {
-                d = new Data(null, null, new UserData(null, newsettings.get()));
-            } else {
-                d = new Data(old.getOrders(), old.getImages(), new UserData(old.getUserData().getProductData(), newsettings.get()));
-            }
+            Data d = data.get().setUserData(data.get().getUserData().setUserSettings(newsettings.get()));
 
             Task<Boolean> task = new CheckConnectionTask(newsettings.get());
             TaskAlert<Boolean> alert = new TaskAlert<>(task, resources.getString("app.dialog.conncheck.Title"),
