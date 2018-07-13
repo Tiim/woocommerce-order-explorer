@@ -2,6 +2,7 @@ package ch.scbirs.shop.orderexplorer.model.local;
 
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ public class UserData {
     }
 
     public UserData(Map<Integer, ProductData> productData, UserSettings userSettings) {
+        Preconditions.checkNotNull(productData, "productdata can't be null. use Collections.emptyMap() instead");
+        Preconditions.checkNotNull(userSettings, "userSettings can't be null");
         this.productData = Collections.unmodifiableMap(new HashMap<>(productData));
         this.userSettings = userSettings;
     }
@@ -52,11 +55,11 @@ public class UserData {
         return userSettings;
     }
 
-    public UserData setProductData(Map<Integer, ProductData> productData){
+    public UserData withProductData(Map<Integer, ProductData> productData){
         return new UserData(productData, userSettings);
     }
 
-    public UserData setUserSettings(UserSettings userSettings) {
+    public UserData withUserSettings(UserSettings userSettings) {
         return new UserData(productData, userSettings);
     }
 }

@@ -5,7 +5,6 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
-import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
@@ -80,18 +79,21 @@ public class OrderPanelController {
 
 
     private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
-        Data oldData = this.data.get();
-        UserData oldUserData = oldData.getUserData();
-        Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
-        ProductData newProductData = new ProductData(newValue);
 
-        Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
-        for (Product p : currentOrder.getProducts()) {
-            newProductDataMap.put(p.getId(), newProductData);
+        if (currentOrder == null) {
+            //statusDropdown.getSelectionModel().clearSelection();
+            return;
         }
 
+        Data oldData = this.data.get();
+        UserData oldUserData = oldData.getUserData();
 
-        Data d = oldData.setUserData(oldData.getUserData().setProductData(newProductDataMap));
+        Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldUserData.getProductData());
+        for (Product p : currentOrder.getProducts()) {
+            newProductDataMap.put(p.getId(), newProductDataMap.get(p.getId()).withStatus(newValue));
+        }
+
+        Data d = oldData.withUserData(oldData.getUserData().withProductData(newProductDataMap));
 
         data.set(d);
     }
@@ -127,6 +129,11 @@ public class OrderPanelController {
     @FXML
     private void sendMail(MouseEvent mouseEvent) {
         Order o = this.currentOrder;
+
+        if (o == null) {
+            return;
+        }
+
         String subject = String.format(resources.getString("app.order.mail.Subject"), o.getId());
         String body = String.format(resources.getString("app.order.mail.Body"), o.getFirstName(), o.getLastName());
         body += String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal());

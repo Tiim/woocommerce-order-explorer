@@ -1,6 +1,8 @@
 package ch.scbirs.shop.orderexplorer.model.local;
 
+import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 public class ProductData {
 
@@ -11,11 +13,16 @@ public class ProductData {
     }
 
     public ProductData(Status status) {
+        Preconditions.checkNotNull(status);
         this.status = status;
     }
 
     public Status getStatus() {
         return status;
+    }
+
+    public ProductData withStatus(Status status) {
+        return new ProductData(status);
     }
 
     @Override

@@ -11,7 +11,6 @@ import ch.scbirs.shop.orderexplorer.gui.util.AlertUtil;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.gui.util.TaskAlert;
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
@@ -140,8 +139,12 @@ public class GuiController {
 
     @FXML
     private void onOpen(ActionEvent actionEvent) throws IOException {
-        Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
-        data.setValue(d);
+        if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
+            Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
+            data.setValue(d);
+        } else {
+            AlertUtil.showError(resources.getString("app.open.error.NoFile"), primaryStage);
+        }
     }
 
     @FXML
@@ -171,7 +174,7 @@ public class GuiController {
         }
         Optional<UserSettings> newsettings = sd.showAndWait();
         if (newsettings.isPresent()) {
-            Data d = data.get().setUserData(data.get().getUserData().setUserSettings(newsettings.get()));
+            Data d = data.get().withUserData(data.get().getUserData().withUserSettings(newsettings.get()));
 
             Task<Boolean> task = new CheckConnectionTask(newsettings.get());
             TaskAlert<Boolean> alert = new TaskAlert<>(task, resources.getString("app.dialog.conncheck.Title"),

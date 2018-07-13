@@ -6,6 +6,7 @@ import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,6 +27,9 @@ public class Data {
     }
 
     public Data(List<Order> orders, Map<String, String> images, UserData userData) {
+        Preconditions.checkNotNull(orders,"Orders array can't be null. Pass Collections.emptyList() instead");
+        Preconditions.checkNotNull(images, "Images map can't be null. Pass Collections.emptyMap() instead");
+        Preconditions.checkNotNull(userData, "UserData can't be null");
         this.orders = Collections.unmodifiableList(new ArrayList<>(orders));
         this.images = Collections.unmodifiableMap(new HashMap<>(images));
         this.userData = userData;
@@ -70,15 +74,15 @@ public class Data {
         return userData;
     }
 
-    public Data setOrders(List<Order> orders) {
+    public Data withOrders(List<Order> orders) {
         return new Data(orders, images, userData);
     }
 
-    public Data setImages(Map<String, String> images) {
+    public Data withImages(Map<String, String> images) {
         return new Data(orders, images, userData);
     }
 
-    public Data setUserData(UserData userData) {
+    public Data withUserData(UserData userData) {
         return new Data(orders, images, userData);
     }
 

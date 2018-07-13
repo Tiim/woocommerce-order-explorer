@@ -33,15 +33,15 @@ public class UserSettings {
         return consumerSecret;
     }
 
-    public UserSettings setHost(String host) {
+    public UserSettings withHost(String host) {
         return new UserSettings(host, consumerKey, consumerSecret);
     }
 
-    public UserSettings setConsumerKey(String consumerKey) {
+    public UserSettings withConsumerKey(String consumerKey) {
         return new UserSettings(host, consumerKey, consumerSecret);
     }
 
-    public UserSettings setConsumerSecret(String consumerSecret) {
+    public UserSettings withConsumerSecret(String consumerSecret) {
         return new UserSettings(host, consumerKey, consumerSecret);
     }
 

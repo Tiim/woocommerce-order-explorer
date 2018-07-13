@@ -133,7 +133,7 @@ public class ProductListCell extends ListCell<Product> {
 
 
         UserData ud = new UserData(newProductDataMap, settings);
-        Data d = oldData.setUserData(oldData.getUserData().setProductData(newProductDataMap));
+        Data d = oldData.withUserData(oldData.getUserData().withProductData(newProductDataMap));
 
         data.set(d);
     }
