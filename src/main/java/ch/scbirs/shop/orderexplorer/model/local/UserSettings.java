@@ -2,11 +2,17 @@ package ch.scbirs.shop.orderexplorer.model.local;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
+
+import javax.annotation.Nonnull;
 
 public class UserSettings {
 
+    @Nonnull
     private final String host;
+    @Nonnull
     private final String consumerKey;
+    @Nonnull
     private final String consumerSecret;
 
     public UserSettings() {
@@ -15,20 +21,26 @@ public class UserSettings {
         consumerSecret = "";
     }
 
-    public UserSettings(String host, String consumerKey, String consumerSecret) {
+    public UserSettings(@Nonnull String host, @Nonnull String consumerKey, @Nonnull String consumerSecret) {
+        Preconditions.checkNotNull(host);
+        Preconditions.checkNotNull(consumerKey);
+        Preconditions.checkNotNull(consumerSecret);
         this.host = host;
         this.consumerKey = consumerKey;
         this.consumerSecret = consumerSecret;
     }
 
+    @Nonnull
     public String getHost() {
         return host;
     }
 
+    @Nonnull
     public String getConsumerKey() {
         return consumerKey;
     }
 
+    @Nonnull
     public String getConsumerSecret() {
         return consumerSecret;
     }
@@ -37,10 +49,12 @@ public class UserSettings {
         return new UserSettings(host, consumerKey, consumerSecret);
     }
 
+    @Nonnull
     public UserSettings withConsumerKey(String consumerKey) {
         return new UserSettings(host, consumerKey, consumerSecret);
     }
 
+    @Nonnull
     public UserSettings withConsumerSecret(String consumerSecret) {
         return new UserSettings(host, consumerKey, consumerSecret);
     }

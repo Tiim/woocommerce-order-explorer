@@ -8,16 +8,21 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
 public class Data {
 
+    @Nonnull
     private final List<Order> orders;
 
+    @Nonnull
     private final Map<String, String> images;
 
+    @Nonnull
     private final UserData userData;
 
     public Data() {
@@ -26,8 +31,8 @@ public class Data {
         userData = new UserData();
     }
 
-    public Data(List<Order> orders, Map<String, String> images, UserData userData) {
-        Preconditions.checkNotNull(orders,"Orders array can't be null. Pass Collections.emptyList() instead");
+    public Data(@Nonnull List<Order> orders, @Nonnull Map<String, String> images, @Nonnull UserData userData) {
+        Preconditions.checkNotNull(orders, "Orders array can't be null. Pass Collections.emptyList() instead");
         Preconditions.checkNotNull(images, "Images map can't be null. Pass Collections.emptyMap() instead");
         Preconditions.checkNotNull(userData, "UserData can't be null");
         this.orders = Collections.unmodifiableList(new ArrayList<>(orders));
@@ -35,17 +40,17 @@ public class Data {
         this.userData = userData;
     }
 
-    public static Data fromJsonFile(Path file) throws IOException {
+    public static Data fromJsonFile(@Nonnull Path file) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(file.toUri().toURL(), Data.class);
     }
 
-    public static void toJsonFile(Path file, Data data) throws IOException {
+    public static void toJsonFile(@Nonnull Path file,@Nonnull Data data) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(file.toFile(), data);
     }
 
-    public static String getImageKeyForProduct(Product product) {
+    public static String getImageKeyForProduct(@Nonnull Product product) {
         return product.getProductId() + "-" + product.getVariationId();
     }
 
@@ -58,30 +63,37 @@ public class Data {
                 .toString();
     }
 
+    @Nonnull
     public List<Order> getOrders() {
         return orders;
     }
 
+    @Nonnull
     public Map<String, String> getImages() {
         return images;
     }
 
+    @Nullable
     public String getImage(Product product) {
         return images.get(getImageKeyForProduct(product));
     }
 
+    @Nonnull
     public UserData getUserData() {
         return userData;
     }
 
+    @Nonnull
     public Data withOrders(List<Order> orders) {
         return new Data(orders, images, userData);
     }
 
+    @Nonnull
     public Data withImages(Map<String, String> images) {
         return new Data(orders, images, userData);
     }
 
+    @Nonnull
     public Data withUserData(UserData userData) {
         return new Data(orders, images, userData);
     }

@@ -4,23 +4,28 @@ import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nonnull;
+
 public class ProductData {
 
+    @Nonnull
     private final Status status;
 
     public ProductData() {
         status = Status.OPEN;
     }
 
-    public ProductData(Status status) {
+    public ProductData(@Nonnull Status status) {
         Preconditions.checkNotNull(status);
         this.status = status;
     }
 
+    @Nonnull
     public Status getStatus() {
         return status;
     }
 
+    @Nonnull
     public ProductData withStatus(Status status) {
         return new ProductData(status);
     }

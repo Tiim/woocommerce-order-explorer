@@ -2,7 +2,9 @@ package ch.scbirs.shop.orderexplorer.model.remote;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,28 +12,36 @@ import java.util.List;
 public class Order {
 
     private final int id;
+    @Nonnull
     private final String firstName;
+    @Nonnull
     private final String lastName;
+    @Nonnull
     private final String email;
 
+    @Nonnull
     private final String note;
+    @Nonnull
     private final String status;
 
+    @Nonnull
     private final String total;
+    @Nonnull
     private final List<Product> products;
 
     private Order() {
         id = 0;
-        firstName = null;
-        lastName = null;
-        email = null;
-        note = null;
-        status = null;
-        total = null;
-        products = null;
+        firstName = "";
+        lastName = "";
+        email = "";
+        note = "";
+        status = "";
+        total = "";
+        products = Collections.emptyList();
     }
 
-    public Order(int id, String firstName, String lastName, String email, String status, String total, String note, List<Product> products) {
+    public Order(int id, @Nonnull String firstName, @Nonnull String lastName, @Nonnull String email,
+                 @Nonnull String status, @Nonnull String total, @Nonnull String note, List<Product> products) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -81,30 +91,37 @@ public class Order {
         return id;
     }
 
+    @Nonnull
     public String getNote() {
         return note;
     }
 
+    @Nonnull
     public String getStatus() {
         return status;
     }
 
+    @Nonnull
     public String getFirstName() {
         return firstName;
     }
 
+    @Nonnull
     public String getLastName() {
         return lastName;
     }
 
+    @Nonnull
     public String getEmail() {
         return email;
     }
 
+    @Nonnull
     public String getTotal() {
         return total;
     }
 
+    @Nonnull
     public List<Product> getProducts() {
         return products;
     }
@@ -154,12 +171,20 @@ public class Order {
             return this;
         }
 
-        public Builder addProduct(Product product) {
+        public Builder addProduct(@Nonnull Product product) {
+            Preconditions.checkNotNull(product);
             this.products.add(product);
             return this;
         }
 
         public Order build() {
+            Preconditions.checkNotNull(firstName, "missing first name");
+            Preconditions.checkNotNull(lastName, "missing last name");
+            Preconditions.checkNotNull(email, "missing email name");
+            Preconditions.checkNotNull(status, "missing status name");
+            Preconditions.checkNotNull(total, "missing total");
+            Preconditions.checkNotNull(note, "missing note");
+
             return new Order(id, firstName, lastName, email, status, total, note, products);
         }
     }

@@ -3,6 +3,7 @@ package ch.scbirs.shop.orderexplorer.model.remote;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +12,12 @@ public class Product {
 
     private final int id;
     private final int quantity;
+    @Nonnull
     private final String name;
+    @Nonnull
     private final Map<String, String> meta;
     private final double price;
+    @Nonnull
     private final String sku;
 
     private final int productId;
@@ -22,15 +26,16 @@ public class Product {
     private Product() {
         id = 0;
         quantity = 0;
-        name = null;
-        meta = null;
+        name = "";
+        meta = Collections.emptyMap();
         price = 0;
-        sku = null;
+        sku = "";
         productId = 0;
         variationId = 0;
     }
 
-    public Product(int id, int quantity, String name, Map<String, String> meta, double price, String sku, int productId, int variationId) {
+    public Product(int id, int quantity, @Nonnull String name, Map<String, String> meta, double price, @Nonnull String sku,
+                   int productId, int variationId) {
         this.id = id;
         this.quantity = quantity;
         this.name = name;
@@ -83,10 +88,12 @@ public class Product {
         return quantity;
     }
 
+    @Nonnull
     public String getName() {
         return name;
     }
 
+    @Nonnull
     public Map<String, String> getMeta() {
         return meta;
     }
@@ -95,6 +102,7 @@ public class Product {
         return price;
     }
 
+    @Nonnull
     public String getSku() {
         return sku;
     }
