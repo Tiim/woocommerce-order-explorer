@@ -49,7 +49,7 @@ public class WebRequesterTask extends Task<Data> {
         return prevData.withOrders(orders).withImages(images);
     }
 
-    private final float progress(int current, int max, int step, int maxstep) {
+    private float progress(int current, int max, int step, int maxstep) {
         float currentProgress = (float) current / max;
         float stepProgress = (float) step / maxstep;
         float v = (currentProgress / maxstep) - (1f / maxstep) + stepProgress;

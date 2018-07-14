@@ -54,7 +54,7 @@ public class GuiController {
     private static final String HOTKEY_REPORT_OVERVIEW = "report.export.OverviewReport";
     private static final String HOTKEY_REPORT_FULL = "report.export.FullReport";
 
-    private ObjectProperty<Data> data = new SimpleObjectProperty<>();
+    private final ObjectProperty<Data> data = new SimpleObjectProperty<>();
     private Stage primaryStage;
     private OrderPanelController orderPanel;
     @FXML

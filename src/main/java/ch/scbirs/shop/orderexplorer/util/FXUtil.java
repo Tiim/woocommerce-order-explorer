@@ -6,6 +6,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
+import javax.annotation.Nonnull;
+
 
 public class FXUtil {
 
@@ -19,7 +21,7 @@ public class FXUtil {
         return cell;
     };
 
-    public static void setWrapTableColumnCellFactory(TableColumn tc) {
+    public static void setWrapTableColumnCellFactory(@Nonnull TableColumn tc) {
         tc.setCellFactory(CELL_FACTORY);
     }
 

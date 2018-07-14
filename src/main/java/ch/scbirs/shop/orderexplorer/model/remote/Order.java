@@ -134,7 +134,7 @@ public class Order {
         private String status;
         private String total;
         private String note;
-        private List<Product> products = new ArrayList<>();
+        private final List<Product> products = new ArrayList<>();
 
         public Builder setId(int id) {
             this.id = id;

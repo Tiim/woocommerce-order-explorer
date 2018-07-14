@@ -93,8 +93,7 @@ public class ProductListCell extends ListCell<Product> {
                 Image value = new Image(Files.newInputStream(imgPath), 200, 200, true, true);
                 img.setImage(value);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println(e);
+                LOGGER.warn("Can't read image");
             }
             name.setText(item.getName());
             price.setText("CHF " + String.valueOf(item.getPrice()));
