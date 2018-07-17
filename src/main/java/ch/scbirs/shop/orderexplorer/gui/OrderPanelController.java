@@ -52,6 +52,8 @@ public class OrderPanelController {
     @FXML
     private Label email;
     @FXML
+    private Label notes;
+    @FXML
     private ListView<Product> list;
     @FXML
     private ComboBox<Status> statusDropdown;
@@ -106,6 +108,7 @@ public class OrderPanelController {
             status.setText(order.getStatus());
             total.setText("CHF " + order.getTotal());
             email.setText(order.getEmail());
+            notes.setText(order.getNote());
 
             statusDropdown.getSelectionModel().select(DataUtil.getOrderStatus(order, data.get()));
 
@@ -115,6 +118,8 @@ public class OrderPanelController {
             status.setText("");
             total.setText("");
             email.setText("");
+
+            notes.setText("");
 
             list.setItems(FXCollections.observableArrayList());
         }
