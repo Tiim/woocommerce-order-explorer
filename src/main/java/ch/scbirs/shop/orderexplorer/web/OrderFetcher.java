@@ -19,7 +19,7 @@ public class OrderFetcher implements SteppedTask {
 
 
     private final Queue<HttpUrl> queue = new ArrayDeque<>();
-    private OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
     private List<Order> orders;
 
     private int currentPage = 0;

@@ -21,6 +21,7 @@ public class FXUtil {
         return cell;
     };
 
+    @SuppressWarnings("unchecked")
     public static void setWrapTableColumnCellFactory(@Nonnull TableColumn tc) {
         tc.setCellFactory(CELL_FACTORY);
     }

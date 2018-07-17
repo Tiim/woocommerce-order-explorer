@@ -24,7 +24,7 @@ public class CheckConnectionTask extends Task<Boolean> {
     }
 
     @Override
-    protected Boolean call() throws Exception {
+    protected Boolean call() {
         try {
             HttpUrl url = new HttpUrl.Builder()
                     .scheme("https")
@@ -38,6 +38,9 @@ public class CheckConnectionTask extends Task<Boolean> {
             Response response = client.newCall(request).execute();
 
             ObjectMapper om = new ObjectMapper();
+            if (response.body() == null) {
+                return false;
+            }
             JsonNode json = om.readTree(response.body().byteStream());
 
             String version = json.get("environment").get("wp_version").asText();
