@@ -189,7 +189,7 @@ public class GuiController {
 
             Thread t = new Thread(task);
             t.start();
-            alert.show();
+            alert.showAndWait();
         }
     }
 
@@ -228,7 +228,7 @@ public class GuiController {
             }
         }
 
-        if (data.get() == null) {
+        if (data.get() == null || data.get().getUserData().getUserSettings().getHost().isEmpty()) {
             onSettingsDialog();
         }
 

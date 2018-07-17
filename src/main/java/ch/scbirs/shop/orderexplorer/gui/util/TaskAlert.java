@@ -1,13 +1,16 @@
 package ch.scbirs.shop.orderexplorer.gui.util;
 
+import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Logger;
 
 public class TaskAlert<T> extends Alert {
+    private static final Logger LOGGER = LogUtil.get();
     private final Task<T> task;
 
     public TaskAlert(Task<T> task, String title, String header, Stage stage) {
@@ -27,6 +30,7 @@ public class TaskAlert<T> extends Alert {
 
         task.setOnCancelled(event -> close());
         task.setOnFailed(event -> {
+            LOGGER.error("Task " + task + " failed!", task.getException());
             close();
             Alert error = new ExceptionAlert(task.getException());
             error.show();
