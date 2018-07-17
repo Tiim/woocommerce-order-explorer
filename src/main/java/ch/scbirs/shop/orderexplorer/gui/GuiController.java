@@ -138,6 +138,12 @@ public class GuiController {
         if (data.get().getUserData().getUserSettings().isEmpty()) {
             Platform.runLater(this::initNewData);
         }
+
+        Platform.runLater(() -> {
+            ExceptionAlert.doTry(() -> {
+                throw new RuntimeException("Testy");
+            });
+        });
     }
 
     private void initNewData() {

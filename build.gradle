@@ -86,7 +86,7 @@ gradle.buildFinished { result ->
             def req = new Request.Builder()
                     .url('https://api.pushover.net/1/messages.json')
                     .post(body)
-                    .build();
+                    .build()
             def res = new OkHttpClient().newCall(req)
 
             println(res.execute().body().string())

@@ -3,6 +3,7 @@ package ch.scbirs.shop.orderexplorer.gui;
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
+import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -21,6 +22,8 @@ public class Gui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        ExceptionAlert.setHostServices(getHostServices());
 
         Hotkeys.init(OrderExplorer.FOLDER.resolve("keymap.json"));
         BackupProvider.setRoot(OrderExplorer.FOLDER);
