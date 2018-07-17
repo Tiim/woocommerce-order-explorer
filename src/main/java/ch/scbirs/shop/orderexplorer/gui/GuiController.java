@@ -33,7 +33,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -69,7 +68,6 @@ public class GuiController {
     private ListView<Order> list;
     @FXML
     private AnchorPane detailPane;
-    private HostServices hostServices;
 
 
     public GuiController() {
@@ -77,6 +75,7 @@ public class GuiController {
         data.addListener(this::onNewData);
     }
 
+    @SuppressWarnings("unused")
     private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
         LOGGER.info("Data value has changed " + data);
         int idx = list.getSelectionModel().getSelectedIndex();
@@ -128,9 +127,7 @@ public class GuiController {
         ObservableList<MenuItem> items = recentBackup.getItems();
         EventHandler<ActionEvent> actionEventHandle = event -> {
             String filename = ((MenuItem) event.getSource()).getText();
-            ExceptionAlert.doTry(() -> {
-                        data.set(BackupProvider.loadBackup(filename));
-                    }
+            ExceptionAlert.doTry(() -> data.set(BackupProvider.loadBackup(filename))
             );
         };
         BindingUtil.mapContent(items, backups, MenuItem::new,
@@ -139,7 +136,7 @@ public class GuiController {
     }
 
     @FXML
-    private void onOpen(ActionEvent actionEvent) throws IOException {
+    private void onOpen() throws IOException {
         if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
             Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
             data.setValue(d);
@@ -149,7 +146,7 @@ public class GuiController {
     }
 
     @FXML
-    private void onSave(ActionEvent actionEvent) throws IOException {
+    private void onSave() throws IOException {
         if (data.get() != null) {
             try {
                 BackupProvider.nextBackup(data.get());
@@ -166,9 +163,9 @@ public class GuiController {
 
     @FXML
     private void onSettingsDialog() {
-        SettingsDialog sd = null;
+        SettingsDialog sd;
         Data old = this.data.get();
-        if (old == null || old.getUserData() == null || old.getUserData().getUserSettings() == null) {
+        if (old == null) {
             sd = new SettingsDialog(null, resources);
         } else {
             sd = new SettingsDialog(old.getUserData().getUserSettings(), resources);
@@ -198,7 +195,7 @@ public class GuiController {
 
     @FXML
     private void onCheckConnection() {
-        if (data.get() == null || data.get().getUserData() == null || data.get().getUserData().getUserSettings() == null) {
+        if (data.get() == null) {
             AlertUtil.showError(resources.getString("app.dialog.conncheck.NoSettings"), primaryStage);
             return;
         }
@@ -231,7 +228,7 @@ public class GuiController {
             }
         }
 
-        if (data.get() == null || data.get().getUserData() == null || data.get().getUserData().getUserSettings() == null) {
+        if (data.get() == null) {
             onSettingsDialog();
         }
 
@@ -254,8 +251,8 @@ public class GuiController {
     }
 
     @FXML
-    private void onBackup(ActionEvent actionEvent) {
-        if (data != null) {
+    private void onBackup() {
+        if (data.get() != null) {
             ExceptionAlert.doTry(() -> BackupProvider.nextBackup(data.get()));
         } else {
             AlertUtil.showWarning(resources.getString("app.dialog.backup.NoData"), primaryStage);
@@ -263,17 +260,17 @@ public class GuiController {
     }
 
     @FXML
-    private void onExit(ActionEvent actionEvent) {
+    private void onExit() {
         System.exit(0);
     }
 
     @FXML
-    private void handleAboutAction(ActionEvent actionEvent) {
+    private void handleAboutAction() {
 
     }
 
     @FXML
-    private void onSearch(KeyEvent keyEvent) {
+    private void onSearch() {
         String s = search.getText().toLowerCase();
         List<Order> filtered = data.get().getOrders().stream()
                 .filter(o -> (o.getFirstName() + " " + o.getLastName()).toLowerCase().contains(s))
@@ -283,7 +280,6 @@ public class GuiController {
     }
 
     public void setHostServices(HostServices hostServices) {
-        this.hostServices = hostServices;
         orderPanel.setHostServices(hostServices);
     }
 
@@ -306,15 +302,13 @@ public class GuiController {
     }
 
     @FXML
-    private void generateReportFull() throws IOException {
+    private void generateReportFull() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle(resources.getString("app.dialog.report.full.filechooser.Title"));
         chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel File", "*.xls"));
         File selectedFile = chooser.showSaveDialog(primaryStage);
         if (selectedFile != null) {
-            ExceptionAlert.doTry(() -> {
-                new FullReport(data.get()).save(selectedFile.toPath());
-            });
+            ExceptionAlert.doTry(() -> new FullReport(data.get()).save(selectedFile.toPath()));
         }
     }
 

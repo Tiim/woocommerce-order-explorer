@@ -19,7 +19,6 @@ public class Gui extends Application {
         Gui.launch(args);
     }
 
-    private Scene scene;
     @Override
     public void start(Stage primaryStage) throws Exception {
 

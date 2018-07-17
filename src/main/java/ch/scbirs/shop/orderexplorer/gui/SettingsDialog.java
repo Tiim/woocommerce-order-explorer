@@ -10,11 +10,14 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class SettingsDialog extends Dialog<UserSettings> {
     private static final Logger LOGGER = LogUtil.get();
+    @Nullable
     private final UserSettings oldSettings;
 
     @FXML
@@ -24,7 +27,7 @@ public class SettingsDialog extends Dialog<UserSettings> {
     @FXML
     private TextField secret;
 
-    public SettingsDialog(UserSettings settings, ResourceBundle bundle) {
+    public SettingsDialog(@Nullable UserSettings settings, @Nonnull ResourceBundle bundle) {
         getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.APPLY);
         setTitle(bundle.getString("app.settings.Title"));
         this.oldSettings = settings;
