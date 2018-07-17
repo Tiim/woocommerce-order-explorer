@@ -14,18 +14,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Logger;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.List;
 
 public class ProductImageFetcher implements SteppedTask {
 
     private static final Logger LOGGER = LogUtil.get();
+
+    private static final int MAX_IMAGE_HEIGHT = 120;
+    private static final int MAX_IMAGE_WIDTH = 120;
 
     private final Deque<Product> products;
     private final Path folder;
@@ -57,16 +62,20 @@ public class ProductImageFetcher implements SteppedTask {
 
     private void downloadImage() throws IOException {
 
-        String filename = FilenameUtils.getName(currentUrl);
+        String filename = FilenameUtils.getBaseName(currentUrl) + ".jpg";
 
         Path o = folder.resolve(filename);
 
         if (!Files.exists(o)) {
-            HttpUrl url = HttpUrl.get(new URL(currentUrl));
+            HttpUrl url = HttpUrl.parse(currentUrl);
             Request request = new Request.Builder().url(url).build();
-            Response response = client.newCall(request).execute();
+            try (Response response = client.newCall(request).execute()) {
 
-            IOUtils.copy(response.body().byteStream(), Files.newOutputStream(o));
+                BufferedImage img = ImageIO.read(response.body().byteStream());
+                BufferedImage scaled = scaleImage(img);
+
+                ImageIO.write(scaled, "jpg", o.toFile());
+            }
         } else {
             LOGGER.info("Skipping file " + o);
         }
@@ -74,6 +83,17 @@ public class ProductImageFetcher implements SteppedTask {
 
         currentUrl = null;
         currentProduct = null;
+    }
+
+    private BufferedImage scaleImage(BufferedImage img) {
+        Image scaled = img.getScaledInstance(MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, Image.SCALE_SMOOTH);
+        BufferedImage out = new BufferedImage(MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g = out.createGraphics();
+        g.drawImage(scaled, 0, 0, null);
+        g.dispose();
+
+        return out;
     }
 
     private void fetchNextUrl() throws IOException {
