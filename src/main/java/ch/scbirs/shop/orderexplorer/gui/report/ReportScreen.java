@@ -37,7 +37,7 @@ public class ReportScreen {
     public ReportScreen(Report report) throws IOException {
         this.report = report;
 
-        LOGGER.info("Showing " + report.getClass());
+        LOGGER.info("Showing " + report.getClass().getSimpleName());
 
         FXMLLoader loader = new FXMLLoader(ReportScreen.class.getResource("report_window.fxml"));
         loader.setResources(resources);

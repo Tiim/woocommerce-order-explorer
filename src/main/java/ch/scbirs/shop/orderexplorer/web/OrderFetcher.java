@@ -1,6 +1,5 @@
 package ch.scbirs.shop.orderexplorer.web;
 
-import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
@@ -26,7 +25,6 @@ public class OrderFetcher implements SteppedTask {
     private int maxPages = 0;
 
     public OrderFetcher(UserSettings settings) {
-        Env env = Env.getInstance();
         orders = new ArrayList<>();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
