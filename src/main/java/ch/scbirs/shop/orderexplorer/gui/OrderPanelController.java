@@ -24,7 +24,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
@@ -80,6 +79,7 @@ public class OrderPanelController {
     }
 
 
+    @SuppressWarnings("unused")
     private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
 
         if (currentOrder == null) {
@@ -132,7 +132,7 @@ public class OrderPanelController {
     }
 
     @FXML
-    private void sendMail(MouseEvent mouseEvent) {
+    private void sendMail() {
         Order o = this.currentOrder;
 
         if (o == null) {
@@ -140,19 +140,20 @@ public class OrderPanelController {
         }
 
         String subject = String.format(resources.getString("app.order.mail.Subject"), o.getId());
-        String body = String.format(resources.getString("app.order.mail.Body"), o.getFirstName(), o.getLastName());
-        body += String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal());
+        StringBuilder body = new StringBuilder(String.format(resources.getString("app.order.mail.Body"),
+                o.getFirstName(), o.getLastName()));
+        body.append(String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal()));
         for (Product p : o.getProducts()) {
-            body += String.format(resources.getString("app.order.mail.Body.Product"),
-                    p.getQuantity(), p.getName(), p.getPrice());
-            body += "* " + Util.formatMap(p.getMeta()) + "\n\n";
+            body.append(String.format(resources.getString("app.order.mail.Body.Product"),
+                    p.getQuantity(), p.getName(), p.getPrice()));
+            body.append("* ").append(Util.formatMap(p.getMeta())).append("\n\n");
         }
         Escaper escaper = UrlEscapers.urlFragmentEscaper();
 
         String mailto = String.format("mailto:%s?subject=%s&body=%s",
                 o.getEmail(),
                 escaper.escape(subject),
-                escaper.escape(body)
+                escaper.escape(body.toString())
         );
         LOGGER.info("New mail: " + mailto);
         hostServices.showDocument(mailto);

@@ -49,7 +49,7 @@ public class MoneyReport extends Report {
         exporter.save(p);
     }
 
-    private void export(Exporter exp) throws IOException {
+    private void export(Exporter exp) {
         summary.forEach(s -> exp.addData(
                 s.getId(),
                 s.getFirstName(),

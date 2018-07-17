@@ -93,14 +93,6 @@ public class Hotkeys {
         }
     }
 
-    public boolean match(String s, KeyEvent event) {
-        if (keyMap.containsKey(s)) {
-            return keyMap.get(s).match(event);
-        } else {
-            return defaultMap.get(s).match(event);
-        }
-    }
-
     private void load(Path p) throws IOException {
         if (!Files.exists(p)) {
             return;

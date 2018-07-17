@@ -119,6 +119,7 @@ public class ProductListCell extends ListCell<Product> {
 
     }
 
+    @SuppressWarnings("unused")
     private void changed(ObservableValue<? extends Status> o, Status old, Status n) {
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();

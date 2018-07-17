@@ -37,6 +37,8 @@ public class ReportScreen {
     public ReportScreen(Report report) throws IOException {
         this.report = report;
 
+        LOGGER.info("Showing " + report.getClass());
+
         FXMLLoader loader = new FXMLLoader(ReportScreen.class.getResource("report_window.fxml"));
         loader.setResources(resources);
         loader.setController(this);
@@ -72,11 +74,12 @@ public class ReportScreen {
 
     @FXML
     private void print() {
+        LOGGER.info("Printing");
         PDDocument document = pdfView.getPdf();
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPageable(new PDFPageable(document));
         if (job.printDialog()) {
-            ExceptionAlert.doTry(() -> job.print());
+            ExceptionAlert.doTry(job::print);
         }
     }
 

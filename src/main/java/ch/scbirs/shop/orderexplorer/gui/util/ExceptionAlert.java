@@ -44,10 +44,9 @@ public class ExceptionAlert extends Alert {
         getDialogPane().setExpandableContent(expContent);
     }
 
-    public static boolean doTry(RunnableWithException toTry) {
+    public static void doTry(RunnableWithException toTry) {
         try {
             toTry.run();
-            return true;
         } catch (Exception e) {
             LOGGER.warn("Exception Dialog showing to the user: ", e);
             Platform.runLater(() -> {
@@ -55,7 +54,6 @@ public class ExceptionAlert extends Alert {
                 error.show();
             });
         }
-        return false;
     }
 
     public interface RunnableWithException {

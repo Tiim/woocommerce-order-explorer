@@ -48,7 +48,7 @@ public class OrderReport extends Report {
         exporter.save(p);
     }
 
-    private void export(Exporter exp) throws IOException {
+    private void export(Exporter exp) {
         group.forEach(pc -> exp.addData(
                 pc.getCount(),
                 pc.getProduct().getName(),

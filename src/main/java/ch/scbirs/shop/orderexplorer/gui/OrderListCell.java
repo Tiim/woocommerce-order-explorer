@@ -5,14 +5,11 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
-import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.ListCell;
-import org.apache.logging.log4j.Logger;
 
 public class OrderListCell extends ListCell<Order> {
 
-    private static final Logger LOGGER = LogUtil.get();
     private final ObjectProperty<Data> data;
 
     public OrderListCell(ObjectProperty<Data> data) {

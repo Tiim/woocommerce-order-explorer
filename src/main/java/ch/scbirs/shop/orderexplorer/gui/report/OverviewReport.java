@@ -23,7 +23,7 @@ public class OverviewReport extends Report {
     private final List<OrderedProduct> productList;
 
 
-    public OverviewReport(Data data) throws IOException {
+    public OverviewReport(Data data) {
         productList = new OrderedProductFactory(data).build();
     }
 
@@ -49,7 +49,7 @@ public class OverviewReport extends Report {
         exporter.save(p);
     }
 
-    private void export(Exporter exporter) throws IOException {
+    private void export(Exporter exporter) {
         for (OrderedProduct pr : productList) {
             exporter.addData(
                     pr.getOrder().getFirstName(),
