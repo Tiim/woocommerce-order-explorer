@@ -1,5 +1,6 @@
 package ch.scbirs.shop.orderexplorer.model.local;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -81,5 +82,10 @@ public class UserSettings {
     @Override
     public int hashCode() {
         return Objects.hashCode(host, consumerKey, consumerSecret);
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return host.isEmpty() || consumerKey.isEmpty() || consumerSecret.isEmpty();
     }
 }

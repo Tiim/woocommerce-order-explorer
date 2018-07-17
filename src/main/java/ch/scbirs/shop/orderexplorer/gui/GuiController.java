@@ -20,6 +20,7 @@ import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.web.CheckConnectionTask;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -133,6 +134,15 @@ public class GuiController {
         BindingUtil.mapContent(items, backups, MenuItem::new,
                 m -> m.setOnAction(actionEventHandle), m -> m.setOnAction(null)
         );
+
+        if (data.get().getUserData().getUserSettings().isEmpty()) {
+            Platform.runLater(this::initNewData);
+        }
+    }
+
+    private void initNewData() {
+        LOGGER.info("Initializing new data on startup");
+        onReload();
     }
 
     @FXML
@@ -195,7 +205,7 @@ public class GuiController {
 
     @FXML
     private void onCheckConnection() {
-        if (data.get() == null) {
+        if (data.get().getUserData().getUserSettings().isEmpty()) {
             AlertUtil.showError(resources.getString("app.dialog.conncheck.NoSettings"), primaryStage);
             return;
         }
@@ -228,7 +238,7 @@ public class GuiController {
             }
         }
 
-        if (data.get() == null || data.get().getUserData().getUserSettings().getHost().isEmpty()) {
+        if (data.get().getUserData().getUserSettings().isEmpty()) {
             onSettingsDialog();
         }
 
