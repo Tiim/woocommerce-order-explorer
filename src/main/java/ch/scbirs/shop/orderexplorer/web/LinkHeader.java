@@ -13,7 +13,7 @@ public class LinkHeader {
     private static final Pattern PARTS = Pattern.compile("\\s*(.+)\\s*=\\s*\"?([^\"]+)\"?");
 
 
-    private Map<String, URL> links = new HashMap<>();
+    private final Map<String, URL> links = new HashMap<>();
 
 
     public LinkHeader(List<String> headers) {
@@ -66,8 +66,8 @@ public class LinkHeader {
     }
 
     private static class Link {
-        private URL url;
-        private Map<String, String> parts;
+        private final URL url;
+        private final Map<String, String> parts;
 
         private Link(URL url, Map<String, String> parts) {
 

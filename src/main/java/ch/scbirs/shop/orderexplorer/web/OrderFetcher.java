@@ -18,7 +18,7 @@ import java.util.*;
 public class OrderFetcher implements SteppedTask {
 
 
-    private Queue<HttpUrl> queue = new ArrayDeque<>();
+    private final Queue<HttpUrl> queue = new ArrayDeque<>();
     private OkHttpClient client = new OkHttpClient();
     private List<Order> orders;
 

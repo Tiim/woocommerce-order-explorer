@@ -46,13 +46,10 @@ public class WebRequesterTask extends Task<Data> {
         Map<String, String> images = imageFetcher.getImages();
         updateMessage("Done");
 
-        UserData userData;
-        userData = prevData.getUserData();
-
-        return new Data(orders, images, userData);
+        return prevData.withOrders(orders).withImages(images);
     }
 
-    private final float progress(int current, int max, int step, int maxstep) {
+    private float progress(int current, int max, int step, int maxstep) {
         float currentProgress = (float) current / max;
         float stepProgress = (float) step / maxstep;
         float v = (currentProgress / maxstep) - (1f / maxstep) + stepProgress;

@@ -12,7 +12,6 @@ import ch.scbirs.shop.orderexplorer.gui.util.AlertUtil;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.gui.util.TaskAlert;
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
@@ -56,7 +55,7 @@ public class GuiController {
     private static final String HOTKEY_REPORT_OVERVIEW = "report.export.OverviewReport";
     private static final String HOTKEY_REPORT_FULL = "report.export.FullReport";
 
-    private ObjectProperty<Data> data = new SimpleObjectProperty<>();
+    private final ObjectProperty<Data> data = new SimpleObjectProperty<>();
     private Stage primaryStage;
     private OrderPanelController orderPanel;
     @FXML
@@ -74,6 +73,7 @@ public class GuiController {
 
 
     public GuiController() {
+        data.setValue(new Data());
         data.addListener(this::onNewData);
     }
 
@@ -140,8 +140,12 @@ public class GuiController {
 
     @FXML
     private void onOpen(ActionEvent actionEvent) throws IOException {
-        Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
-        data.setValue(d);
+        if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
+            Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
+            data.setValue(d);
+        } else {
+            AlertUtil.showError(resources.getString("app.open.error.NoFile"), primaryStage);
+        }
     }
 
     @FXML
@@ -171,12 +175,7 @@ public class GuiController {
         }
         Optional<UserSettings> newsettings = sd.showAndWait();
         if (newsettings.isPresent()) {
-            Data d;
-            if (old == null) {
-                d = new Data(null, null, new UserData(null, newsettings.get()));
-            } else {
-                d = new Data(old.getOrders(), old.getImages(), new UserData(old.getUserData().getProductData(), newsettings.get()));
-            }
+            Data d = data.get().withUserData(data.get().getUserData().withUserSettings(newsettings.get()));
 
             Task<Boolean> task = new CheckConnectionTask(newsettings.get());
             TaskAlert<Boolean> alert = new TaskAlert<>(task, resources.getString("app.dialog.conncheck.Title"),

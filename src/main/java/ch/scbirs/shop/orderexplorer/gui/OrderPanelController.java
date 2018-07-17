@@ -5,7 +5,6 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.ProductData;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
-import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
@@ -53,6 +52,8 @@ public class OrderPanelController {
     @FXML
     private Label email;
     @FXML
+    private Label notes;
+    @FXML
     private ListView<Product> list;
     @FXML
     private ComboBox<Status> statusDropdown;
@@ -80,20 +81,21 @@ public class OrderPanelController {
 
 
     private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
-        Data oldData = this.data.get();
-        UserData oldUserData = oldData.getUserData();
-        UserSettings settings = oldUserData.getUserSettings();
-        Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
-        ProductData newProductData = new ProductData(newValue);
 
-        Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
-        for (Product p : currentOrder.getProducts()) {
-            newProductDataMap.put(p.getId(), newProductData);
+        if (currentOrder == null) {
+            //statusDropdown.getSelectionModel().clearSelection();
+            return;
         }
 
+        Data oldData = this.data.get();
+        UserData oldUserData = oldData.getUserData();
 
-        UserData ud = new UserData(newProductDataMap, settings);
-        Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
+        Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldUserData.getProductData());
+        for (Product p : currentOrder.getProducts()) {
+            newProductDataMap.put(p.getId(), newProductDataMap.get(p.getId()).withStatus(newValue));
+        }
+
+        Data d = oldData.withUserData(oldData.getUserData().withProductData(newProductDataMap));
 
         data.set(d);
     }
@@ -106,6 +108,7 @@ public class OrderPanelController {
             status.setText(order.getStatus());
             total.setText("CHF " + order.getTotal());
             email.setText(order.getEmail());
+            notes.setText(order.getNote());
 
             statusDropdown.getSelectionModel().select(DataUtil.getOrderStatus(order, data.get()));
 
@@ -115,6 +118,8 @@ public class OrderPanelController {
             status.setText("");
             total.setText("");
             email.setText("");
+
+            notes.setText("");
 
             list.setItems(FXCollections.observableArrayList());
         }
@@ -129,6 +134,11 @@ public class OrderPanelController {
     @FXML
     private void sendMail(MouseEvent mouseEvent) {
         Order o = this.currentOrder;
+
+        if (o == null) {
+            return;
+        }
+
         String subject = String.format(resources.getString("app.order.mail.Subject"), o.getId());
         String body = String.format(resources.getString("app.order.mail.Body"), o.getFirstName(), o.getLastName());
         body += String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal());

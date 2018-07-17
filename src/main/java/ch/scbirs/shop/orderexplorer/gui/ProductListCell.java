@@ -93,8 +93,7 @@ public class ProductListCell extends ListCell<Product> {
                 Image value = new Image(Files.newInputStream(imgPath), 200, 200, true, true);
                 img.setImage(value);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println(e);
+                LOGGER.warn("Can't read image");
             }
             name.setText(item.getName());
             price.setText("CHF " + String.valueOf(item.getPrice()));
@@ -133,7 +132,7 @@ public class ProductListCell extends ListCell<Product> {
 
 
         UserData ud = new UserData(newProductDataMap, settings);
-        Data d = new Data(oldData.getOrders(), oldData.getImages(), ud);
+        Data d = oldData.withUserData(oldData.getUserData().withProductData(newProductDataMap));
 
         data.set(d);
     }
