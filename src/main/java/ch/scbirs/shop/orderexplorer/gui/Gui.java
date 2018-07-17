@@ -4,6 +4,8 @@ import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
+import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
+import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -11,10 +13,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Gui extends Application {
+    private static final Logger LOGGER = LogUtil.get();
 
     public static void run(String[] args) {
         Gui.launch(args);
@@ -37,6 +44,14 @@ public class Gui extends Application {
         loader.setResources(bundle);
         Parent root = loader.load();
         GuiController controller = loader.getController();
+
+        UserSettings args = getUserSettings(getParameters().getNamed());
+
+        if (args != null) {
+            LOGGER.info("Load user settings from commandline: " + args);
+            controller.setUserSettings(args);
+        }
+
         controller.setStage(primaryStage);
         controller.setHostServices(getHostServices());
 
@@ -51,5 +66,13 @@ public class Gui extends Application {
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
         primaryStage.show();
+    }
+
+    @Nullable
+    private UserSettings getUserSettings(@Nonnull Map<String, String> args) {
+        if (args.containsKey("host") && args.containsKey("ck") && args.containsKey("cs")) {
+            return new UserSettings(args.get("host"), args.get("ck"), args.get("cs"));
+        }
+        return null;
     }
 }

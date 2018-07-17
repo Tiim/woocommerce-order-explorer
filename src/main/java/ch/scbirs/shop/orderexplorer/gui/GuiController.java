@@ -139,11 +139,6 @@ public class GuiController {
             Platform.runLater(this::initNewData);
         }
 
-        Platform.runLater(() -> {
-            ExceptionAlert.doTry(() -> {
-                throw new RuntimeException("Testy");
-            });
-        });
     }
 
     private void initNewData() {
@@ -332,5 +327,9 @@ public class GuiController {
     private void onHotkeyDialog() {
         HotkeySettings hs = new HotkeySettings(primaryStage, resources, Hotkeys.getInstance());
         hs.show();
+    }
+
+    public void setUserSettings(UserSettings args) {
+        data.set(data.get().withUserData(data.get().getUserData().withUserSettings(args)));
     }
 }
