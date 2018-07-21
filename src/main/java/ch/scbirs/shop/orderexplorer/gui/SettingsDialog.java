@@ -31,17 +31,23 @@ public class SettingsDialog extends Dialog<UserSettings> {
         getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.APPLY);
         setTitle(bundle.getString("app.settings.Title"));
         this.oldSettings = settings;
-        setResultConverter(b ->
-                b == ButtonType.APPLY ?
-                        new UserSettings(host.getText().trim(), key.getText().trim(), secret.getText()) :
-                        this.oldSettings);
+        setResultConverter(b -> {
+            if (b == ButtonType.APPLY) {
+                UserSettings s = new UserSettings(host.getText().trim(), key.getText().trim(), secret.getText());
+                if (s.isEmpty()) {
+                    return null;
+                }
+                return s;
+            } else {
+                return null;
+            }
+        });
         try {
             FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("settings_dialog.fxml"));
             loader.setResources(bundle);
             loader.setController(this);
             Parent p = loader.load();
             getDialogPane().setContent(p);
-//            getDialogPane().lookupButton(ButtonType.APPLY)
         } catch (IOException e) {
             LOGGER.error("Can't load settings dialog fxml", e);
         }

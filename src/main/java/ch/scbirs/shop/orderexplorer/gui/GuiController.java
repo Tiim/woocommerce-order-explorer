@@ -179,13 +179,8 @@ public class GuiController {
 
     @FXML
     private void onSettingsDialog() {
-        SettingsDialog sd;
-        Data old = this.data.get();
-        if (old == null) {
-            sd = new SettingsDialog(null, resources);
-        } else {
-            sd = new SettingsDialog(old.getUserData().getUserSettings(), resources);
-        }
+        Data old = data.get();
+        SettingsDialog sd = new SettingsDialog(old.getUserData().getUserSettings(), resources);
         Optional<UserSettings> newsettings = sd.showAndWait();
         if (newsettings.isPresent()) {
             Data d = data.get().withUserData(data.get().getUserData().withUserSettings(newsettings.get()));
@@ -246,6 +241,11 @@ public class GuiController {
 
         if (data.get().getUserData().getUserSettings().isEmpty()) {
             onSettingsDialog();
+        }
+
+        if (data.get().getUserData().getUserSettings().isEmpty()) {
+            AlertUtil.showWarning(resources.getString("app.reload.NoSettings"), primaryStage);
+            return;
         }
 
         Task<Data> task = new WebRequesterTask(data.get());
