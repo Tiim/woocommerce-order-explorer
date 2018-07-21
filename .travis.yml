@@ -14,8 +14,6 @@ deploy:
   api_key: $GITHUB_RELEASE_TOKEN
   file: "build/lib/*.jar"
   skip_cleanup: true
-  on:
-    tags: true
 
 cache:
   directories:
