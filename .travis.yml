@@ -14,6 +14,8 @@ deploy:
   api_key: $RELEASE_TOKEN
   file: "build/lib/*.jar"
   skip_cleanup: true
+  on:
+    branch: master
 	
 cache:
   directories:
