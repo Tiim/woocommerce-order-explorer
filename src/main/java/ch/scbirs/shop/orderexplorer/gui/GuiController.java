@@ -303,8 +303,9 @@ public class GuiController {
     }
 
     @FXML
-    private void handleAboutAction() {
-
+    private void handleAboutAction() throws IOException {
+        AboutDialog ad = new AboutDialog(resources);
+        ad.show();
     }
 
     @FXML

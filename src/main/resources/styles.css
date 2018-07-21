@@ -23,6 +23,16 @@
     -fx-font-size: 14;
 }
 
+.about-title {
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
+    -fx-text-fill: #005fab;
+}
+
+.about-version {
+    -fx-font-weight: bold;
+}
+
 /* ORDER LIST: OPEN */
 
 .list-cell:open {

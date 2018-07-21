@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="300.0" prefWidth="500.0"
+            xmlns="http://javafx.com/javafx/8.0.121">
+    <top>
+        <HBox BorderPane.alignment="CENTER">
+            <children>
+                <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="about-title" text="%name"/>
+                        <Label fx:id="version" styleClass="about-version" text="Version"/>
+                    </children>
+                </VBox>
+                <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="ch/scbirs/shop/orderexplorer/gui/logo.png"/>
+                    </image>
+                </ImageView>
+            </children>
+        </HBox>
+    </top>
+</BorderPane>
