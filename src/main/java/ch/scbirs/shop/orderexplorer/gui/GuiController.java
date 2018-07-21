@@ -36,6 +36,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
@@ -91,6 +92,10 @@ public class GuiController {
 
     public void setStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            onExit();
+        });
     }
 
     @FXML
@@ -272,7 +277,29 @@ public class GuiController {
 
     @FXML
     private void onExit() {
-        System.exit(0);
+
+        ButtonType save = new ButtonType(resources.getString("buttontype.Save"), ButtonBar.ButtonData.APPLY);
+        Alert alert = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                null,
+                save,
+                ButtonType.CANCEL, ButtonType.NO
+        );
+        AlertUtil.setDefaultButton(alert, save);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setHeaderText(resources.getString("app.dialog.close.Message"));
+        alert.initOwner(primaryStage);
+
+        Optional<ButtonType> btn = alert.showAndWait();
+        if (btn.isPresent() && btn.get() == ButtonType.NO) {
+            LOGGER.info("Close without saving");
+            System.exit(0);
+        } else if (btn.isPresent() && btn.get() == save) {
+            LOGGER.info("Close with saving");
+            ExceptionAlert.doTry(this::onSave);
+            System.exit(0);
+        }
+        LOGGER.info("Abort closing");
     }
 
     @FXML

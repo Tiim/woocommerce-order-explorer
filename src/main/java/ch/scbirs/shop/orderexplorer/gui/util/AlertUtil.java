@@ -1,6 +1,9 @@
 package ch.scbirs.shop.orderexplorer.gui.util;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 
 public class AlertUtil {
@@ -23,5 +26,12 @@ public class AlertUtil {
         alert.initOwner(stage);
         alert.setHeaderText(message);
         alert.showAndWait();
+    }
+
+    public static Alert setDefaultButton(Alert alert, ButtonType defBtn) {
+        DialogPane pane = alert.getDialogPane();
+        for (ButtonType t : alert.getButtonTypes())
+            ((Button) pane.lookupButton(t)).setDefaultButton(t == defBtn);
+        return alert;
     }
 }
