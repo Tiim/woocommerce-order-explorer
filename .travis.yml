@@ -1,0 +1,23 @@
+language: java
+
+jdk:
+  - oraclejdk10
+
+before_install:
+  - chmod +x gradlew
+
+script:
+  - ./gradlew assemble
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_RELEASE_TOKEN
+  file: "build/lib/*.jar"
+  skip_cleanup: true
+  on:
+    tags: true
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/

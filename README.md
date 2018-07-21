@@ -15,7 +15,7 @@ to see who ordered what and to mark orders (and single products in an order) as 
 #### Configure WooCommerce
 
 * [Enable the REST API](https://docs.woocommerce.com/document/woocommerce-rest-api/#section-2)
-* [Generate API keys] (https://docs.woocommerce.com/document/woocommerce-rest-api/#section-3)
+* [Generate API keys](https://docs.woocommerce.com/document/woocommerce-rest-api/#section-3)
 
 #### Configure WooCommerce Order Explorer
 
