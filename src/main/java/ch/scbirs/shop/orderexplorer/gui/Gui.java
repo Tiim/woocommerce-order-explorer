@@ -4,6 +4,7 @@ import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
+import ch.scbirs.shop.orderexplorer.gui.util.VersionUtil;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.application.Application;
@@ -37,7 +38,8 @@ public class Gui extends Application {
 
         ResourceBundle bundle = ResourceBundle.getBundle("lang.bundle");
 
-        primaryStage.setTitle(bundle.getString("app.title"));
+        primaryStage.setTitle(
+                String.format(bundle.getString("app.title"), VersionUtil.getVersion()));
         primaryStage.getIcons().addAll(Icons.getIcons());
 
         FXMLLoader loader = new FXMLLoader(Gui.class.getResource("gui.fxml"));

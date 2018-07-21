@@ -3,7 +3,22 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 group 'ch.scbirs.shop'
-version '0.2.0'
+def desc = 'git describe --tags --long'.execute().text.trim()
+if (desc.isEmpty()) {
+    desc = 'v0.0.0-0-nogitcommit'
+}
+println("Git describe: $desc")
+def gitversion = desc.split("-").toList()
+def gitsha = gitversion.pop() // get sha
+def commits = gitversion.pop() // get commits since tag
+def ver = gitversion.join("-").substring(1) // get tag minus first character
+def fullver = ver + "+" + commits + "." + gitsha
+if (commits != "0") {
+    version fullver
+} else {
+    version ver
+}
+
 
 apply plugin: 'java'
 
@@ -57,6 +72,8 @@ jar {
     }
     manifest {
         attributes 'Main-Class': 'ch.scbirs.shop.orderexplorer.OrderExplorer'
+        attributes 'Specification-Version': ver
+        attributes 'Implementation-Version': fullver
     }
 }
 
