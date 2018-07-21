@@ -60,6 +60,8 @@ dependencies {
 
     compile group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.1'
 
+    compile group: 'com.github.zafarkhaja', name: 'java-semver', version: '0.9.0'
+
     runtime group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.11.0'
     runtime group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.0'
 

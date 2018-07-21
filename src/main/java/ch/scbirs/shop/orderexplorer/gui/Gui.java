@@ -6,7 +6,7 @@ import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
-import ch.scbirs.shop.orderexplorer.util.VersionUtil;
+import ch.scbirs.shop.orderexplorer.version.VersionUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;

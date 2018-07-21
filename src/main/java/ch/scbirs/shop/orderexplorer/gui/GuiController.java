@@ -17,8 +17,11 @@ import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
 import ch.scbirs.shop.orderexplorer.util.BindingUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import ch.scbirs.shop.orderexplorer.version.GithubReleaseQuery;
+import ch.scbirs.shop.orderexplorer.version.VersionUtil;
 import ch.scbirs.shop.orderexplorer.web.CheckConnectionTask;
 import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
+import com.github.zafarkhaja.semver.Version;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -79,7 +82,7 @@ public class GuiController {
 
     @SuppressWarnings("unused")
     private void onNewData(ObservableValue<? extends Data> o, Data oldData, Data data) {
-        LOGGER.info("Data value has changed " + data);
+        LOGGER.info("Data value has changed ");
         int idx = list.getSelectionModel().getSelectedIndex();
         if (idx < 0) {
             idx = 0;
@@ -143,6 +146,19 @@ public class GuiController {
         if (data.get().getUserData().getUserSettings().isEmpty()) {
             Platform.runLater(this::initNewData);
         }
+
+        versionCheck();
+
+    }
+
+    private void versionCheck() {
+        Version currversion = VersionUtil.getVersion();
+        GithubReleaseQuery grq = new GithubReleaseQuery("Tiim", "woocommerce-order-explorer");
+        grq.isNewerVersionAvailable(currversion).thenAccept(b -> Platform.runLater(() -> {
+            if (b.getLeft()) {
+                AlertUtil.showInfo(String.format("New version %s available!", b.getRight().getVersion()), primaryStage);
+            }
+        }));
 
     }
 

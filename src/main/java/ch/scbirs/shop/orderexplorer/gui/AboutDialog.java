@@ -1,7 +1,7 @@
 package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
-import ch.scbirs.shop.orderexplorer.util.VersionUtil;
+import ch.scbirs.shop.orderexplorer.version.VersionUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,6 +57,6 @@ public class AboutDialog {
 
     @FXML
     private void initialize() {
-        version.setText(VersionUtil.getFullVersion());
+        version.setText(VersionUtil.getVersion().toString());
     }
 }
