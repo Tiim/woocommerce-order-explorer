@@ -5,11 +5,13 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public class ExceptionUtil {
 
-    public static String generateBugUrl(Throwable t) {
+    public static String generateBugUrl(Throwable t, String version) {
         String stacktrace = ExceptionUtils.getStackTrace(t);
         String title = ExceptionUtils.getRootCauseMessage(t);
 
-        String desc = String.format("# Description\n\n\n--your description--\n# Exception\n\n```\n%s\n```\n/label ~\"auto\\-report\"\n", stacktrace);
+        String desc = String.format("# Description\n\n\n--your description--" +
+                "\n\nVersion: *%s*" +
+                "\n# Exception\n\n```\n%s\n```\n/label ~\"auto\\-report\"\n", version, stacktrace);
 
         HttpUrl url = HttpUrl.parse("https://gitlab.com/Tiim/OrderExplorer/issues/new")
                 .newBuilder()

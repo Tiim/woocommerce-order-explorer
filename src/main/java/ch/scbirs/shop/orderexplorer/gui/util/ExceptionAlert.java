@@ -2,6 +2,7 @@ package ch.scbirs.shop.orderexplorer.gui.util;
 
 import ch.scbirs.shop.orderexplorer.util.ExceptionUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import ch.scbirs.shop.orderexplorer.util.VersionUtil;
 import com.google.common.collect.ImmutableMap;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -72,7 +73,7 @@ public class ExceptionAlert extends Alert {
 
     private void sendReport() {
         LOGGER.info("Opening bug report url");
-        hostServices.showDocument(ExceptionUtil.generateBugUrl(throwable));
+        hostServices.showDocument(ExceptionUtil.generateBugUrl(throwable, VersionUtil.getFullVersion()));
     }
 
     public static void doTry(RunnableWithException toTry) {

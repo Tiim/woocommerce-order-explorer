@@ -1,4 +1,4 @@
-package ch.scbirs.shop.orderexplorer.gui.util;
+package ch.scbirs.shop.orderexplorer.util;
 
 import java.util.Objects;
 
