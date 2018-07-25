@@ -4,10 +4,12 @@ import com.github.zafarkhaja.semver.Version;
 
 public class VersionUtil {
 
+    public static final Version DEV_VERSION = Version.valueOf("0.0.0-dev");
+
     public static Version getVersion() {
         String v = VersionUtil.class.getPackage().getSpecificationVersion();
         if (v == null || v.isEmpty()) {
-            v = "0.0.0-dev";
+            return DEV_VERSION;
         }
         return Version.valueOf(v);
     }

@@ -153,6 +153,12 @@ public class GuiController {
 
     private void versionCheck() {
         Version currversion = VersionUtil.getVersion();
+
+        if (currversion == VersionUtil.DEV_VERSION) {
+            LOGGER.info("Running dev version. Disabling version check.");
+            return;
+        }
+
         GithubReleaseQuery grq = new GithubReleaseQuery("Tiim", "woocommerce-order-explorer");
         grq.isNewerVersionAvailable(currversion).thenAccept(b -> Platform.runLater(() -> {
             if (b.getLeft()) {
