@@ -2,13 +2,14 @@ package ch.scbirs.shop.orderexplorer.web;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.model.remote.products.ProductVariation;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,27 +27,49 @@ public class WebRequesterTask extends Task<Data> {
 
     @Override
     protected Data call() throws Exception {
-        OrderFetcher orderFetcher = new OrderFetcher(prevData.getUserData().getUserSettings());
-        updateMessage("Fetching orders");
-        while (!orderFetcher.isDone() && !isCancelled()) {
-            orderFetcher.doStep();
-            updateProgress(progress(orderFetcher.currentProgress(), orderFetcher.maxProgress(), 1, 2), 1);
-        }
-        List<Order> orders = orderFetcher.getOrders();
+        List<Order> orders = fetchOrders();
+        // List all products that have been ordered
         Set<Product> allProducts = orders.stream()
                 .flatMap(order -> order.getProducts().stream())
                 .collect(Collectors.toSet());
-        updateMessage("Fetching images");
-        ProductImageFetcher imageFetcher = new ProductImageFetcher(new ArrayList<>(allProducts), OrderExplorer.FOLDER,
-                prevData.getUserData().getUserSettings());
-        while (!imageFetcher.isDone() && !isCancelled()) {
-            imageFetcher.doStep();
-            updateProgress(progress(imageFetcher.currentProgress(), imageFetcher.maxProgress(), 2, 2), 1);
-        }
-        Map<String, String> images = imageFetcher.getImages();
+        Map<String, String> images = fetchImages(allProducts);
+        List<ProductVariation> variations = fetchProductVariations();
         updateMessage("Done");
+        return prevData
+                .withOrders(orders)
+                .withImages(images)
+                .withProductVariations(variations);
+    }
 
-        return prevData.withOrders(orders).withImages(images);
+    private List<ProductVariation> fetchProductVariations() throws IOException {
+        updateMessage("Fetching all products");
+        ProductFetcher fetcher = new ProductFetcher(prevData.getUserData().getUserSettings());
+        while (!fetcher.isDone() && !isCancelled()) {
+            fetcher.doStep();
+            updateProgress(progress(fetcher.currentProgress(), fetcher.maxProgress(), 3, 3), 1);
+        }
+        return fetcher.getProducts();
+    }
+
+    private Map<String, String> fetchImages(Set<Product> allProducts) throws IOException {
+        updateMessage("Fetching images");
+        ProductImageFetcher fetcher = new ProductImageFetcher(new ArrayList<>(allProducts), OrderExplorer.FOLDER,
+                prevData.getUserData().getUserSettings());
+        while (!fetcher.isDone() && !isCancelled()) {
+            fetcher.doStep();
+            updateProgress(progress(fetcher.currentProgress(), fetcher.maxProgress(), 2, 3), 1);
+        }
+        return fetcher.getImages();
+    }
+
+    private List<Order> fetchOrders() throws IOException {
+        updateMessage("Fetching orders");
+        OrderFetcher fetcher = new OrderFetcher(prevData.getUserData().getUserSettings());
+        while (!fetcher.isDone() && !isCancelled()) {
+            fetcher.doStep();
+            updateProgress(progress(fetcher.currentProgress(), fetcher.maxProgress(), 1, 3), 1);
+        }
+        return fetcher.getOrders();
     }
 
     private float progress(int current, int max, int step, int maxstep) {

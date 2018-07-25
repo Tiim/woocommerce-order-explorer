@@ -1,6 +1,7 @@
 package ch.scbirs.shop.orderexplorer.report;
 
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.remote.products.ProductVariation;
 import ch.scbirs.shop.orderexplorer.report.model.OrderedProduct;
 import ch.scbirs.shop.orderexplorer.report.model.OrderedProductFactory;
 import ch.scbirs.shop.orderexplorer.report.model.ProductCount;
@@ -33,13 +34,33 @@ public class FullReport {
 
             generateOrderReport(wb);
             generateOverviewReport(wb);
+            generateProductsReport(wb);
 
             wb.write(os);
         }
     }
 
-    private void generateOverviewReport(Workbook wb) {
+    private void generateProductsReport(Workbook wb) {
         Sheet sheet = wb.createSheet("All Products");
+
+        int cols = addHeader(sheet, "Name", "ProductID", "Price", "Url");
+        int rowNr = 1;
+        List<ProductVariation> var = data.getProductVariations();
+
+        for (ProductVariation v : var) {
+            int c = 0;
+            Row r = sheet.createRow(rowNr++);
+
+            c = makeCell(c, r, v.getName());
+            c = makeCell(c, r, v.getSku());
+            c = makeCell(c, r, v.getPrice());
+            makeCell(c, r, v.getPermalink());
+        }
+        autosize(sheet, cols);
+    }
+
+    private void generateOverviewReport(Workbook wb) {
+        Sheet sheet = wb.createSheet("Ordered Product Summary");
 
         int cols = addHeader(sheet, "Amount", "Name", "SKU", "Meta", "Price", "Total");
         int rowNr = 1;

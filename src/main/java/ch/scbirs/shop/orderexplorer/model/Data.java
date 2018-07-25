@@ -3,6 +3,7 @@ package ch.scbirs.shop.orderexplorer.model;
 import ch.scbirs.shop.orderexplorer.model.local.UserData;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import ch.scbirs.shop.orderexplorer.model.remote.products.ProductVariation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -23,20 +24,26 @@ public class Data {
     private final Map<String, String> images;
 
     @Nonnull
+    private final List<ProductVariation> productVariations;
+
+    @Nonnull
     private final UserData userData;
 
     public Data() {
         orders = Collections.emptyList();
         images = Collections.emptyMap();
+        productVariations = Collections.emptyList();
         userData = new UserData();
     }
 
-    public Data(@Nonnull List<Order> orders, @Nonnull Map<String, String> images, @Nonnull UserData userData) {
+    public Data(@Nonnull List<Order> orders, @Nonnull Map<String, String> images,
+                @Nonnull List<ProductVariation> productVariations, @Nonnull UserData userData) {
         Preconditions.checkNotNull(orders, "Orders array can't be null. Pass Collections.emptyList() instead");
         Preconditions.checkNotNull(images, "Images map can't be null. Pass Collections.emptyMap() instead");
         Preconditions.checkNotNull(userData, "UserData can't be null");
         this.orders = Collections.unmodifiableList(new ArrayList<>(orders));
         this.images = Collections.unmodifiableMap(new HashMap<>(images));
+        this.productVariations = Collections.unmodifiableList(new ArrayList<>(productVariations));
         this.userData = userData;
     }
 
@@ -45,7 +52,7 @@ public class Data {
         return mapper.readValue(file.toUri().toURL(), Data.class);
     }
 
-    public static void toJsonFile(@Nonnull Path file,@Nonnull Data data) throws IOException {
+    public static void toJsonFile(@Nonnull Path file, @Nonnull Data data) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(file.toFile(), data);
     }
@@ -79,23 +86,33 @@ public class Data {
     }
 
     @Nonnull
+    public List<ProductVariation> getProductVariations() {
+        return productVariations;
+    }
+
+    @Nonnull
     public UserData getUserData() {
         return userData;
     }
 
     @Nonnull
     public Data withOrders(List<Order> orders) {
-        return new Data(orders, images, userData);
+        return new Data(orders, images, productVariations, userData);
     }
 
     @Nonnull
     public Data withImages(Map<String, String> images) {
-        return new Data(orders, images, userData);
+        return new Data(orders, images, productVariations, userData);
+    }
+
+    @Nonnull
+    public Data withProductVariations(List<ProductVariation> variations) {
+        return new Data(orders, images, variations, userData);
     }
 
     @Nonnull
     public Data withUserData(UserData userData) {
-        return new Data(orders, images, userData);
+        return new Data(orders, images, productVariations, userData);
     }
 
     @Override
