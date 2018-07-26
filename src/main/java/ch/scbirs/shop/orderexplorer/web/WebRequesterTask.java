@@ -11,7 +11,6 @@ import javafx.concurrent.Task;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,7 +54,7 @@ public class WebRequesterTask extends Task<Data> {
 
     private Map<String, String> fetchImages(Set<Product> allProducts) throws IOException {
         updateMessage("Fetching images");
-        ProductImageFetcher fetcher = new ProductImageFetcher(new ArrayList<>(allProducts), OrderExplorer.FOLDER,
+        ProductImageFetcher fetcher = new ProductImageFetcher(allProducts, OrderExplorer.FOLDER,
                 prevData.getUserData().getUserSettings());
         while (!fetcher.isDone() && !isCancelled()) {
             fetcher.doStep();

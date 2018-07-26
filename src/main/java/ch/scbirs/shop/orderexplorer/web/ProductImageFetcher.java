@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.List;
 
 public class ProductImageFetcher implements SteppedTask {
 
@@ -43,12 +43,22 @@ public class ProductImageFetcher implements SteppedTask {
     private Product currentProduct = null;
     private String currentUrl = null;
 
-    public ProductImageFetcher(List<Product> products, Path folder, UserSettings settings) {
+    public ProductImageFetcher(Set<Product> products, Path folder, UserSettings settings) {
+
+        products = dedupe(products);
 
         this.products = new ArrayDeque<>(products);
         this.folder = folder;
         maxProgress = products.size() * 2;
         this.settings = settings;
+    }
+
+    private Set<Product> dedupe(Set<Product> products) {
+        Map<Pair<Integer, Integer>, Product> map = new HashMap<>();
+        for (Product p : products) {
+            map.put(Pair.of(p.getProductId(), p.getVariationId()), p);
+        }
+        return new HashSet<>(map.values());
     }
 
     @Override
