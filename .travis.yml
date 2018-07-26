@@ -15,7 +15,7 @@ deploy:
   api_key:
     secure: "H/UwGEHSrkgibBLAXU0379Leos2NBHg8xAm1kSmFyZG/ddi9FIJLXihvDHYN+57JxQ7dfAjCd+e2iExk8BqiL5QZlfBJN6cVmo4TxvRAUzL1myq7OTV8z3ITkYxNZTvNUgxjcQU0LXA1cs0upnjfwL7XVCHszPgO1HtTTFKvBNKkVtjyksq4BXEUXQdhzwgDwDbC7rFKJyRDntw+W5STnrz+utM7o+v7v//EsUeKp9IqidJc2amQIMJ9KlFzkHBjlJGxzqonBZni9EcMu7iqGeHieyYM2rImZaYFe5og0WQZDGJu+EjI7RmVRussZFeI4VEDdEW86p7F8HjnVEGvumqsXI5Ic3Z4IP//2cFboV01eWi+fE+z9ZCOs7kayZnTw1VZmirQJe0e8CKISmgKVlDN35gky0scf9gUOWVqSpjN/82R737mUTunOaqrVNcMDjH1Zn6UqCcxGcVK4jM1FpxJjo5JBGlN3F86OZ0cYBaasRe4Z5k6q5MghAmqh/nQ4ctbpBNJEAEH0pV8M5Bv9oqJYaDNAlmHGtyplRcMOmhaLCURHzk9jliZIMnK3G4M0bGAsXf5xxedsaMr242VGHjdidwuP9Tf//aEf6yXwqqS8JswtItxBBxH98kpLwgomxJUgsAyvAy9YKItjvAXjqTJ4+zNJsviBDMxFs9A+5g="
   file_glob: true
-  file: build/lib/*
+  file: $TRAVIS_BUILD_DIR/build/lib/*
   skip_cleanup: true
   on:
     tags: true
