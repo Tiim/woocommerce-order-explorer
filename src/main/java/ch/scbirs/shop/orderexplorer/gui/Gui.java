@@ -8,6 +8,7 @@ import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.version.VersionUtil;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -38,8 +39,6 @@ public class Gui extends Application {
 
         ResourceBundle bundle = ResourceBundle.getBundle("lang.bundle");
 
-        primaryStage.setTitle(
-                String.format(bundle.getString("app.title"), VersionUtil.getVersion()));
         primaryStage.getIcons().addAll(Icons.getIcons());
 
         FXMLLoader loader = new FXMLLoader(Gui.class.getResource("gui.fxml"));
@@ -48,6 +47,9 @@ public class Gui extends Application {
         GuiController controller = loader.getController();
 
         UserSettings args = getUserSettings(getParameters().getNamed());
+
+        primaryStage.titleProperty().bind(Bindings.format(bundle.getString("app.title"), VersionUtil.getVersion(),
+                Bindings.createStringBinding(() -> controller.savedProperty().get() ? "" : "[*]", controller.savedProperty())));
 
         if (args != null) {
             LOGGER.info("Load user settings from commandline: " + args);

@@ -9,6 +9,7 @@ import ch.scbirs.shop.orderexplorer.gui.report.OrderReport;
 import ch.scbirs.shop.orderexplorer.gui.report.OverviewReport;
 import ch.scbirs.shop.orderexplorer.gui.report.ReportScreen;
 import ch.scbirs.shop.orderexplorer.gui.util.AlertUtil;
+import ch.scbirs.shop.orderexplorer.gui.util.DirtyObjectProperty;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.gui.util.TaskAlert;
 import ch.scbirs.shop.orderexplorer.model.Data;
@@ -24,8 +25,7 @@ import ch.scbirs.shop.orderexplorer.web.WebRequesterTask;
 import com.github.zafarkhaja.semver.Version;
 import javafx.application.HostServices;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +37,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -58,8 +60,12 @@ public class GuiController {
     private static final String HOTKEY_REPORT_ORDER = "report.export.OrderReport";
     private static final String HOTKEY_REPORT_OVERVIEW = "report.export.OverviewReport";
     private static final String HOTKEY_REPORT_FULL = "report.export.FullReport";
+    private static final String HOTKEY_SAVE = "data.Save";
 
-    private final ObjectProperty<Data> data = new SimpleObjectProperty<>();
+    private final DirtyObjectProperty<Data> data = new DirtyObjectProperty<>();
+
+    private final BooleanBinding saved = data.dirtyProperty().not();
+
     private Stage primaryStage;
     private OrderPanelController orderPanel;
     @FXML
@@ -120,6 +126,7 @@ public class GuiController {
         if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
             try {
                 data.setValue(Data.fromJsonFile(OrderExplorer.SETTINGS_FILE));
+                data.resetDirty();
             } catch (Exception e) {
                 LOGGER.warn("Failed to open json file on startup", e);
             }
@@ -130,7 +137,7 @@ public class GuiController {
         hotkeys.keymap(HOTKEY_REPORT_ORDER, KeyCode.F1, this::generateReportOrder);
         hotkeys.keymap(HOTKEY_REPORT_OVERVIEW, KeyCode.F2, this::generateReportOverview);
         hotkeys.keymap(HOTKEY_REPORT_FULL, KeyCode.F3, this::generateReportFull);
-
+        hotkeys.keymap(HOTKEY_SAVE, new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), this::onSave);
 
         ObservableList<String> backups = BackupProvider.backups();
         ObservableList<MenuItem> items = recentBackup.getItems();
@@ -178,6 +185,7 @@ public class GuiController {
         if (Files.exists(OrderExplorer.SETTINGS_FILE)) {
             Data d = Data.fromJsonFile(OrderExplorer.SETTINGS_FILE);
             data.setValue(d);
+            data.resetDirty();
         } else {
             AlertUtil.showError(resources.getString("app.open.error.NoFile"), primaryStage);
         }
@@ -192,6 +200,7 @@ public class GuiController {
                 LOGGER.warn("Can't make backup", e);
             }
             Data.toJsonFile(OrderExplorer.SETTINGS_FILE, data.get());
+            data.resetDirty();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText(resources.getString("app.dialog.save.NoData"));
@@ -202,7 +211,7 @@ public class GuiController {
     @FXML
     private void onSettingsDialog() {
         Data old = data.get();
-        SettingsDialog sd = new SettingsDialog(old.getUserData().getUserSettings(), resources);
+        SettingsDialog sd = new SettingsDialog(old.getUserData().getUserSettings(), resources, primaryStage);
         Optional<UserSettings> newsettings = sd.showAndWait();
         if (newsettings.isPresent()) {
             Data d = data.get().withUserData(data.get().getUserData().withUserSettings(newsettings.get()));
@@ -299,29 +308,33 @@ public class GuiController {
 
     @FXML
     private void onExit() {
+        if (!saved.get()) {
+            ButtonType save = new ButtonType(resources.getString("buttontype.Save"), ButtonBar.ButtonData.APPLY);
+            Alert alert = new Alert(
+                    Alert.AlertType.CONFIRMATION,
+                    null,
+                    save,
+                    ButtonType.CANCEL, ButtonType.NO
+            );
+            AlertUtil.setDefaultButton(alert, save);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setHeaderText(resources.getString("app.dialog.close.Message"));
+            alert.initOwner(primaryStage);
 
-        ButtonType save = new ButtonType(resources.getString("buttontype.Save"), ButtonBar.ButtonData.APPLY);
-        Alert alert = new Alert(
-                Alert.AlertType.CONFIRMATION,
-                null,
-                save,
-                ButtonType.CANCEL, ButtonType.NO
-        );
-        AlertUtil.setDefaultButton(alert, save);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setHeaderText(resources.getString("app.dialog.close.Message"));
-        alert.initOwner(primaryStage);
-
-        Optional<ButtonType> btn = alert.showAndWait();
-        if (btn.isPresent() && btn.get() == ButtonType.NO) {
-            LOGGER.info("Close without saving");
-            System.exit(0);
-        } else if (btn.isPresent() && btn.get() == save) {
-            LOGGER.info("Close with saving");
-            ExceptionAlert.doTry(this::onSave);
+            Optional<ButtonType> btn = alert.showAndWait();
+            if (btn.isPresent() && btn.get() == ButtonType.NO) {
+                LOGGER.info("Close without saving");
+                System.exit(0);
+            } else if (btn.isPresent() && btn.get() == save) {
+                LOGGER.info("Close with saving");
+                ExceptionAlert.doTry(this::onSave);
+                System.exit(0);
+            }
+            LOGGER.info("Abort closing");
+        } else {
+            LOGGER.info("Close - no save necessary");
             System.exit(0);
         }
-        LOGGER.info("Abort closing");
     }
 
     @FXML
@@ -381,5 +394,9 @@ public class GuiController {
 
     public void setUserSettings(UserSettings args) {
         data.set(data.get().withUserData(data.get().getUserData().withUserSettings(args)));
+    }
+
+    public BooleanBinding savedProperty() {
+        return saved;
     }
 }

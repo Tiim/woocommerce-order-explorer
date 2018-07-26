@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -27,7 +28,8 @@ public class SettingsDialog extends Dialog<UserSettings> {
     @FXML
     private TextField secret;
 
-    public SettingsDialog(@Nullable UserSettings settings, @Nonnull ResourceBundle bundle) {
+    public SettingsDialog(@Nullable UserSettings settings, @Nonnull ResourceBundle bundle, @Nonnull Stage parent) {
+        initOwner(parent);
         getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.APPLY);
         setTitle(bundle.getString("app.settings.Title"));
         this.oldSettings = settings;
