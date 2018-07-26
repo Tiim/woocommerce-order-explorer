@@ -6,6 +6,7 @@ import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.model.remote.products.ProductVariation;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
+import ch.scbirs.shop.orderexplorer.web.products.ProductFetcher;
 import javafx.concurrent.Task;
 import org.apache.logging.log4j.Logger;
 
@@ -41,13 +42,14 @@ public class WebRequesterTask extends Task<Data> {
                 .withProductVariations(variations);
     }
 
-    private List<ProductVariation> fetchProductVariations() throws IOException {
+    private List<ProductVariation> fetchProductVariations() throws Exception {
         updateMessage("Fetching all products");
         ProductFetcher fetcher = new ProductFetcher(prevData.getUserData().getUserSettings());
         while (!fetcher.isDone() && !isCancelled()) {
             fetcher.doStep();
             updateProgress(progress(fetcher.currentProgress(), fetcher.maxProgress(), 3, 3), 1);
         }
+        System.out.println(fetcher.getProducts());
         return fetcher.getProducts();
     }
 

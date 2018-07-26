@@ -16,6 +16,7 @@ public class ProductVariation {
     private final String price;
     @Nonnull
     private final String permalink;
+    private final boolean variable;
 
     public ProductVariation() {
         id = 0;
@@ -23,14 +24,17 @@ public class ProductVariation {
         sku = "";
         price = "";
         permalink = "";
+        variable = false;
     }
 
-    public ProductVariation(int id, @Nonnull String name, @Nonnull String sku, @Nonnull String price, @Nonnull String permalink) {
+    public ProductVariation(int id, @Nonnull String name, @Nonnull String sku, @Nonnull String price,
+                            @Nonnull String permalink, boolean variable) {
         this.id = id;
         this.name = Objects.requireNonNull(name);
         this.sku = Objects.requireNonNull(sku);
         this.price = Objects.requireNonNull(price);
         this.permalink = Objects.requireNonNull(permalink);
+        this.variable = variable;
     }
 
     public int getId() {
@@ -57,6 +61,10 @@ public class ProductVariation {
         return permalink;
     }
 
+    public boolean isVariable() {
+        return variable;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -65,6 +73,7 @@ public class ProductVariation {
                 .add("sku", sku)
                 .add("price", price)
                 .add("permalink", permalink)
+                .add("variable", variable)
                 .toString();
     }
 }

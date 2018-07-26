@@ -1,9 +1,10 @@
-package ch.scbirs.shop.orderexplorer.web;
+package ch.scbirs.shop.orderexplorer.web.products;
 
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.products.ProductVariation;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.util.SteppedTask;
+import ch.scbirs.shop.orderexplorer.web.LinkHeader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.HttpUrl;
@@ -15,11 +16,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.*;
 
-public class ProductFetcher implements SteppedTask {
+public class SimpleProductFetcher implements SteppedTask {
 
     private static final Logger LOGGER = LogUtil.get();
-
-    private final HttpUrl baseVariationUrl;
     private final Queue<HttpUrl> queue = new ArrayDeque<>();
     private final OkHttpClient client = new OkHttpClient();
     private final List<ProductVariation> products;
@@ -27,9 +26,9 @@ public class ProductFetcher implements SteppedTask {
     private int progress = 0;
     private int maxPages = 0;
 
-    public ProductFetcher(UserSettings settings) {
+    public SimpleProductFetcher(UserSettings settings) {
         products = new ArrayList<>();
-        baseVariationUrl = new HttpUrl.Builder()
+        HttpUrl baseVariationUrl = new HttpUrl.Builder()
                 .scheme("https")
                 .host(settings.getHost())
                 .addPathSegments("wp-json/wc/v2/products")
@@ -71,20 +70,23 @@ public class ProductFetcher implements SteppedTask {
 
 
     private void handleAnswer(JsonNode jsonNode) {
-        jsonNode.forEach((product) -> {
-            products.add(handleNormalProduct(product));
+        jsonNode.forEach((pr) -> {
+            ProductVariation product = handleNormalProduct(pr);
+            products.add(product);
+            LOGGER.info("Did load product " + product);
         });
     }
 
     private ProductVariation handleNormalProduct(JsonNode node) {
+        LOGGER.trace("Handle Product " + node);
         return new ProductVariation(
                 node.get("id").asInt(),
                 node.get("name").asText(),
                 node.get("sku").asText(),
                 node.get("price").asText(),
-                node.get("permalink").asText()
+                node.get("permalink").asText(),
+                node.get("type").asText().equals("variable")
         );
-
     }
 
     public List<ProductVariation> getProducts() {
