@@ -10,7 +10,11 @@ public class Util {
             Object o = map.get(key);
             b.append(key).append(": ").append(o).append("\n");
         });
-        return b.substring(0, b.length() - 1);
+        if (b.length() > 0) {
+            return b.substring(0, b.length() - 1);
+        } else {
+            return b.toString();
+        }
     }
 
 }
