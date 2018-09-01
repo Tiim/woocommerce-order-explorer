@@ -1,6 +1,5 @@
 package ch.scbirs.shop.orderexplorer.web;
 
-import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
@@ -112,7 +111,7 @@ public class ProductImageFetcher implements SteppedTask {
 
         String url = fetchNextUrlFromVariation(product);
 
-        if (url.contains("placeholder")) {
+        if (url == null || url.contains("placeholder")) {
             url = fetchNextUrlFromProduct(product);
         }
 
@@ -123,11 +122,10 @@ public class ProductImageFetcher implements SteppedTask {
     }
 
     private String fetchNextUrlFromProduct(Product product) throws IOException {
-        Env env = Env.getInstance();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(settings.getHost())
-                .addPathSegments(String.format("wp-json/wc/v2/products/%d", product.getProductId(), product.getVariationId()))
+                .addPathSegments(String.format("wp-json/wc/v2/products/%d", product.getProductId()))
                 .addQueryParameter("consumer_key", settings.getConsumerKey())
                 .addQueryParameter("consumer_secret", settings.getConsumerSecret())
                 .build();
@@ -142,7 +140,6 @@ public class ProductImageFetcher implements SteppedTask {
     }
 
     private String fetchNextUrlFromVariation(Product product) throws IOException {
-        Env env = Env.getInstance();
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(settings.getHost())
@@ -156,6 +153,10 @@ public class ProductImageFetcher implements SteppedTask {
 
         ObjectMapper om = new ObjectMapper();
         JsonNode node = om.readTree(response.body().byteStream());
+
+        if (node.at("/data/status").asInt() == 404) {
+            return null;
+        }
 
         return node.get("image").get("src").asText();
     }
