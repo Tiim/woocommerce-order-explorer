@@ -23,6 +23,14 @@ public class Filter {
         filters = new HashMap<>();
     }
 
+    public Filter clone(List<Order> orders) {
+        Filter filter = new Filter(orders);
+        for (String key : filters.keySet()) {
+            filter.addFilter(key, filters.get(key));
+        }
+        return filter;
+    }
+
 
     public void addFilter(String name, Function<Order, Boolean> filter) {
         filters.put(name, filter);

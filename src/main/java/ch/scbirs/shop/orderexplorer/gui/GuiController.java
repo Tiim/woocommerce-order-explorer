@@ -92,8 +92,11 @@ public class GuiController {
         if (idx < 0) {
             idx = 0;
         }
-
-        filter = new Filter(data.getOrders());
+        if (filter == null) {
+            filter = new Filter(data.getOrders());
+        } else {
+            filter = filter.clone(data.getOrders());
+        }
 
         list.setItems(filter.getFilteredOutput());
         if (list.getItems().size() > idx) {
