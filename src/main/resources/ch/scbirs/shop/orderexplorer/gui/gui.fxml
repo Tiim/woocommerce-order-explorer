@@ -61,11 +61,12 @@
                      <children>
                          <TextField fx:id="search" onKeyTyped="#onSearch" promptText="%app.orders.search.Prompt"
                                     HBox.hgrow="ALWAYS"/>
-                         <ToggleButton id="filter_paid" fx:id="filterPaid" minWidth="24.0" mnemonicParsing="false"
-                                       selected="true"/>
-                         <ToggleButton id="filter_in_stock" fx:id="filterInStock" minWidth="24.0"
-                                       mnemonicParsing="false" selected="true"/>
-                         <ToggleButton id="filter_done" fx:id="filterDone" minWidth="24.0" mnemonicParsing="false"/>
+                         <ToggleButton id="filter_paid" minWidth="24.0" mnemonicParsing="false"
+                                       onAction="#onFilterButton"/>
+                         <ToggleButton id="filter_in_stock" minWidth="24.0" mnemonicParsing="false"
+                                       onAction="#onFilterButton"/>
+                         <ToggleButton id="filter_done" minWidth="24.0" mnemonicParsing="false"
+                                       onAction="#onFilterButton"/>
                      </children>
                      <padding>
                          <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>

@@ -2,6 +2,7 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.OrderExplorer;
 import ch.scbirs.shop.orderexplorer.backup.BackupProvider;
+import ch.scbirs.shop.orderexplorer.gui.filter.*;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.HotkeySettings;
 import ch.scbirs.shop.orderexplorer.gui.hotkey.Hotkeys;
 import ch.scbirs.shop.orderexplorer.gui.report.MoneyReport;
@@ -27,7 +28,6 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -48,10 +48,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class GuiController {
 
@@ -65,6 +63,8 @@ public class GuiController {
     private final DirtyObjectProperty<Data> data = new DirtyObjectProperty<>();
 
     private final BooleanBinding saved = data.dirtyProperty().not();
+
+    private Filter filter;
 
     private Stage primaryStage;
     private OrderPanelController orderPanel;
@@ -80,7 +80,6 @@ public class GuiController {
     @FXML
     private AnchorPane detailPane;
 
-
     public GuiController() {
         data.setValue(new Data());
         data.addListener(this::onNewData);
@@ -93,7 +92,10 @@ public class GuiController {
         if (idx < 0) {
             idx = 0;
         }
-        list.setItems(FXCollections.observableArrayList(data.getOrders()));
+
+        filter = new Filter(data.getOrders());
+
+        list.setItems(filter.getFilteredOutput());
         if (list.getItems().size() > idx) {
             list.getSelectionModel().select(idx);
         }
@@ -155,7 +157,6 @@ public class GuiController {
         }
 
         versionCheck();
-
     }
 
     private void versionCheck() {
@@ -345,12 +346,11 @@ public class GuiController {
 
     @FXML
     private void onSearch() {
-        String s = search.getText().toLowerCase();
-        List<Order> filtered = data.get().getOrders().stream()
-                .filter(o -> (o.getFirstName() + " " + o.getLastName()).toLowerCase().contains(s))
-                .collect(Collectors.toList());
-        list.setItems(FXCollections.observableArrayList(filtered));
-        list.getSelectionModel().select(0);
+        String s = search.getText().toLowerCase().trim();
+        if (s.isEmpty()) {
+            filter.removeFilter("search");
+        }
+        filter.addFilter("search", new SearchFilter(s));
     }
 
     public void setHostServices(HostServices hostServices) {
@@ -390,6 +390,22 @@ public class GuiController {
     private void onHotkeyDialog() {
         HotkeySettings hs = new HotkeySettings(primaryStage, resources, Hotkeys.getInstance());
         hs.show();
+    }
+
+    @FXML
+    private void onFilterButton(ActionEvent actionEvent) {
+        ToggleButton btn = (ToggleButton) actionEvent.getSource();
+        switch (btn.getId()) {
+            case "filter_done":
+                filter.toggleFilter("status_done", new DoneFilter(data));
+                break;
+            case "filter_paid":
+                filter.toggleFilter("status_paid", new PaidFilter(data));
+                break;
+            case "filter_in_stock":
+                filter.toggleFilter("status_in_stock", new InStockFilter(data));
+                break;
+        }
     }
 
     public void setUserSettings(UserSettings args) {
