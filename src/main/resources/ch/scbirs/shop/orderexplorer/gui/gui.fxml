@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox id="vbox" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.scbirs.shop.orderexplorer.gui.GuiController">
@@ -56,8 +57,20 @@
                            minWidth="200.0"/>
              </center>
              <top>
-                 <TextField fx:id="search" onKeyTyped="#onSearch" promptText="%app.orders.search.Prompt"
-                            BorderPane.alignment="CENTER"/>
+                 <HBox spacing="3.0" BorderPane.alignment="CENTER">
+                     <children>
+                         <TextField fx:id="search" onKeyTyped="#onSearch" promptText="%app.orders.search.Prompt"
+                                    HBox.hgrow="ALWAYS"/>
+                         <ToggleButton id="filter_paid" fx:id="filterPaid" minWidth="24.0" mnemonicParsing="false"
+                                       selected="true"/>
+                         <ToggleButton id="filter_in_stock" fx:id="filterInStock" minWidth="24.0"
+                                       mnemonicParsing="false" selected="true"/>
+                         <ToggleButton id="filter_done" fx:id="filterDone" minWidth="24.0" mnemonicParsing="false"/>
+                     </children>
+                     <padding>
+                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                     </padding>
+                 </HBox>
              </top>
          </BorderPane>
        <AnchorPane fx:id="detailPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" />

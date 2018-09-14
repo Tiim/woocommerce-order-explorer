@@ -23,6 +23,30 @@
     -fx-font-size: 14;
 }
 
+#filter_paid {
+    -fx-background-image: url('paper-bill.png');
+    -fx-background-size: 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 90%;
+    -fx-background-position: center
+}
+
+#filter_in_stock {
+    -fx-background-image: url('truck.png');
+    -fx-background-size: 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 90%;
+    -fx-background-position: center
+}
+
+#filter_done {
+    -fx-background-image: url('check-mark.png');
+    -fx-background-size: 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 90%;
+    -fx-background-position: center
+}
+
 .about-title {
     -fx-font-size: 25;
     -fx-font-weight: bold;
