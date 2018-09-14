@@ -61,16 +61,45 @@
     -fx-background-color: derive(lemonchiffon, -30%);
 }
 
-/* ORDER LIST: DELIVERED */
+/* ORDER LIST: PAID */
 
-.list-cell:delivered {
+.list-cell:paid {
+    -fx-background-color: peachpuff;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:paid {
+    -fx-background-color: derive(peachpuff, -30%);
+}
+
+.list-cell:selected:paid {
+    -fx-background-color: derive(peachpuff, -30%);
+}
+
+/* ORDER LIST: PAID and IN STOCK */
+
+.list-cell:paid_instock {
     -fx-background-color: #D0FDD0;
 }
 
-.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:delivered {
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:paid_instock {
     -fx-background-color: derive(#D0FDD0, -30%);
 }
 
-.list-cell:selected:delivered {
+.list-cell:selected:paid_instock {
+    -fx-background-color: derive(#D0FDD0, -30%);
+}
+
+/* ORDER LIST: DELIVERED */
+
+.list-cell:done {
+    -fx-background-color: #D0FDD0;
+    -fx-opacity: 0.2;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:selected:done {
+    -fx-background-color: derive(#D0FDD0, -30%);
+}
+
+.list-cell:selected:done {
     -fx-background-color: derive(#D0FDD0, -30%);
 }

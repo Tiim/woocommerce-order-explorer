@@ -4,20 +4,42 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import javafx.css.PseudoClass;
 import javafx.scene.Node;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class DataUtil {
     private static final Logger LOGGER = LogUtil.get();
 
+    private static PseudoClass NOT_STARTED = PseudoClass.getPseudoClass("open");
+    private static PseudoClass PAID = PseudoClass.getPseudoClass("paid");
+    private static PseudoClass PAID_IN_STOCK = PseudoClass.getPseudoClass("paid_instock");
+    private static PseudoClass IN_STOCK = PseudoClass.getPseudoClass("in_stock");
+    private static PseudoClass DONE = PseudoClass.getPseudoClass("done");
+
+    private static ArrayList<Pair<Status, PseudoClass>> CLASSES = new ArrayList<>();
+
+    static {
+        CLASSES.add(Pair.of(new Status(false, false, false), NOT_STARTED));
+        CLASSES.add(Pair.of(new Status(false, true, false), PAID));
+        CLASSES.add(Pair.of(new Status(true, true, false), PAID_IN_STOCK));
+        CLASSES.add(Pair.of(new Status(true, false, false), IN_STOCK));
+        CLASSES.add(Pair.of(new Status(true, true, true), DONE));
+    }
+
+
     public static void setPseudoClass(Node n, OrderStatus status) {
-        //TODO: make pseudoclasses
+        setPseudoClass(n, status == null ? null : status.toStatus());
     }
 
     public static void setPseudoClass(Node n, Status status) {
-        //TODO: make pseudoclasses
+        for (Pair<Status, PseudoClass> p : CLASSES) {
+            n.pseudoClassStateChanged(p.getRight(), p.getLeft().equals(status));
+        }
     }
 
     /**
@@ -87,6 +109,10 @@ public class DataUtil {
 
         public boolean isDoneIndeterminate() {
             return done == null;
+        }
+
+        public Status toStatus() {
+            return new Status(isInStock(), isPaid(), isDone());
         }
     }
 }
