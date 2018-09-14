@@ -4,28 +4,14 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
-import javafx.css.PseudoClass;
 import javafx.scene.Node;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
 
 public class DataUtil {
     private static final Logger LOGGER = LogUtil.get();
-    private static final ArrayList<Pair<Status, PseudoClass>> CLASSES = new ArrayList<>(Status.values().length);
-
-    static {
-        for (Status s : Status.values()) {
-            CLASSES.add(new ImmutablePair<>(s, PseudoClass.getPseudoClass(s.toString().toLowerCase())));
-        }
-    }
 
     public static void setPseudoClass(Node n, Status status) {
-        for (Pair<Status, PseudoClass> p : CLASSES) {
-            n.pseudoClassStateChanged(p.getRight(), p.getLeft() == status);
-        }
+        //TODO: make pseudoclasses
     }
 
     /**
@@ -43,7 +29,7 @@ public class DataUtil {
                 Status newS = data.getUserData().getProductData(p).getStatus();
                 if (s == null) {
                     s = newS;
-                } else if (s != newS) {
+                } else if (!s.equals(newS)) {
                     return null;
                 }
             }

@@ -18,7 +18,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
@@ -32,10 +32,9 @@ import java.util.ResourceBundle;
 
 public class OrderPanelController {
     private static final Logger LOGGER = LogUtil.get();
-    private static final String HOTKEY_OPEN = "order.mark.Open";
-    private static final String HOTKEY_IN_STOCK = "order.mark.InStock";
-    private static final String HOTKEY_DELIVERED = "order.mark.Delivered";
-    private final ChangeListener<Status> statusChangeListener = this::changed;
+    private static final String HOTKEY_PAID = "order.toggle.Paid";
+    private static final String HOTKEY_IN_STOCK = "order.toggle.InStock";
+    private static final String HOTKEY_DONE = "order.toggle.Done";
 
     private Order currentOrder;
 
@@ -55,7 +54,13 @@ public class OrderPanelController {
     @FXML
     private ListView<Product> list;
     @FXML
-    private ComboBox<Status> statusDropdown;
+    private CheckBox isPaid;
+    @FXML
+    private CheckBox isInStock;
+    @FXML
+    private CheckBox isDone;
+
+    private final ChangeListener<Boolean> changedListener = this::changed;
 
     private ObjectProperty<Data> data;
     private HostServices hostServices;
@@ -63,36 +68,44 @@ public class OrderPanelController {
     @FXML
     public void initialize() {
         list.setCellFactory(param -> new ProductListCell(data));
-        statusDropdown.setItems(FXCollections.observableArrayList(Status.values()));
-        statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
+
+        isPaid.selectedProperty().addListener(changedListener);
+        isInStock.selectedProperty().addListener(changedListener);
+        isDone.selectedProperty().addListener(changedListener);
 
         Hotkeys hotkey = Hotkeys.getInstance();
-        hotkey.keymap(HOTKEY_OPEN, new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHIFT_DOWN),
-                () -> statusDropdown.getSelectionModel().select(Status.OPEN)
+        hotkey.keymap(HOTKEY_PAID, new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHIFT_DOWN),
+                () -> isPaid.fire()
         );
         hotkey.keymap(HOTKEY_IN_STOCK, new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.SHIFT_DOWN),
-                () -> statusDropdown.getSelectionModel().select(Status.IN_STOCK)
+                () -> isInStock.fire()
         );
-        hotkey.keymap(HOTKEY_DELIVERED, new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.SHIFT_DOWN),
-                () -> statusDropdown.getSelectionModel().select(Status.DELIVERED)
+        hotkey.keymap(HOTKEY_DONE, new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.SHIFT_DOWN),
+                () -> isDone.fire()
         );
     }
 
 
-    @SuppressWarnings("unused")
-    private void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
+    private void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 
         if (currentOrder == null) {
-            //statusDropdown.getSelectionModel().clearSelection();
             return;
         }
 
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();
 
+        Status newStatus = new Status(isInStock.isSelected(), isPaid.isSelected(), isDone.isSelected());
+
+        updateStatus(newStatus);
+
         Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldUserData.getProductData());
         for (Product p : currentOrder.getProducts()) {
-            newProductDataMap.put(p.getId(), newProductDataMap.get(p.getId()).withStatus(newValue));
+            ProductData productData = newProductDataMap.get(p.getId());
+            if (productData == null) {
+                productData = new ProductData();
+            }
+            newProductDataMap.put(p.getId(), productData.withStatus(newStatus));
         }
 
         Data d = oldData.withUserData(oldData.getUserData().withProductData(newProductDataMap));
@@ -100,8 +113,28 @@ public class OrderPanelController {
         data.set(d);
     }
 
+    private void updateStatus(Status status) {
+        isPaid.selectedProperty().removeListener(changedListener);
+        isInStock.selectedProperty().removeListener(changedListener);
+        isDone.selectedProperty().removeListener(changedListener);
+
+        if (status == null) {
+            status = new Status();
+        }
+
+        isPaid.setSelected(status.isPaid());
+        isInStock.setSelected(status.isInStock());
+        isDone.setSelected(status.isDone());
+
+        isPaid.selectedProperty().addListener(changedListener);
+        isInStock.selectedProperty().addListener(changedListener);
+        isDone.selectedProperty().addListener(changedListener);
+    }
+
+
     public void setCurrentOrder(Order order) {
-        statusDropdown.getSelectionModel().selectedItemProperty().removeListener(statusChangeListener);
+
+
         currentOrder = order;
         if (order != null) {
             firstName.setText(order.getFirstName() + " " + order.getLastName());
@@ -110,7 +143,7 @@ public class OrderPanelController {
             email.setText(order.getEmail());
             notes.setText(order.getNote());
 
-            statusDropdown.getSelectionModel().select(DataUtil.getOrderStatus(order, data.get()));
+            updateStatus(DataUtil.getOrderStatus(order, data.get()));
 
             list.setItems(FXCollections.observableArrayList(order.getProducts()));
         } else {
@@ -121,10 +154,10 @@ public class OrderPanelController {
 
             notes.setText("");
 
+            updateStatus(new Status());
+
             list.setItems(FXCollections.observableArrayList());
         }
-        statusDropdown.getSelectionModel().selectedItemProperty().addListener(statusChangeListener);
-
     }
 
     public void setData(ObjectProperty<Data> data) {

@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-
+<?import javafx.scene.layout.*?>
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.scbirs.shop.orderexplorer.gui.OrderPanelController">
     <top>
       <HBox spacing="5.0" BorderPane.alignment="CENTER">
@@ -45,7 +37,13 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-                <ComboBox fx:id="statusDropdown" prefWidth="150.0" HBox.hgrow="NEVER" />
+             <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                 <children>
+                     <CheckBox fx:id="isPaid" mnemonicParsing="false" text="Paid"/>
+                     <CheckBox fx:id="isInStock" mnemonicParsing="false" text="In Stock"/>
+                     <CheckBox fx:id="isDone" mnemonicParsing="false" text="Done"/>
+                 </children>
+             </VBox>
          </children>
       </HBox>
     </top>

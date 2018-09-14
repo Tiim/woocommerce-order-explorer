@@ -6,10 +6,11 @@ import com.google.common.base.MoreObjects;
 public class ProductCount {
 
     private final Product product;
-    private int count = 1;
+    private int count;
 
     public ProductCount(Product product) {
         this.product = product;
+        count = product.getQuantity();
     }
 
     public int getCount() {

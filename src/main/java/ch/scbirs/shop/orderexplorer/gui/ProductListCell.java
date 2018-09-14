@@ -14,11 +14,10 @@ import ch.scbirs.shop.orderexplorer.util.Util;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -34,7 +33,8 @@ import java.util.Map;
 public class ProductListCell extends ListCell<Product> {
     private static final Logger LOGGER = LogUtil.get();
     private final ObjectProperty<Data> data;
-    private final ChangeListener<Status> changedListener = this::changed;
+    @FXML
+    private CheckBox isPaid;
     private FXMLLoader loader;
 
 
@@ -55,7 +55,10 @@ public class ProductListCell extends ListCell<Product> {
     @FXML
     private Label meta;
     @FXML
-    private ComboBox<Status> status;
+    private CheckBox isInStock;
+    @FXML
+    private CheckBox isDone;
+    private final ChangeListener<Boolean> changedListener = this::changed;
 
     public ProductListCell(ObjectProperty<Data> data) {
         this.data = data;
@@ -63,7 +66,7 @@ public class ProductListCell extends ListCell<Product> {
 
     @FXML
     private void initialize() {
-        status.setItems(FXCollections.observableArrayList(Status.values()));
+
     }
 
     @Override
@@ -85,8 +88,6 @@ public class ProductListCell extends ListCell<Product> {
                     throw new RuntimeException(e);
                 }
             }
-            status.getSelectionModel().selectedItemProperty().removeListener(changedListener);
-
             Path imgPath = OrderExplorer.FOLDER.resolve(data.get().getImage(item));
 
             try {
@@ -100,9 +101,11 @@ public class ProductListCell extends ListCell<Product> {
             quantity.setText(String.valueOf(item.getQuantity()) + "x");
             sku.setText(item.getSku());
 
+
             ProductData productData = data.get().getUserData().getProductData(item);
             Status status = productData.getStatus();
-            this.status.getSelectionModel().select(status);
+            updateStatus(status);
+
             DataUtil.setPseudoClass(this, status);
 
             Map<String, String> meta = item.getMeta();
@@ -113,20 +116,39 @@ public class ProductListCell extends ListCell<Product> {
 
             this.meta.setText(Util.formatMap(meta).toUpperCase());
 
-            this.status.getSelectionModel().selectedItemProperty().addListener(changedListener);
             setGraphic(root);
         }
 
     }
 
+    private void updateStatus(Status status) {
+
+        isPaid.selectedProperty().removeListener(changedListener);
+        isInStock.selectedProperty().removeListener(changedListener);
+        isDone.selectedProperty().removeListener(changedListener);
+
+        isPaid.setSelected(status.isPaid());
+        isInStock.setSelected(status.isInStock());
+        isDone.setSelected(status.isDone());
+
+        isPaid.selectedProperty().addListener(changedListener);
+        isInStock.selectedProperty().addListener(changedListener);
+        isDone.selectedProperty().addListener(changedListener);
+    }
+
     @SuppressWarnings("unused")
-    private void changed(ObservableValue<? extends Status> o, Status old, Status n) {
+    private void changed(ObservableValue<? extends Boolean> o, Boolean old, Boolean n) {
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();
         UserSettings settings = oldUserData.getUserSettings();
         Map<Integer, ProductData> oldProductDataMap = oldUserData.getProductData();
 
-        ProductData newProductData = new ProductData(n);
+        Status status = new Status(isInStock.isSelected(), isPaid.isSelected(), isDone.isSelected());
+        ProductData newProductData = new ProductData(
+                status
+        );
+
+        updateStatus(status);
 
         Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldProductDataMap);
         newProductDataMap.put(currentItem.getId(), newProductData);
