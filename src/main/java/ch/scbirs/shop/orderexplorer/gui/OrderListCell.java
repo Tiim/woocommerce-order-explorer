@@ -2,7 +2,6 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.Env;
 import ch.scbirs.shop.orderexplorer.model.Data;
-import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
 import javafx.beans.property.ObjectProperty;
@@ -29,7 +28,7 @@ public class OrderListCell extends ListCell<Order> {
             }
             setText(string);
         }
-        Status s = DataUtil.getOrderStatus(item, data.get());
+        DataUtil.OrderStatus s = DataUtil.getOrderStatus(item, data.get());
         DataUtil.setPseudoClass(this, s);
     }
 }

@@ -76,7 +76,7 @@ public class ProductListCell extends ListCell<Product> {
 
         if (empty || item == null) {
             setGraphic(null);
-            DataUtil.setPseudoClass(this, null);
+            DataUtil.setPseudoClass(this, (Status) null);
         } else {
             if (loader == null) {
                 loader = new FXMLLoader(ProductListCell.class.getResource("product_list_item.fxml"));

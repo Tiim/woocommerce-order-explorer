@@ -14,9 +14,9 @@ import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import javafx.application.HostServices;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -35,6 +36,8 @@ public class OrderPanelController {
     private static final String HOTKEY_PAID = "order.toggle.Paid";
     private static final String HOTKEY_IN_STOCK = "order.toggle.InStock";
     private static final String HOTKEY_DONE = "order.toggle.Done";
+
+    private final EventHandler<ActionEvent> changeListener = this::changed;
 
     private Order currentOrder;
 
@@ -60,7 +63,6 @@ public class OrderPanelController {
     @FXML
     private CheckBox isDone;
 
-    private final ChangeListener<Boolean> changedListener = this::changed;
 
     private ObjectProperty<Data> data;
     private HostServices hostServices;
@@ -69,9 +71,10 @@ public class OrderPanelController {
     public void initialize() {
         list.setCellFactory(param -> new ProductListCell(data));
 
-        isPaid.selectedProperty().addListener(changedListener);
-        isInStock.selectedProperty().addListener(changedListener);
-        isDone.selectedProperty().addListener(changedListener);
+
+        isPaid.setOnAction(changeListener);
+        isInStock.setOnAction(changeListener);
+        isDone.setOnAction(changeListener);
 
         Hotkeys hotkey = Hotkeys.getInstance();
         hotkey.keymap(HOTKEY_PAID, new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHIFT_DOWN),
@@ -86,7 +89,7 @@ public class OrderPanelController {
     }
 
 
-    private void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+    private void changed(ActionEvent event) {
 
         if (currentOrder == null) {
             return;
@@ -95,9 +98,12 @@ public class OrderPanelController {
         Data oldData = this.data.get();
         UserData oldUserData = oldData.getUserData();
 
-        Status newStatus = new Status(isInStock.isSelected(), isPaid.isSelected(), isDone.isSelected());
+        DataUtil.OrderStatus newStatus = new DataUtil.OrderStatus(
+                isPaid.isIndeterminate() ? null : isPaid.isSelected(),
+                isInStock.isIndeterminate() ? null : isInStock.isSelected(),
+                isDone.isIndeterminate() ? null : isDone.isSelected()
+        );
 
-        updateStatus(newStatus);
 
         Map<Integer, ProductData> newProductDataMap = new HashMap<>(oldUserData.getProductData());
         for (Product p : currentOrder.getProducts()) {
@@ -105,30 +111,42 @@ public class OrderPanelController {
             if (productData == null) {
                 productData = new ProductData();
             }
-            newProductDataMap.put(p.getId(), productData.withStatus(newStatus));
+            Status oldStatus = productData.getStatus();
+
+            if (!newStatus.isPaidIndetermiate()) {
+                oldStatus = oldStatus.withPaid(newStatus.isPaid());
+            }
+            if (!newStatus.isInStockIndeterminate()) {
+                oldStatus = oldStatus.withInStock(newStatus.isInStock());
+            }
+            if (!newStatus.isDoneIndeterminate()) {
+                oldStatus = oldStatus.withDone(newStatus.isDone());
+            }
+
+            newProductDataMap.put(p.getId(), productData.withStatus(oldStatus));
         }
 
         Data d = oldData.withUserData(oldData.getUserData().withProductData(newProductDataMap));
-
         data.set(d);
+
+        updateStatus(DataUtil.getOrderStatus(currentOrder, d));
     }
 
-    private void updateStatus(Status status) {
-        isPaid.selectedProperty().removeListener(changedListener);
-        isInStock.selectedProperty().removeListener(changedListener);
-        isDone.selectedProperty().removeListener(changedListener);
-
-        if (status == null) {
-            status = new Status();
-        }
+    private void updateStatus(@Nonnull DataUtil.OrderStatus status) {
+        isPaid.setOnAction(null);
+        isInStock.setOnAction(null);
+        isDone.setOnAction(null);
 
         isPaid.setSelected(status.isPaid());
+        isPaid.setIndeterminate(status.isPaidIndetermiate());
         isInStock.setSelected(status.isInStock());
+        isInStock.setIndeterminate(status.isInStockIndeterminate());
         isDone.setSelected(status.isDone());
+        isDone.setIndeterminate(status.isDoneIndeterminate());
 
-        isPaid.selectedProperty().addListener(changedListener);
-        isInStock.selectedProperty().addListener(changedListener);
-        isDone.selectedProperty().addListener(changedListener);
+        isPaid.setOnAction(changeListener);
+        isInStock.setOnAction(changeListener);
+        isDone.setOnAction(changeListener);
     }
 
 
@@ -154,7 +172,7 @@ public class OrderPanelController {
 
             notes.setText("");
 
-            updateStatus(new Status());
+            updateStatus(new DataUtil.OrderStatus(null, null, null));
 
             list.setItems(FXCollections.observableArrayList());
         }

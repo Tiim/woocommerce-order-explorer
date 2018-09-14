@@ -26,15 +26,19 @@ public class Status {
     }
 
     public Status withInStock(boolean inStock) {
-        return new Status(inStock, this.paid, true);
+        return new Status(inStock, this.paid, false);
     }
 
     public Status withPaid(boolean paid) {
-        return new Status(this.inStock, paid, true);
+        return new Status(this.inStock, paid, false);
     }
 
     public Status withDone(boolean done) {
-        return new Status(false, false, done);
+        if (!done) {
+            return new Status(inStock, paid, false);
+        } else {
+            return new Status(true, true, true);
+        }
     }
 
     @Override
