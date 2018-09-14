@@ -2,11 +2,14 @@ package ch.scbirs.shop.orderexplorer.gui;
 
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
 import ch.scbirs.shop.orderexplorer.version.VersionUtil;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +24,8 @@ public class AboutDialog {
     private Label version;
     @FXML
     private Parent root;
+    @FXML
+    private WebView credits;
 
     public AboutDialog(ResourceBundle resources) {
         this.resources = resources;
@@ -38,6 +43,7 @@ public class AboutDialog {
             LOGGER.error("Can't load about_dialog.fxml", e);
             throw new RuntimeException(e);
         }
+
     }
 
     public void show() {
@@ -56,7 +62,12 @@ public class AboutDialog {
     }
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException {
         version.setText(VersionUtil.getVersion().toString());
+        String str = Resources.toString(AboutDialog.class.getResource("credits.html"), Charsets.UTF_8);
+        credits.getEngine().loadContent(
+                str
+        );
+        System.out.println(str);
     }
 }
