@@ -62,6 +62,24 @@ public class PDFExporter extends Exporter {
     }
 
     @Override
+    public void addData(List<String> d) {
+        for (int i = 0; i < d.size(); i++) {
+            d.set(i, d.get(i).replace('\r', ' ').replace('\n', ' '));
+        }
+        super.addData(d);
+    }
+
+    @Override
+    public void addData(Object... o) {
+        for (int i = 0; i < o.length; i++) {
+            if (o[i] instanceof String) {
+                o[i] = ((String) o[i]).replace('\r', ' ').replace('\n', ' ');
+            }
+        }
+        super.addData(o);
+    }
+
+    @Override
     public void save(Path p) throws IOException {
         try (PDDocument doc = generatePDDocument()) {
             doc.save(p.toFile());
