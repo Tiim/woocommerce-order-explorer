@@ -68,6 +68,7 @@ public class GuiController {
 
     private Stage primaryStage;
     private OrderPanelController orderPanel;
+    private HostServices hostServices;
     @FXML
     private ResourceBundle resources;
 
@@ -343,7 +344,7 @@ public class GuiController {
 
     @FXML
     private void handleAboutAction() {
-        AboutDialog ad = new AboutDialog(resources);
+        AboutDialog ad = new AboutDialog(resources, hostServices);
         ad.show();
     }
 
@@ -357,6 +358,7 @@ public class GuiController {
     }
 
     public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
         orderPanel.setHostServices(hostServices);
     }
 
