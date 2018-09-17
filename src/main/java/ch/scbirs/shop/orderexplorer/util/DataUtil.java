@@ -53,7 +53,11 @@ public class DataUtil {
         for (Product p : o.getProducts()) {
             body.append(String.format(resources.getString("app.order.mail.Body.Product"),
                     p.getQuantity(), p.getName(), p.getPrice()));
-            body.append("* ").append(Util.formatMap(p.getMeta())).append("\n\n");
+            String meta = Util.formatMap(p.getMeta());
+            if (!meta.isEmpty()) {
+                body.append("* ").append(meta).append('\n');
+            }
+            body.append('\n');
         }
         Escaper escaper = UrlEscapers.urlFragmentEscaper();
 
