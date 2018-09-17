@@ -9,9 +9,6 @@ import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
 import ch.scbirs.shop.orderexplorer.util.DataUtil;
 import ch.scbirs.shop.orderexplorer.util.LogUtil;
-import ch.scbirs.shop.orderexplorer.util.Util;
-import com.google.common.escape.Escaper;
-import com.google.common.net.UrlEscapers;
 import javafx.application.HostServices;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -21,9 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.*;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -183,31 +178,24 @@ public class OrderPanelController {
     }
 
     @FXML
-    private void sendMail() {
+    private void mailLabelClicked(MouseEvent event) {
         Order o = this.currentOrder;
 
         if (o == null) {
             return;
         }
 
-        String subject = String.format(resources.getString("app.order.mail.Subject"), o.getId());
-        StringBuilder body = new StringBuilder(String.format(resources.getString("app.order.mail.Body"),
-                o.getFirstName(), o.getLastName()));
-        body.append(String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal()));
-        for (Product p : o.getProducts()) {
-            body.append(String.format(resources.getString("app.order.mail.Body.Product"),
-                    p.getQuantity(), p.getName(), p.getPrice()));
-            body.append("* ").append(Util.formatMap(p.getMeta())).append("\n\n");
+        if (event.getButton() == MouseButton.PRIMARY) {
+            String mailto = DataUtil.generateMailtoLink(o, resources);
+            LOGGER.info("New mail: " + mailto);
+            hostServices.showDocument(mailto);
+        } else {
+            String mail = o.getEmail();
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(mail);
+            clipboard.setContent(content);
         }
-        Escaper escaper = UrlEscapers.urlFragmentEscaper();
-
-        String mailto = String.format("mailto:%s?subject=%s&body=%s",
-                o.getEmail(),
-                escaper.escape(subject),
-                escaper.escape(body.toString())
-        );
-        LOGGER.info("New mail: " + mailto);
-        hostServices.showDocument(mailto);
     }
 
     public void setHostServices(HostServices hostServices) {

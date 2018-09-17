@@ -4,6 +4,8 @@ import ch.scbirs.shop.orderexplorer.model.Data;
 import ch.scbirs.shop.orderexplorer.model.local.Status;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.model.remote.Product;
+import com.google.common.escape.Escaper;
+import com.google.common.net.UrlEscapers;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class DataUtil {
     private static final Logger LOGGER = LogUtil.get();
@@ -40,6 +43,25 @@ public class DataUtil {
         for (Pair<Status, PseudoClass> p : CLASSES) {
             n.pseudoClassStateChanged(p.getRight(), p.getLeft().equals(status));
         }
+    }
+
+    public static String generateMailtoLink(Order o, ResourceBundle resources) {
+        String subject = String.format(resources.getString("app.order.mail.Subject"), o.getId());
+        StringBuilder body = new StringBuilder(String.format(resources.getString("app.order.mail.Body"),
+                o.getFirstName(), o.getLastName()));
+        body.append(String.format(resources.getString("app.order.mail.Body.Total"), o.getTotal()));
+        for (Product p : o.getProducts()) {
+            body.append(String.format(resources.getString("app.order.mail.Body.Product"),
+                    p.getQuantity(), p.getName(), p.getPrice()));
+            body.append("* ").append(Util.formatMap(p.getMeta())).append("\n\n");
+        }
+        Escaper escaper = UrlEscapers.urlFragmentEscaper();
+
+        return String.format("mailto:%s?subject=%s&body=%s",
+                o.getEmail(),
+                escaper.escape(subject),
+                escaper.escape(body.toString())
+        );
     }
 
     /**
