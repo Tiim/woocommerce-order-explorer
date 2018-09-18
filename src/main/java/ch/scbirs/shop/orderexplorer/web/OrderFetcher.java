@@ -17,6 +17,8 @@ import java.util.*;
 public class OrderFetcher implements SteppedTask {
 
 
+    private final List<String> statusFilter = Arrays.asList("completed", "cancelled", "refunded", "failed");
+
     private final Queue<HttpUrl> queue = new ArrayDeque<>();
     private final OkHttpClient client = new OkHttpClient();
     private List<Order> orders;
@@ -91,7 +93,11 @@ public class OrderFetcher implements SteppedTask {
                 });
                 b.addProduct(new Product(id, quantity, name, meta, price, sku, productId, variationId));
             });
-            handleOrder(b.build());
+
+            Order o = b.build();
+            if (!statusFilter.contains(o.getStatus())) {
+                handleOrder(o);
+            }
         });
     }
 
