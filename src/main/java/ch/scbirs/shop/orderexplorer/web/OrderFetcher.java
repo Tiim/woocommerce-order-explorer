@@ -62,6 +62,7 @@ public class OrderFetcher implements SteppedTask {
     private void handleAnswer(JsonNode jsonNode) {
         jsonNode.forEach((order) -> {
             JsonNode billing = order.get("billing");
+            JsonNode shipping = order.get("shipping");
 
             Order.Builder b = new Order.Builder()
                     .setId(order.get("id").asInt())
@@ -69,6 +70,8 @@ public class OrderFetcher implements SteppedTask {
                     .setNote(order.get("customer_note").asText())
                     .setFirstName(billing.get("first_name").asText())
                     .setLastName(billing.get("last_name").asText())
+                    .setShippingFirstName(shipping.get("first_name").asText())
+                    .setShippingLastName(shipping.get("last_name").asText())
                     .setEmail(billing.get("email").asText())
                     .setTotal(order.get("total").asText());
 

@@ -16,6 +16,12 @@ public class Order {
     private final String firstName;
     @Nonnull
     private final String lastName;
+
+    @Nonnull
+    private final String shippingFirstName;
+    @Nonnull
+    private final String shippingLastName;
+
     @Nonnull
     private final String email;
 
@@ -33,6 +39,8 @@ public class Order {
         id = 0;
         firstName = "";
         lastName = "";
+        shippingFirstName = "";
+        shippingLastName = "";
         email = "";
         note = "";
         status = "";
@@ -40,11 +48,15 @@ public class Order {
         products = Collections.emptyList();
     }
 
-    public Order(int id, @Nonnull String firstName, @Nonnull String lastName, @Nonnull String email,
-                 @Nonnull String status, @Nonnull String total, @Nonnull String note, List<Product> products) {
+    public Order(int id, @Nonnull String firstName, @Nonnull String lastName, @Nonnull String shippingFirstName, @Nonnull String shippingLastName,
+                 @Nonnull String email, @Nonnull String status, @Nonnull String total, @Nonnull String note, List<Product> products) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+
+        this.shippingFirstName = shippingFirstName;
+        this.shippingLastName = shippingLastName;
+
         this.email = email;
         this.status = status;
 
@@ -59,6 +71,8 @@ public class Order {
                 .add("id", id)
                 .add("firstName", firstName)
                 .add("lastName", lastName)
+                .add("shippingFirstName", shippingFirstName)
+                .add("shippingLastName", shippingLastName)
                 .add("email", email)
                 .add("note", note)
                 .add("status", status)
@@ -75,6 +89,8 @@ public class Order {
         return id == order.id &&
                 Objects.equal(firstName, order.firstName) &&
                 Objects.equal(lastName, order.lastName) &&
+                Objects.equal(shippingFirstName, order.shippingFirstName) &&
+                Objects.equal(shippingLastName, order.shippingLastName) &&
                 Objects.equal(email, order.email) &&
                 Objects.equal(note, order.note) &&
                 Objects.equal(status, order.status) &&
@@ -84,7 +100,7 @@ public class Order {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, firstName, lastName, email, note, status, total, products);
+        return Objects.hashCode(id, firstName, lastName, shippingFirstName, shippingLastName, email, note, status, total, products);
     }
 
     public int getId() {
@@ -112,6 +128,16 @@ public class Order {
     }
 
     @Nonnull
+    public String getShippingFirstName() {
+        return shippingFirstName;
+    }
+
+    @Nonnull
+    public String getShippingLastName() {
+        return shippingLastName;
+    }
+
+    @Nonnull
     public String getEmail() {
         return email;
     }
@@ -130,6 +156,8 @@ public class Order {
         private int id;
         private String firstName;
         private String lastName;
+        private String shippingFirstName;
+        private String shippingLastName;
         private String email;
         private String status;
         private String total;
@@ -148,6 +176,16 @@ public class Order {
 
         public Builder setLastName(String lastName) {
             this.lastName = lastName;
+            return this;
+        }
+
+        public Builder setShippingFirstName(String shippingFirstName) {
+            this.shippingFirstName = shippingFirstName;
+            return this;
+        }
+
+        public Builder setShippingLastName(String shippingLastName) {
+            this.shippingLastName = shippingLastName;
             return this;
         }
 
@@ -180,12 +218,14 @@ public class Order {
         public Order build() {
             Preconditions.checkNotNull(firstName, "missing first name");
             Preconditions.checkNotNull(lastName, "missing last name");
+            Preconditions.checkNotNull(shippingFirstName, "missing shipping first name");
+            Preconditions.checkNotNull(shippingLastName, "missing shipping last name");
             Preconditions.checkNotNull(email, "missing email name");
             Preconditions.checkNotNull(status, "missing status name");
             Preconditions.checkNotNull(total, "missing total");
             Preconditions.checkNotNull(note, "missing note");
 
-            return new Order(id, firstName, lastName, email, status, total, note, products);
+            return new Order(id, firstName, lastName, shippingFirstName, shippingLastName, email, status, total, note, products);
         }
     }
 }

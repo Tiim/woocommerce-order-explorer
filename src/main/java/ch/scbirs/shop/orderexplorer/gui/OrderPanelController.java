@@ -40,7 +40,9 @@ public class OrderPanelController {
     private ResourceBundle resources;
 
     @FXML
-    private Label firstName;
+    private Label name;
+    @FXML
+    private Label shippingName;
     @FXML
     private Label status;
     @FXML
@@ -150,7 +152,8 @@ public class OrderPanelController {
 
         currentOrder = order;
         if (order != null) {
-            firstName.setText(order.getFirstName() + " " + order.getLastName());
+            name.setText(order.getFirstName() + " " + order.getLastName());
+            shippingName.setText(order.getShippingFirstName() + " " + order.getShippingLastName());
             status.setText(order.getStatus());
             total.setText("CHF " + order.getTotal());
             email.setText(order.getEmail());
@@ -160,7 +163,8 @@ public class OrderPanelController {
 
             list.setItems(FXCollections.observableArrayList(order.getProducts()));
         } else {
-            firstName.setText("");
+            name.setText("");
+            shippingName.setText("");
             status.setText("");
             total.setText("");
             email.setText("");

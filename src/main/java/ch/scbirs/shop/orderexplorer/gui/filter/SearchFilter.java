@@ -25,6 +25,8 @@ public class SearchFilter implements Function<Order, Boolean> {
         StringBuilder b = new StringBuilder();
         b.append(order.getFirstName()).append(" ");
         b.append(order.getLastName()).append(" ");
+        b.append(order.getShippingFirstName()).append(" ");
+        b.append(order.getShippingLastName()).append(" ");
         b.append(order.getEmail()).append(" ");
         b.append(order.getStatus()).append(" ");
         b.append(order.getNote()).append(" ");
