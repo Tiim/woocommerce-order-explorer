@@ -14,6 +14,7 @@ import ch.scbirs.shop.orderexplorer.gui.util.DirtyObjectProperty;
 import ch.scbirs.shop.orderexplorer.gui.util.ExceptionAlert;
 import ch.scbirs.shop.orderexplorer.gui.util.TaskAlert;
 import ch.scbirs.shop.orderexplorer.model.Data;
+import ch.scbirs.shop.orderexplorer.model.local.UserDataCleaner;
 import ch.scbirs.shop.orderexplorer.model.local.UserSettings;
 import ch.scbirs.shop.orderexplorer.model.remote.Order;
 import ch.scbirs.shop.orderexplorer.report.FullReport;
@@ -419,5 +420,9 @@ public class GuiController {
 
     public BooleanBinding savedProperty() {
         return saved;
+    }
+
+    public void onClean(ActionEvent actionEvent) {
+        data.set(new UserDataCleaner().clean(data.get()));
     }
 }

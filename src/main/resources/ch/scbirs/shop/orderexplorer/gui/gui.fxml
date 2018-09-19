@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
 <VBox id="vbox" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.scbirs.shop.orderexplorer.gui.GuiController">
     <MenuBar>
         <menus>
             <Menu text="%app.menu.File">
                 <items>
-                    <MenuItem onAction="#onOpen" text="%app.menu.File.Open"/>
-                    <MenuItem onAction="#onSave" text="%app.menu.File.Save"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onReload" text="%app.menu.File.Reload"/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onCheckConnection"
-                              text="%app.menu.File.CheckConnection"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onSettingsDialog" text="%app.menu.File.Settings"/>
+                    <MenuItem onAction="#onOpen" text="%app.menu.File.Open" />
+                    <MenuItem onAction="#onSave" text="%app.menu.File.Save" />
+                    <MenuItem mnemonicParsing="false" onAction="#onReload" text="%app.menu.File.Reload" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#onCheckConnection" text="%app.menu.File.CheckConnection" />
+                    <MenuItem mnemonicParsing="false" onAction="#onSettingsDialog" text="%app.menu.File.Settings" />
                     <SeparatorMenuItem />
-                    <MenuItem onAction="#onExit" text="%app.menu.File.Exit"/>
+               <MenuItem mnemonicParsing="false" onAction="#onClean" text="%app.menu.File.Clean" />
+                    <MenuItem onAction="#onExit" text="%app.menu.File.Exit" />
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="%app.menu.Backup">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="%app.menu.Backup.New"/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <Menu fx:id="recentBackup" mnemonicParsing="false" text="%app.menu.Backup.Recent"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onBackup" text="%app.menu.Backup.New" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <Menu fx:id="recentBackup" mnemonicParsing="false" text="%app.menu.Backup.Recent" />
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="%app.menu.Reports">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReportOrder"
-                              text="%app.menu.Reports.OrderReport"/>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReportOverview"
-                              text="%app.menu.Reports.OverviewReport"/>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReportMoney" text="%app.menu.Reports.Money"/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#generateReportFull"
-                              text="%app.menu.Reports.FullReport"/>
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportOrder" text="%app.menu.Reports.OrderReport" />
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportOverview" text="%app.menu.Reports.OverviewReport" />
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportMoney" text="%app.menu.Reports.Money" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#generateReportFull" text="%app.menu.Reports.FullReport" />
                 </items>
             </Menu>
             <Menu text="%app.menu.Help">
                 <items>
-                    <MenuItem disable="true" text="%app.menu.Help.Search"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onHotkeyDialog" text="%app.menu.Help.Hotkey"/>
+                    <MenuItem disable="true" text="%app.menu.Help.Search" />
+                    <MenuItem mnemonicParsing="false" onAction="#onHotkeyDialog" text="%app.menu.Help.Hotkey" />
                     <SeparatorMenuItem />
-                    <MenuItem onAction="#handleAboutAction" text="%app.menu.Help.About"/>
+                    <MenuItem onAction="#handleAboutAction" text="%app.menu.Help.About" />
                 </items>
             </Menu>
         </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.25" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-               VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.25" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
      <items>
          <BorderPane>
              <center>
-                 <ListView fx:id="list" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                           minWidth="200.0"/>
+                 <ListView fx:id="list" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="200.0" />
              </center>
              <top>
                  <HBox spacing="3.0" BorderPane.alignment="CENTER">
                      <children>
-                         <TextField fx:id="search" onKeyTyped="#onSearch" promptText="%app.orders.search.Prompt"
-                                    HBox.hgrow="ALWAYS"/>
-                         <ToggleButton id="filter_paid" minWidth="24.0" mnemonicParsing="false"
-                                       onAction="#onFilterButton"/>
-                         <ToggleButton id="filter_in_stock" minWidth="24.0" mnemonicParsing="false"
-                                       onAction="#onFilterButton"/>
-                         <ToggleButton id="filter_done" minWidth="24.0" mnemonicParsing="false"
-                                       onAction="#onFilterButton"/>
+                         <TextField fx:id="search" onKeyTyped="#onSearch" promptText="%app.orders.search.Prompt" HBox.hgrow="ALWAYS" />
+                         <ToggleButton id="filter_paid" minWidth="24.0" mnemonicParsing="false" onAction="#onFilterButton" />
+                         <ToggleButton id="filter_in_stock" minWidth="24.0" mnemonicParsing="false" onAction="#onFilterButton" />
+                         <ToggleButton id="filter_done" minWidth="24.0" mnemonicParsing="false" onAction="#onFilterButton" />
                      </children>
                      <padding>
-                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                      </padding>
                  </HBox>
              </top>
