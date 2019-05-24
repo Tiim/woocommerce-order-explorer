@@ -2,6 +2,15 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.squareup.okhttp3:okhttp:3.10.0'
+    }
+}
 
 plugins {
   id "java"
@@ -30,15 +39,7 @@ if (commits != "0") {
 sourceCompatibility = 1.12 
 targetCompatibility = 1.12
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
 
-    dependencies {
-        classpath 'com.squareup.okhttp3:okhttp:3.10.0'
-    }
-}
 
 repositories {
     mavenCentral()
@@ -85,7 +86,14 @@ jar {
 
 javafx {
     version = "12"
-    modules = [ 'javafx.controls', 'javafx.base', 'javafx.fxml', 'javafx.graphics' ]
+    modules = [
+        'javafx.controls',
+        'javafx.base',
+        'javafx.fxml',
+        'javafx.graphics',
+        'javafx.web',
+        'javafx.swing'
+    ]
 }
 
 gradle.buildFinished { result ->
