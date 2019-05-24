@@ -2,6 +2,12 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+
+plugins {
+  id "java"
+  id "org.openjfx.javafxplugin" version "0.0.7"
+}
+
 group 'ch.scbirs.shop'
 def desc = 'git describe --tags --long'.execute().text.trim()
 if (desc.isEmpty()) {
@@ -20,11 +26,9 @@ if (commits != "0") {
 }
 
 
-apply plugin: 'java'
 
-
-sourceCompatibility = 1.10
-targetCompatibility = 1.10
+sourceCompatibility = 1.12 
+targetCompatibility = 1.12
 
 buildscript {
     repositories {
@@ -77,6 +81,11 @@ jar {
         attributes 'Specification-Version': ver
         attributes 'Implementation-Version': fullver
     }
+}
+
+javafx {
+    version = "12"
+    modules = [ 'javafx.controls', 'javafx.base', 'javafx.fxml', 'javafx.graphics' ]
 }
 
 gradle.buildFinished { result ->
