@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.squareup.okhttp3:okhttp:3.10.0'
+        classpath 'com.squareup.okhttp3:okhttp:3.14.2'
     }
 }
 
