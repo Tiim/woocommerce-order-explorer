@@ -1,20 +1,8 @@
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.squareup.okhttp3:okhttp:4.0.1'
-    }
-}
-
 plugins {
   id "java"
+  id 'application'
   id "org.openjfx.javafxplugin" version "0.0.8"
+  id 'org.beryx.jlink' version '2.12.0'
 }
 
 group 'ch.scbirs.shop'
@@ -24,17 +12,22 @@ if (desc.isEmpty()) {
 }
 println("Git describe: $desc")
 def gitversion = desc.split("-").toList()
-def gitsha = gitversion.pop() // get sha
-def commits = gitversion.pop() // get commits since tag
+def gitsha = gitversion.removeLast() // get sha
+def commits = gitversion.removeLast() // get commits since tag
 def ver = gitversion.join("-").substring(1) // get tag minus first character
 def fullver = ver + "+" + commits + "." + gitsha
+println("Full Version: $fullver")
+
 if (commits != "0") {
+    println("Full Version: $fullver")
     version fullver
 } else {
+    println("Version: $ver")
     version ver
 }
 
 
+mainClassName = 'ch.scbirs.shop.orderexplorer.OrderExplorer'
 
 sourceCompatibility = 1.12 
 targetCompatibility = 1.12
@@ -46,6 +39,15 @@ repositories {
 }
 
 dependencies {
+    compile group: "org.openjfx", name: "javafx", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-base", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-controls", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-fxml", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-graphics", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-web", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-swing", version: "12.0.1"
+
+
     compile 'com.squareup.okhttp3:okhttp:4.0.1'
 
     compile 'com.fasterxml.jackson.core:jackson-core:2.9.9'
@@ -96,38 +98,9 @@ javafx {
     ]
 }
 
-gradle.buildFinished { result ->
-
-    if (System.getenv("CI")?.toBoolean() ?: false) {
-        def apiToken = System.getenv('PUSHOVER_API_TOKEN')
-        def userKey = System.getenv('PUSHOVER_USER_KEY')
-
-        if (apiToken != null && userKey != null) {
-            println('Sending build status with Pushover')
-            def status = result.failure ? 'failed' : 'success'
-            def name = System.getenv('CI_PROJECT_NAME') ?: 'Unknown Project'
-            def pipeline = System.getenv('CI_PIPELINE_URL') ?: 'Unknown Url'
-            def msg = System.getenv('CI_COMMIT_MESSAGE') ?: 'Unknown commit message'
-            def ref = System.getenv('CI_COMMIT_REF_NAME') ?: 'unknown branch'
-
-            def body = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart('token', "$apiToken")
-                    .addFormDataPart('user', "$userKey")
-                    .addFormDataPart('title', "$name: Build $status")
-                    .addFormDataPart('message', "Commit on $ref \n$msg")
-                    .addFormDataPart('url', pipeline)
-                    .build()
-
-            def req = new Request.Builder()
-                    .url('https://api.pushover.net/1/messages.json')
-                    .post(body)
-                    .build()
-            def res = new OkHttpClient().newCall(req)
-
-            println(res.execute().body().string())
-        } else {
-            println('Skipping notification, Pushover credentials are not present')
-        }
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'orderexplorer'
     }
 }
