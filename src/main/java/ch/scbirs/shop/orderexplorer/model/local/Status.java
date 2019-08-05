@@ -67,4 +67,9 @@ public class Status {
     public boolean isDone() {
         return done;
     }
+
+     @Override
+     public String toString() {
+         return "stock: " + inStock + " paid: " + paid + " done: " + done;
+     }
 }
