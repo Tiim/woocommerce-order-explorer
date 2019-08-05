@@ -16,7 +16,6 @@ def gitsha = gitversion.removeLast() // get sha
 def commits = gitversion.removeLast() // get commits since tag
 def ver = gitversion.join("-").substring(1) // get tag minus first character
 def fullver = ver + "+" + commits + "." + gitsha
-println("Full Version: $fullver")
 
 if (commits != "0") {
     println("Full Version: $fullver")
