@@ -7,20 +7,17 @@ before_install:
   - chmod +x gradlew
 
 script:
-  - echo $PWD
-  - ls $PWD
-  - echo $HOME
-  - ls $HOME
-  - echo $TRAVIS_BUILD_DIR
   - ./gradlew assemble
   - ./gradlew test
+  - export RELEASE_FILE=$(ls ./build/distributions/*.zip)
+  - echo "Releasing $RELEASE_FILE on GitHub"
 
 deploy:
   provider: releases
   api_key:
     secure: "i9jDizUYdP67irOX873RHfi25d1CdH6xLFtX/h0gKG1EADD4Xk4GwHREp/CFUn1fv74OBSEVl5n6d/vAGwNgJ3Q4grEv2DAoYPZPtxkH+rUOKKsVD0MjiGgQr2xbVTYh0a550VKl3kfW78dxvLpeQhrAyhTA5PplLLGHkOAi4eARcH97pOPeiKn71TDNiqm8+0c/dvZZzlmp8D/gaMx38AkB37IJrTrZhho8wv6o6aBMai2E2FjA5GIId+ok+6/vpNfLc1meOPox620jL8KH5B/Dwn874J3xKOEWxbpRJxwKWTZOJMf8AID6stv0uq35T/rzLdcD24uxatwcfs03vFKyAfbJ8o9iiAFCxf11IPhS6YLJhqG9BwfOxnjL1V77sXU9x4gupy7hjKNSfrVd+3sKHuU+iqzGJ/TyjH9R01hP8+g2NEFlg479xukeec70I6j21PlOYdha23q0qSYJphQwcoD+5bCuPQuIbZ0nqTDUkef8TJf2uatXU1DMU5vSUNdNrOeg8p+1viT69Ni7XXi0On1juBk/RjWXOfIL4ddUnevCGCpyPyntd36Pu5PKBdeluDk/K0wGN22YErIpWRPqjTiuoMWNMepMaMNrcpinyAWF21BkI6tO9sDjGBxttyFjtV1pgVYtghnNTmTvnRP59C7BAqiXGFKUrC11r2k="
   file_glob: true
-  file: "build/distributions/**/*"
+  file: "${RELEASE_FILE}"
   skip_cleanup: true
   on:
     tags: true
