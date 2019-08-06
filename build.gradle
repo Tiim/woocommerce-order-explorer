@@ -2,7 +2,7 @@ plugins {
   id "java"
   id 'application'
   id "org.openjfx.javafxplugin" version "0.0.8"
-  id 'org.beryx.jlink' version '2.12.0'
+  id 'org.beryx.jlink' version '2.14.0'
 }
 
 group 'ch.scbirs.shop'
@@ -38,13 +38,13 @@ repositories {
 }
 
 dependencies {
-    compile group: "org.openjfx", name: "javafx", version: "12.0.1"
-    compile group: "org.openjfx", name: "javafx-base", version: "12.0.1"
-    compile group: "org.openjfx", name: "javafx-controls", version: "12.0.1"
-    compile group: "org.openjfx", name: "javafx-fxml", version: "12.0.1"
-    compile group: "org.openjfx", name: "javafx-graphics", version: "12.0.1"
-    compile group: "org.openjfx", name: "javafx-web", version: "12.0.1"
-    compile group: "org.openjfx", name: "javafx-swing", version: "12.0.1"
+    compile group: "org.openjfx", name: "javafx-base", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx-controls", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx-graphics", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx-swing", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx-web", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx-fxml", version: "12.0.2"
 
 
     compile 'com.squareup.okhttp3:okhttp:4.0.1'
