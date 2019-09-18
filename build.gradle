@@ -41,7 +41,7 @@ dependencies {
     compile group: "org.openjfx", name: "javafx-base", version: "13"
     compile group: "org.openjfx", name: "javafx", version: "12.0.2"
     compile group: "org.openjfx", name: "javafx-controls", version: "13"
-    compile group: "org.openjfx", name: "javafx-graphics", version: "12.0.2"
+    compile group: "org.openjfx", name: "javafx-graphics", version: "13"
     compile group: "org.openjfx", name: "javafx-swing", version: "12.0.2"
     compile group: "org.openjfx", name: "javafx-web", version: "13"
     compile group: "org.openjfx", name: "javafx-fxml", version: "13"
