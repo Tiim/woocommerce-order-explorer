@@ -59,7 +59,7 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
 
-    compile 'org.apache.poi:poi:4.1.0'
+    compile 'org.apache.poi:poi:4.1.1'
 
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.17'
     compile 'com.github.dhorions:boxable:1.5'
