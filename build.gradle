@@ -50,7 +50,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:4.2.2'
 
     compile 'com.fasterxml.jackson.core:jackson-core:2.10.0.pr3'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.0.pr3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
 
     compile 'com.google.guava:guava:28.1-jre'
     compile 'commons-io:commons-io:2.6'
