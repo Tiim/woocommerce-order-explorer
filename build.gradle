@@ -47,7 +47,7 @@ dependencies {
     compile group: "org.openjfx", name: "javafx-fxml", version: "14"
 
 
-    compile 'com.squareup.okhttp3:okhttp:4.4.1'
+    compile 'com.squareup.okhttp3:okhttp:4.5.0'
 
     compile 'com.fasterxml.jackson.core:jackson-core:2.10.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
