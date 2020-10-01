@@ -2,7 +2,7 @@ plugins {
   id "java"
   id 'application'
   id "org.openjfx.javafxplugin" version "0.0.8"
-  id 'org.beryx.jlink' version '2.17.1'
+  id 'org.beryx.jlink' version '2.22.0'
 }
 
 group 'ch.scbirs.shop'
