@@ -20,6 +20,5 @@ module ch.scbirs.shop.orderexplorer {
     opens ch.scbirs.shop.orderexplorer.model to com.fasterxml.jackson.databind;
     opens ch.scbirs.shop.orderexplorer.model.local to com.fasterxml.jackson.databind;
     opens ch.scbirs.shop.orderexplorer.model.remote to com.fasterxml.jackson.databind;
-
-    exports ch.scbirs.shop.orderexplorer;
+    opens ch.scbirs.shop.orderexplorer.model.remote.products to com.fasterxml.jackson.databind;
 }

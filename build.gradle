@@ -53,8 +53,8 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.11.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
 
     implementation 'com.google.guava:guava:30.0-jre'
     implementation 'commons-io:commons-io:2.8.0'
