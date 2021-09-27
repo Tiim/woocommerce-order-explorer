@@ -120,7 +120,7 @@ jlink {
 task zipExe(type: Zip) {
     from "$buildDir/jpackage"
     include '*'
-    include '*/*' //to include contents of a folder present inside Reports directory
+    include '**/*' //to include contents of a folder present inside Reports directory
     archiveFileName = 'OrderExplorer-'+ fullver +'.zip'
     destinationDirectory = file("$buildDir")
     dependsOn "jpackage"
