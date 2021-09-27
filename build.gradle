@@ -38,40 +38,40 @@ repositories {
 }
 
 dependencies {
-    compile group: "org.openjfx", name: "javafx-base", version: "15.0.1.0.1"
-    compile group: "org.openjfx", name: "javafx", version: "14"
-    compile group: "org.openjfx", name: "javafx-controls", version: "14.0.1"
-    compile group: "org.openjfx", name: "javafx-graphics", version: "14.0.1"
-    compile group: "org.openjfx", name: "javafx-swing", version: "15.0.1"
-    compile group: "org.openjfx", name: "javafx-web", version: "14.0.1"
-    compile group: "org.openjfx", name: "javafx-fxml", version: "14.0.1"
+    implementation group: "org.openjfx", name: "javafx-base", version: "15.0.1.0.1"
+    implementation group: "org.openjfx", name: "javafx", version: "14"
+    implementation group: "org.openjfx", name: "javafx-controls", version: "14.0.1"
+    implementation group: "org.openjfx", name: "javafx-graphics", version: "14.0.1"
+    implementation group: "org.openjfx", name: "javafx-swing", version: "15.0.1"
+    implementation group: "org.openjfx", name: "javafx-web", version: "14.0.1"
+    implementation group: "org.openjfx", name: "javafx-fxml", version: "14.0.1"
 
 
-    compile 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
-    compile 'com.fasterxml.jackson.core:jackson-core:2.11.0'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.11.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
 
-    compile 'com.google.guava:guava:30.0-jre'
-    compile 'commons-io:commons-io:2.8.0'
-    compile 'org.apache.commons:commons-lang3:3.10'
+    implementation 'com.google.guava:guava:30.0-jre'
+    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'org.apache.commons:commons-lang3:3.10'
 
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
 
-    compile 'org.apache.poi:poi:4.1.2'
+    implementation 'org.apache.poi:poi:4.1.2'
 
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
-    compile 'com.github.dhorions:boxable:1.5'
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
+    implementation 'com.github.dhorions:boxable:1.5'
 
-    compile group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.1u2'
+    implementation group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.1u2'
 
-    compile group: 'com.github.zafarkhaja', name: 'java-semver', version: '0.9.0'
+    implementation group: 'com.github.zafarkhaja', name: 'java-semver', version: '0.9.0'
 
-    runtime group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.13.3'
-    runtime group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
+    runtimeOnly group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.13.3'
+    runtimeOnly group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
 
-    testCompile group: 'junit', name: 'junit', version: '4.13'
+    testImplementation group: 'junit', name: 'junit', version: '4.13'
 }
 
 jar {
